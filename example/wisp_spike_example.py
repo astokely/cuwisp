@@ -1,6 +1,7 @@
 from wisp import calculate_correlation_matrix as correlation_matrix 
 from wisp import calculate_suboptimal_paths 
 from wisp.paths import SubOptimalPaths  
+from graph_correlation_matrix import graph
 correlation_matrix(
 	"example_output",
 	10.0,
@@ -34,3 +35,5 @@ for path in suboptimal_paths:
 #print(suboptimal_paths.sink)
 
 #print(suboptimal_paths.num_paths)
+
+graph()
