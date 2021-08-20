@@ -1,34 +1,10 @@
-"""WISP is licensed under the Academic Free License 3.0. For more
-information, please see http://opensource.org/licenses/AFL-3.0
 
-WISP is distributed in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-Copyright 2012 Adam VanWart and Jacob D. Durrant. If you have any questions,
-comments, or suggestions, please don't hesitate to contact durrantj [at] pitt
-[dot] edu.
-
-The latest version of WISP can be downloaded from
-http://git.durrantlab.com/jdurrant/wisp
-
-If you use WISP in your work, please cite A.T. Van Wart, J.D. Durrant, L.
-Votapka, R.E. Amaro. Weighted implementation of suboptimal paths (WISP): An
-optimized algorithm and tool for dynamical network analysis, J. Chem. Theory
-Comput. 10 (2014) 511-517."""
-
-'''
-import copy
-import shutil
-import pstats
-from pstats import SortKey
-'''
 import shutil
 import mdtraj as md
 import os
 import sys
 import numpy as np
-from typing import Optional
+from typing import Optional, Tuple
 from .correlation_matrix import GetCorrelationMatrix
 from .paths import get_suboptimal_paths
 
@@ -40,6 +16,8 @@ def calculate_correlation_matrix(
 		correlation_matrix_filename: Optional[str] = '',
 		correlation_matrix_after_contact_map_filename: Optional[str] = '',
 		nodes_xml_filename: Optional[str] = '',
+		cuda_parameters: Optional[Tuple] = (256, 10, 256, 100),
+		num_multiprocessing_processes: Optional[int] = 10,
 ) -> None:
 	tmp_path = os.path.dirname(os.path.abspath(
 		sys.modules[GetCorrelationMatrix.__module__].__file__)
@@ -47,6 +25,12 @@ def calculate_correlation_matrix(
 	if os.path.exists(output_directory):
 		shutil.rmtree(output_directory)
 	os.makedirs(output_directory)
+	(
+		threads_per_block_com_calc,
+		num_blocks_com_calc,
+		threads_per_block_sum_coordinates_calc,
+		num_blocks_sum_coordinates_calc,
+	) = cuda_parameters
 
 	correlation_matrix = GetCorrelationMatrix(
 		output_directory,
@@ -55,7 +39,12 @@ def calculate_correlation_matrix(
 		tmp_path,	
 		correlation_matrix_filename,
 		correlation_matrix_after_contact_map_filename,
-		nodes_xml_filename
+		nodes_xml_filename,
+		threads_per_block_com_calc,
+		num_blocks_com_calc,
+		threads_per_block_sum_coordinates_calc,
+		num_blocks_sum_coordinates_calc,
+		num_multiprocessing_processes
 	)
 	shutil.rmtree(tmp_path)
 
@@ -64,7 +53,7 @@ def calculate_suboptimal_paths(
 		src: int,
 		sink: int,
 		cutoff: Optional[float] = None,
-		k: Optional[int] = 16,
+		threads_per_block: Optional[int] = 256,
 		use_contact_map_correlation_matrix: Optional[bool] = True,
 		correlation_matrix_filename: Optional[str] = '',
 		nodes_xml_filename: Optional[str] = '',
@@ -89,7 +78,7 @@ def calculate_suboptimal_paths(
 			sink,
 			suboptimal_paths_xml_filename, 
 			cutoff,
-			k 
+			threads_per_block
 		)
 
 

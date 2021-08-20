@@ -6,7 +6,7 @@ from numba import cuda, njit, float32
 import numpy as np
 import math
 import heapq
-from typing import Any, Tuple, Optional, List
+from typing import Any, Tuple, Optional, List, Union, Set
 from math import ceil
 from math import floor
 from abserdes import Serializer as serializer
@@ -142,13 +142,14 @@ def hedetniemi_distance(
 		a: Any,
 		num_nodes: int,
 		max_edges_in_ssp: int,
-		k: Optional[int] = 16,
+		threads_per_block: int,
 ) -> Any:
+	threads_per_block = int(np.sqrt(threads_per_block))
 	n = num_nodes
 	a_device = cuda.to_device(a)
 	b_device = cuda.device_array(shape=(n,n))
 	h_device = cuda.device_array(shape=(n,n))
-	dimGrid, dimBlock = cuda_grid_and_block_dims(n, k)
+	dimGrid, dimBlock = cuda_grid_and_block_dims(n, threads_per_block)
 	init_matrix[dimGrid, dimBlock](
 		a_device, 
 		b_device, 
@@ -157,7 +158,7 @@ def hedetniemi_distance(
 	)
 	for i in range(max_edges_in_ssp):
 		found_ssp = cuda.to_device([True])
-		dimGrid, dimBlock = cuda_grid_and_block_dims(n, k)
+		dimGrid, dimBlock = cuda_grid_and_block_dims(n, threads_per_block)
 		all_pair_hedetniemit[dimGrid, dimBlock](
 			a_device, 
 			b_device, 
@@ -214,16 +215,16 @@ def get_ssp(
 	return path, nodes
 
 def explore_paths(
-		src, 
-		sink, 
-		a, 
-		nodes, 
-		n, 
-		cutoff = None, 
-		pop=0
-):
-	h = np.array(hedetniemi_distance(a, n, n))
-
+		src: int, 
+		sink: int, 
+		a: np.ndarray, 
+		nodes: List, 
+		n: int, 
+		pop: int,
+		cutoff: Union[float, None], 
+		threads_per_block: int,
+) -> Set:
+	h = np.array(hedetniemi_distance(a, n, n, threads_per_block))
 	q = deque([])
 	s = set([])
 	n_p = set([])
@@ -245,7 +246,7 @@ def explore_paths(
 			i, j = q.pop()
 		a[i][j] = np.inf
 		a[j][i] = np.inf
-		h = np.array(hedetniemi_distance(a, n, n))
+		h = np.array(hedetniemi_distance(a, n, n, threads_per_block))
 		if get_ssp(src, sink, h, a) is not None:
 			path, nodes = get_ssp(src, sink, h, a)
 		else:
@@ -281,48 +282,48 @@ def get_suboptimal_paths(
 		src: int, 
 		sink: int,
 		suboptimal_paths_xml: str, 
-		cutoff: float,
-		k: int,
+		cutoff: Union[float, None],
+		threads_per_block: int,
 ):
 	suboptimal_paths = SubOptimalPaths()
 	a = np.array(np.loadtxt(input_files_path + "/" + correlation_matrix_file))
 	n = len(a)
-	h = np.array(hedetniemi_distance(a, n, n))
+	h = np.array(hedetniemi_distance(a, n, n, threads_per_block))
 	path, nodes = get_ssp(src, sink, h, a)
 	ssp = path
 	ssp.append(h[src][sink])
 	nodes = [(nodes[i], nodes[i+1]) for i in range(len(nodes)-1)]
-	paths1 = list(explore_paths(src, sink, a, nodes, n, pop=0, cutoff=cutoff))
+	paths1 = list(explore_paths(src, sink, a, nodes, n, 0, cutoff, threads_per_block))
 	d1 = {i[-1] : i[:-1] for i in paths1}
 
 	a = np.array(np.loadtxt(input_files_path + "/" + correlation_matrix_file))
 	n = len(a)
-	h = np.array(hedetniemi_distance(a, n, n))
+	h = np.array(hedetniemi_distance(a, n, n, threads_per_block))
 	path, nodes = get_ssp(src, sink, h, a)
 	ssp = path
 	ssp.append(h[src][sink])
 	nodes = [(nodes[i], nodes[i+1]) for i in range(len(nodes)-1)]
-	paths2 = list(explore_paths(src, sink, a, nodes, n, pop=1, cutoff=cutoff))
+	paths2 = list(explore_paths(src, sink, a, nodes, n, 1, cutoff, threads_per_block))
 	d2 = {i[-1] : i[:-1] for i in paths2}
 
 	a = np.array(np.loadtxt(input_files_path + "/" + correlation_matrix_file))
 	n = len(a)
-	h = np.array(hedetniemi_distance(a, n, n))
+	h = np.array(hedetniemi_distance(a, n, n, threads_per_block))
 	path, nodes = get_ssp(src, sink, h, a)
 	ssp = path
 	ssp.append(h[src][sink])
 	nodes = [(nodes[i], nodes[i+1]) for i in range(len(nodes)-1)]
-	paths3 = list(explore_paths(src, sink, a, nodes, n, pop=2, cutoff=cutoff))
+	paths3 = list(explore_paths(src, sink, a, nodes, n, 2, cutoff, threads_per_block))
 	d3 = {i[-1] : i[:-1] for i in paths3}
 
 	a = np.array(np.loadtxt(input_files_path + "/" + correlation_matrix_file))
 	n = len(a)
-	h = np.array(hedetniemi_distance(a, n, n))
+	h = np.array(hedetniemi_distance(a, n, n, threads_per_block))
 	path, nodes = get_ssp(src, sink, h, a)
 	ssp = path
 	ssp.append(h[src][sink])
 	nodes = [(nodes[i], nodes[i+1]) for i in range(len(nodes)-1)]
-	paths4 = list(explore_paths(src, sink, a, nodes, n, pop=3, cutoff=cutoff))
+	paths4 = list(explore_paths(src, sink, a, nodes, n, 3, cutoff, threads_per_block))
 	d4 = {i[-1] : i[:-1] for i in paths4}
 
 	d = {}

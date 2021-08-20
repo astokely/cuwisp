@@ -16,7 +16,7 @@ from Cython.Build import cythonize
 setup(
 	author='Andy Stokely',
 	email='amstokely@ucsd.edu',
-	name='wisp',
+	name='cuwisp',
     install_requires=[
 		"numpy==1.19.5",
 		"numba",
@@ -30,10 +30,10 @@ setup(
     platforms=['Linux',
                 'Unix',],
     python_requires=">=3.8",          
-    ext_modules = cythonize("wisp/calccom.pyx"),
-	py_modules = ["wisp/cparse/cparse"],
+    ext_modules = cythonize("cuwisp/calccom.pyx"),
+	py_modules = ["cuwisp/cparse/cparse"],
     packages=find_packages() + [''],
-	package_data={'': ['wisp/cparse/_cparse.cpython-38-x86_64-linux-gnu.so']},
+	package_data={'': ['cuwisp/cparse/_cparse.cpython-38-x86_64-linux-gnu.so']},
 )
 
 if 'install' in sys.argv:

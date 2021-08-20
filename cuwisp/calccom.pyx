@@ -2,7 +2,7 @@ import numpy as np
 from .cuComReduction import centerOfMassReduction
 
 
-def calc_com(all_indices, all_coords, all_masses, num_blocks = 10):
+def calc_com(all_indices, all_coords, all_masses, threads_per_block, num_blocks):
 	indices = all_indices[0]
 	group_sizes = [len(group) for group in indices]
 	largest_group = max(group_sizes)
@@ -39,18 +39,16 @@ def calc_com(all_indices, all_coords, all_masses, num_blocks = 10):
 	
 	coms = centerOfMassReduction(
 		c, m, total_masses, 
-		256, num_blocks, largest_group, 
+		threads_per_block, num_blocks, largest_group, 
 		len(indices), len(coordinates)
 	) 
-	C = []
+	i, j, k = coms.shape
+	C = np.zeros((j, i, k), dtype=np.float64)
 	for i in range(len(coordinates)):
-		c = np.array([np.zeros(3, dtype=np.float64) for i in range(len(coms))])
 		for j in range(len(coms)):
-			c[j][0] = coms[j][i][0]
-			c[j][1] = coms[j][i][1]
-			c[j][2] = coms[j][i][2]
-		C.append(c)
-	C = np.array(C)
+			C[i][j][0] = coms[j][i][0]
+			C[i][j][1] = coms[j][i][1]
+			C[i][j][2] = coms[j][i][2]
 	return C 
 		
 

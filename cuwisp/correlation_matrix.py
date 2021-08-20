@@ -96,6 +96,11 @@ class GetCorrelationMatrix:
 			correlation_matrix_filename: str,
 			correlation_matrix_after_contact_map_filename: str,
 			nodes_xml_filename: str,
+			threads_per_block_com_calc: int,
+			num_blocks_com_calc: int,
+			threads_per_block_sum_coordinates_calc: int,
+			num_blocks_sum_coordinates_calc: int,
+			num_multiprocessing_processes: int,
 	):
 		current_frame = 0
 		if os.path.exists(tmp_path):
@@ -115,11 +120,11 @@ class GetCorrelationMatrix:
 		global scmat
 		cmat = ctypes_matrix(3*num_traj_frames, num_atoms)
 		scmat = shared_ctypes_multiprocessing_array(cmat)
-		with Pool(50) as pool:
+		with Pool(num_multiprocessing_processes) as pool:
 			pdbs = list(pool.map(parse_pdb, zip(paths, pdb_single_frame_files, num_frames)))
 		mat = np.ctypeslib.as_array(scmat)
 		del scmat
-		self.average_pdb.coordinates = sumCoords(mat, num_traj_frames, num_atoms, 1000, 1024)
+		self.average_pdb.coordinates = sumCoords(mat, num_traj_frames, num_atoms, num_blocks_sum_coordinates_calc, threads_per_block_sum_coordinates_calc)
 		self.atom_indices_in_same_node = {}
 		top = self.average_pdb.trajectory.topology
 		atom_indices_in_nodes = []
@@ -157,7 +162,7 @@ class GetCorrelationMatrix:
 		
 		all_coords = [pdb.coordinates for pdb in pdbs]
 		all_masses = [pdb.masses for pdb in pdbs]
-		all_coms = calc_com(all_indices, all_coords, all_masses)
+		all_coms = calc_com(all_indices, all_coords, all_masses, threads_per_block_com_calc, num_blocks_com_calc)
 		
 		for i, pdb in enumerate(pdbs): 
 			pdb.map_nodes_to_residues(all_coms[i])
