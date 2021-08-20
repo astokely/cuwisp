@@ -289,6 +289,14 @@ def get_suboptimal_paths(
 	a = np.array(np.loadtxt(input_files_path + "/" + correlation_matrix_file))
 	n = len(a)
 	h = np.array(hedetniemi_distance(a, n, n, threads_per_block))
+	if get_ssp(src, sink, h, a) is None:
+		raise Exception(
+			"Sink node is unreachable from source node.".upper() + '\n'
+			+ "Either perform the suboptimal path calculation" + '\n'
+			+ "using the correlation matrix without the contact map" + '\n'
+			+ "applied, or rerun the correlation matrix calculation with" + '\n'
+		    + "a larger cutoff distance."
+		)
 	path, nodes = get_ssp(src, sink, h, a)
 	ssp = path
 	ssp.append(h[src][sink])
