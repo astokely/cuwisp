@@ -32,6 +32,5 @@ def plot_3D_surface():
 	c = [(i, j, b[i][j]) for i in range(m) for j in range(n)]
 	x, y, z = list(zip(*c))
 	fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
-	surf = ax.plot_trisurf(x, y, z, cmap=cm.coolwarm,
-						   linewidth=0, antialiased=False)
+	surf = ax.plot_trisurf(x, y, z)
 	plt.show()

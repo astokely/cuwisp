@@ -6,6 +6,24 @@ from cuwisp import calculate_suboptimal_paths
 from cuwisp.paths import SubOptimalPaths  
 from colour import Color
 import graph_correlation_matrix as graph
+import abserdes.Serializer as serializer
+
+class Visualize(serializer):
+
+	def __init__(self):
+
+class Material(serializer):
+
+	def __init__(self):
+		self.name = ''
+		self.ambient = 0.0
+		self.specular = 0.0
+		self.diffuse = 0.79 
+		self.shininess = 0.53
+		self.mirror = 0.0
+		self.opacity = 1.0
+
+class VmdTcl(serializer)
 
 def visualize(
 		color_gradient: Tuple,

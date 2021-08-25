@@ -25,7 +25,8 @@ setup(
 		"cython",
 		"data-science-types",
 		"abserdes",
-		"matplotlib"
+		"matplotlib",
+		"colours"
 	],              
     platforms=['Linux',
                 'Unix',],

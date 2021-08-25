@@ -25,10 +25,16 @@ class SubOptimalPaths(serializer):
 		for path in self.paths:
 			yield path
 
+	def reverse(self):
+		for path in reversed(self.paths):
+			yield path
+
 class Path(serializer):
 
 	def __init__(self) -> None:
 		self.index = None
+		self.num_nodes = None
+		self.num_edges = None
 		self.src = None
 		self.sink = None
 		self.edges = [] 
@@ -54,7 +60,7 @@ class Edge(serializer):
 		))
 
 	def __iter__(self):
-		nodes = [self.node1, self.node1]
+		nodes = [self.node1, self.node2]
 		for node in nodes:
 			yield node 
 
@@ -347,8 +353,11 @@ def get_suboptimal_paths(
 		path = Path()
 		path.length = k
 		path.edges = [] 
+		path_nodes = set([])
 		for path_edge in ordered_paths(d[k], src):
 			node1_index, node2_index = path_edge
+			path_nodes.add(node1_index)
+			path_nodes.add(node2_index)
 			edge = Edge()	
 			edge.node1 = nodes[node1_index]
 			edge.node2 = nodes[node2_index]
@@ -356,6 +365,8 @@ def get_suboptimal_paths(
 		path.src = src
 		path.sink = sink 
 		path.index = path_index
+		path.num_nodes = len(path_nodes) 
+		path.num_edges = len(path.edges) 
 		suboptimal_paths.paths.append(path)
 		path_index += 1
 	suboptimal_paths.src = src

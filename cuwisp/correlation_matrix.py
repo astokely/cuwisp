@@ -124,7 +124,13 @@ class GetCorrelationMatrix:
 			pdbs = list(pool.map(parse_pdb, zip(paths, pdb_single_frame_files, num_frames)))
 		mat = np.ctypeslib.as_array(scmat)
 		del scmat
-		self.average_pdb.coordinates = sumCoords(mat, num_traj_frames, num_atoms, num_blocks_sum_coordinates_calc, threads_per_block_sum_coordinates_calc)
+		self.average_pdb.coordinates = sumCoords(
+			mat, 
+			num_traj_frames, 
+			num_atoms, 
+			num_blocks_sum_coordinates_calc, 
+			threads_per_block_sum_coordinates_calc
+		)
 		self.atom_indices_in_same_node = {}
 		top = self.average_pdb.trajectory.topology
 		atom_indices_in_nodes = []
@@ -140,18 +146,6 @@ class GetCorrelationMatrix:
 		self.average_pdb.map_atoms_to_residues()
 		nodes = Nodes()
 		node_index = 0
-		for node_identifier, atom_indices in \
-		self.average_pdb.residue_identifier_to_atom_indices.items():
-			node = Node()
-			node.index = node_index
-			node.atom_indices = atom_indices
-			node.identifier = node_identifier
-			nodes[node_index] = node
-			node_index += 1
-		nodes.num_nodes = node_index + 1
-		if nodes_xml_filename == '':
-			nodes_xml_filename = output_directory + "/nodes.xml"
-		nodes.serialize(nodes_xml_filename)
 		pdbs.append(self.average_pdb)
 		all_indices = []
 		for pdb in pdbs:
@@ -162,8 +156,31 @@ class GetCorrelationMatrix:
 		
 		all_coords = [pdb.coordinates for pdb in pdbs]
 		all_masses = [pdb.masses for pdb in pdbs]
-		all_coms = calc_com(all_indices, all_coords, all_masses, threads_per_block_com_calc, num_blocks_com_calc)
-		
+		all_coms = calc_com(
+			all_indices, 
+			all_coords, 
+			all_masses, 
+			threads_per_block_com_calc, 
+			num_blocks_com_calc
+		)
+		nodes = Nodes()
+		node_index = 0
+		for node_identifier, atom_indices in \
+		self.average_pdb.residue_identifier_to_atom_indices.items():
+			node = Node()
+			node.index = node_index
+			node.atom_indices = atom_indices
+			node.identifier = node_identifier
+			nodes[node_index] = node
+			node_index += 1
+			nodes[node.index].coordinates = (
+				all_coms[-1][node.index]
+			)
+		nodes.num_nodes = node_index + 1
+		if nodes_xml_filename == '':
+			nodes_xml_filename = output_directory + "/nodes.xml"
+		nodes.serialize(nodes_xml_filename)
+
 		for i, pdb in enumerate(pdbs): 
 			pdb.map_nodes_to_residues(all_coms[i])
 		for pdb in pdbs:
@@ -283,6 +300,10 @@ class GetCorrelationMatrix:
 			)
 		np.savetxt(
 			output_directory + "/contact_map_matrix.txt", contact_map
+		)
+
+		self.average_pdb.trajectory.save_pdb(
+			output_directory + "/average.pdb"
 		)
 
 		if correlation_matrix_after_contact_map_filename == '':

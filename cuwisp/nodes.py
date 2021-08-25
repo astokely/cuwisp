@@ -6,6 +6,7 @@ class Node(serializer):
 		self.index = 0
 		self.atom_indices = []
 		self.identifier = ''
+		self.coordinates = None
 
 	def __repr__(self):
 		return str(self.index)
