@@ -4,26 +4,9 @@ import numpy as np
 from cuwisp import calculate_correlation_matrix as correlation_matrix 
 from cuwisp import calculate_suboptimal_paths 
 from cuwisp.paths import SubOptimalPaths  
+import vmdtcl
 from colour import Color
-import graph_correlation_matrix as graph
-import abserdes.Serializer as serializer
-
-class Visualize(serializer):
-
-	def __init__(self):
-
-class Material(serializer):
-
-	def __init__(self):
-		self.name = ''
-		self.ambient = 0.0
-		self.specular = 0.0
-		self.diffuse = 0.79 
-		self.shininess = 0.53
-		self.mirror = 0.0
-		self.opacity = 1.0
-
-class VmdTcl(serializer)
+from abserdes import Serializer as serializer
 
 def visualize(
 		color_gradient: Tuple,
@@ -53,35 +36,36 @@ def visualize(
 		colors = list(color1.range_to(Color(color2.lower()), suboptimal_paths.num_paths))
 		num_radii = suboptimal_paths.num_paths
 		radii = np.linspace(0.2, 0.05, num_radii)
-		tcl.write('set avail_materials [material list]\n')
-		tcl.write(
-			'if {[lsearch -exact $avail_materials "node"] >= 0} {'
-				+ 'material delete node'
-			+'}\n'
-		)
-		tcl.write('material add node\n')
-		tcl.write('material change ambient node 0.0\n') 
-		tcl.write('material change specular node 0.0\n') 
-		tcl.write('material change diffuse node 0.79\n')
-		tcl.write('material change shininess node 0.53\n') 
-		tcl.write('material change mirror node 0.0\n')
-		tcl.write('material change opacity node 1.0\n') 
-		tcl.write('set color_start [colorinfo num] \n') 
+		node_material_properties = {
+			'ambient' : 0.0,
+			'specular' : 0.0,
+			'diffuse' : 0.79,
+			'shininess' : 0.53,
+			'mirror' : 0.0,
+			'opacity' : 1.0
+		}
+		node_material = vmdtcl.add_material("node", node_material_properties)			
+		delete_all_reps = vmdtcl.delete_all_representations()			
+		licorice = vmdtcl.Licorice()
+		lines = vmdtcl.Lines()
+		set_rep = vmdtcl.set_representation(lines)
+		coloring_method = vmdtcl.set_representation_coloring_method("name")
+		add_rep = vmdtcl.add_representation()
+		modify_selection = vmdtcl.modify_representation_selection("all")
 
-		tcl.write('set n [expr [molinfo [molinfo top] get numreps] - 1] \n') 
-		tcl.write(
-			'while {$n >= 0} {'
-				+ ' mol delrep $n [molinfo top];' 
-				+ ' set r [expr $n - 1];' 
-				+ ' set n $r'
-			+'}\n'
-		)
+		tcl.write(delete_all_reps) 
+		tcl.write(node_material) 
+		tcl.write(set_rep) 
+		tcl.write(coloring_method) 
+		tcl.write(add_rep)
+		tcl.write(modify_selection)
+
+		set_rep = vmdtcl.set_representation(licorice)
+		tcl.write(set_rep) 
+
+
+
 		tcl.write('set molid [molinfo top] \n') 
-		tcl.write('mol color name \n') 
-		tcl.write('mol representation lines \n') 
-		tcl.write('mol addrep $molid \n')
-		tcl.write('mol modselect 0 $molid all \n')
-		tcl.write('mol representation Licorice \n') 
 
 		for path in suboptimal_paths:
 			if path.num_edges < 3:

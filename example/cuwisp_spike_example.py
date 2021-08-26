@@ -10,7 +10,7 @@ import graph_correlation_matrix as graph
 correlation_matrix(
 	"example_output",
 	10.0,
-	"/home/astokely/spike/spike_example.pdb",
+	"spike_example.pdb",
 	cuda_parameters = (256, 100, 1024, 1000),
 	#temp_file_directory = 'tmp',
 )
