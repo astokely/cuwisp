@@ -92,7 +92,7 @@ class GetCorrelationMatrix:
 			output_directory: str,
 			contact_map_distance_limit: float,
 			pdb_trajectory_filename: str,
-			tmp_path: str,	
+			temp_file_directory: str,	
 			correlation_matrix_filename: str,
 			correlation_matrix_after_contact_map_filename: str,
 			nodes_xml_filename: str,
@@ -103,19 +103,19 @@ class GetCorrelationMatrix:
 			num_multiprocessing_processes: int,
 	):
 		current_frame = 0
-		if os.path.exists(tmp_path):
-			shutil.rmtree(tmp_path)
-		os.makedirs(tmp_path)
-		parse(pdb_trajectory_filename, tmp_path + "/")
-		num_traj_frames = len(os.listdir(tmp_path + "/")) 
+		if os.path.exists(temp_file_directory):
+			shutil.rmtree(temp_file_directory)
+		os.makedirs(temp_file_directory)
+		parse(pdb_trajectory_filename, temp_file_directory + "/")
+		num_traj_frames = len(os.listdir(temp_file_directory + "/")) 
 		self.average_pdb = Molecule() 
-		self.average_pdb.load_pdb_from_list(md.load(tmp_path + "/0.pdb"))
-		pdb_single_frame_files = [f for f in os.listdir(tmp_path + "/")]
+		self.average_pdb.load_pdb_from_list(md.load(temp_file_directory + "/0.pdb"))
+		pdb_single_frame_files = [f for f in os.listdir(temp_file_directory + "/")]
 		pdbs = []
 
 
 		num_atoms = len(self.average_pdb.coordinates)
-		paths = [tmp_path + "/" for path in range(num_traj_frames)]
+		paths = [temp_file_directory + "/" for path in range(num_traj_frames)]
 		num_frames = [num_traj_frames for path in range(num_traj_frames)]
 		global scmat
 		cmat = ctypes_matrix(3*num_traj_frames, num_atoms)

@@ -18,10 +18,14 @@ def calculate_correlation_matrix(
 		nodes_xml_filename: Optional[str] = '',
 		cuda_parameters: Optional[Tuple] = (256, 10, 256, 100),
 		num_multiprocessing_processes: Optional[int] = 10,
+		temp_file_directory: Optional[str] = '',
 ) -> None:
-	tmp_path = os.path.dirname(os.path.abspath(
-		sys.modules[GetCorrelationMatrix.__module__].__file__)
-	) + "/tmp"
+	if temp_file_directory == '':
+		temp_file_directory = (
+			os.path.dirname(os.path.abspath(
+				sys.modules[GetCorrelationMatrix.__module__].__file__
+			)) + "/tmp"
+		)
 	if os.path.exists(output_directory):
 		shutil.rmtree(output_directory)
 	os.makedirs(output_directory)
@@ -36,7 +40,7 @@ def calculate_correlation_matrix(
 		output_directory,
 		contact_map_distance_limit,
 		pdb_trajectory_filename,
-		tmp_path,	
+		temp_file_directory,
 		correlation_matrix_filename,
 		correlation_matrix_after_contact_map_filename,
 		nodes_xml_filename,
@@ -46,7 +50,7 @@ def calculate_correlation_matrix(
 		num_blocks_sum_coordinates_calc,
 		num_multiprocessing_processes
 	)
-	shutil.rmtree(tmp_path)
+	shutil.rmtree(temp_file_directory)
 
 def calculate_suboptimal_paths(
 		input_files_path: str,
