@@ -270,10 +270,10 @@ def generate_spline(
 	num_edges = (
 		max(nodes.shape) - 1
 	)
-	if num_edges < 3:
-		degree = num_edges
-	else:
-		degree = 3
+	print(num_edges)
+	degree = num_edges - 1
+	if num_edges > 3:
+		degree = 3 
 	if not column_major:
 		nodes = nodes.T	
 	x, y, z = nodes	

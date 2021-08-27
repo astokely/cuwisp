@@ -5,20 +5,18 @@ from cuwisp import calculate_suboptimal_paths
 from cuwisp import calculate_correlation_matrix 
 from cuwisp.paths import SubOptimalPaths  
 from colour import Color
-
 calculate_correlation_matrix(
 	"example_output",
 	10.0,
-	"spike_example.pdb",
+	'spike_example.pdb',
 	cuda_parameters = (256, 100, 1024, 1000),
-	#temp_file_directory = 'tmp',
 )
-
 calculate_suboptimal_paths(
 	"example_output", 
 	80, 
-	110, 
+	100,
 	threads_per_block=1024, 
+	#use_contact_map_correlation_matrix=False,
 	cutoff=4.5,
 )
 
