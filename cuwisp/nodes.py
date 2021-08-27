@@ -40,3 +40,10 @@ class Nodes(serializer):
 			return self.nodes[index]
 		return
 
+	def get_node_from_atom_index(
+			self, 
+			index: int,
+	) -> Node:
+		for node in self.nodes:
+			if index in node.atom_indices:
+				return node

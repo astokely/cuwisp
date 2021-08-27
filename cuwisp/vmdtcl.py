@@ -1,7 +1,6 @@
 import numpy as np
 from typing import Optional, Union, Dict, Tuple, List
 from abserdes import Serializer as serializer
-import os
 
 class Licorice(serializer):
 
@@ -30,10 +29,39 @@ class Licorice(serializer):
 		licorice_properties = {
 			"name" : self.name,
 			"bond_radius" : self.bond_radius,
-			"bond_radius" : self.bond_radius,
+			"sphere_resolution" : self.sphere_resolution,
 			"bond_resolution" : self.bond_resolution,
 		}
 		for name, property_ in licorice_properties.items():
+			yield name, property_
+
+class VDW(serializer):
+
+	def __init__(
+			self,
+			sphere_scale: Optional[float] = 1.0, 
+			sphere_resolution: Optional[float] = 12.0, 
+	) -> None:
+		self.name = "VDW"
+		self.sphere_scale = sphere_scale
+		self.sphere_resolution = sphere_resolution
+
+	def __repr__(self):
+		name = self.name
+		sphere_scale = self.sphere_scale
+		sphere_resolution = self.sphere_resolution
+		return (
+			f'{name} {sphere_scale} '
+			f'{sphere_resolution}'
+		)
+
+	def __iter__(self):
+		vdw_properties = {
+			"name" : self.name,
+			"sphere_scale" : self.sphere_scale,
+			"sphere_resolution" : self.sphere_resolution,
+		}
+		for name, property_ in vdw_properties.items():
 			yield name, property_
 
 class Lines(serializer):
@@ -49,7 +77,7 @@ class Lines(serializer):
 		thickness = self.thickness
 		name = self.name
 		return (
-			f'{name} {thickness} '
+			f'{name} {thickness}'
 		)
 
 	def __iter__(self):
@@ -59,6 +87,45 @@ class Lines(serializer):
 		}
 		for name, property_ in lines_properties.items():
 			yield name, property_
+
+class QuickSurf(serializer):
+
+	def __init__(
+			self,
+			radius_scale: Optional[float] = 1.0,
+			density_isovalue: Optional[float] = 0.5,
+			grid_spacing: Optional[float] = 1.0,
+			surface_quality: Optional[int] = 1,
+	):
+		self.name = 'QuickSurf'
+		self.radius_scale = radius_scale
+		self.density_isovalue = density_isovalue
+		self.grid_spacing = grid_spacing
+		self.surface_quality = surface_quality
+
+	def __repr__(self):
+		name = self.name
+		radius_scale = self.radius_scale
+		density_isovalue = self.density_isovalue
+		grid_spacing = self.grid_spacing
+		surface_quality = self.surface_quality
+		return (
+			f'{name} {radius_scale} '
+			f'{density_isovalue} {grid_spacing} '
+			f'{surface_quality}' 
+		)
+
+	def __iter__(self):
+		quicksurf_properties = {
+			'name' : self.name,
+			'radius_scale' : self.radius_scale,
+			'density_isovalue' : self.density_isovalue,
+			'grid_spacing' : self.grid_spacing,
+			'surface_quality' : self.surface_quality
+		}
+		for name, property_ in quicksurf_properties.items():
+			yield name, property_
+			 
 
 class Sphere(serializer):
 
@@ -94,11 +161,14 @@ class Sphere(serializer):
 
 	def tcl(
 			self,
-			new_line: Optional = True
+            tcl: Optional[str] = '',
+			new_line: Optional = True,
 	) -> str:
 		if new_line:
-			return ''.join([self.__repr__(), '\n'])
-		return self.__repr__()
+			tcl += ''.join([self.__repr__(), '\n'])
+		else:
+			tcl += self.__repr__()
+		return tcl
 
 class Cylinder(serializer):
 
@@ -144,29 +214,116 @@ class Cylinder(serializer):
 
 	def tcl(
 			self,
-			new_line: Optional = True
+			tcl: Optional[str] = '',
+			new_line: Optional[bool] = True,
 	) -> str:
 		if new_line:
-			return ''.join([self.__repr__(), '\n'])
-		return self.__repr__()
+			tcl += ''.join([self.__repr__(), '\n'])
+		else:
+			tcl += self.__repr__()
+		return tcl
+
+def reset_view(
+		tcl: Optional[str] = '',
+		new_line: Optional[bool] = True,
+) -> str:
+	tcl += f'display resetview\n'
+	if new_line:
+		return tcl
+	return tcl[:-1] 
+
+def set_projection(
+		projection: str,
+		tcl: Optional[str] = '',
+		new_line: Optional[bool] = True,
+) -> str:
+	tcl += f'display projection {projection}\n'
+	if new_line:
+		return tcl
+	return tcl[:-1] 
+
+def set_depth_cueing(
+		depth_cueing: str,	
+		tcl: Optional[str] = '',
+		new_line: Optional[bool] = True,
+) -> str:
+	tcl += f'display depthcue {depth_cueing}\n'
+	if new_line:
+		return tcl
+	return tcl[:-1] 
+
+def delete_molecule(
+		molid: Optional[int] = 'top',
+		tcl: Optional[str] = '',
+		new_line: Optional[bool] = True,
+) -> str:
+	tcl += f'mol delete {molid}'
+	if new_line:
+		return tcl
+	return tcl[:-1] 
+
+def load_pdb(
+		pdb: str,
+		tcl: Optional[str] = '',
+		new_line: Optional[bool] = True,
+) -> str:
+	tcl += f'mol new {pdb}'
+	if new_line:
+		return tcl
+	return tcl[:-1] 
+
+def set_antialiasing(
+		antialiasing: str,	
+		tcl: Optional[str] = '',
+		new_line: Optional[bool] = True,
+) -> str:
+	tcl += f'display antialias {antialiasing}\n'
+	if new_line:
+		return tcl
+	return tcl[:-1] 
+
+def set_render_mode(
+		render_mode: str,	
+		tcl: Optional[str] = '',
+		new_line: Optional[bool] = True,
+) -> str:
+	tcl += f'display rendermode {render_mode}\n'
+	if new_line:
+		return tcl
+	return tcl[:-1] 
+
+def set_background_color(
+		colour: str,	
+		tcl: Optional[str] = '',
+		new_line: Optional[bool] = True,
+) -> str:
+	tcl += f'color Display Background {colour}\n'
+	if new_line:
+		return tcl
+	return tcl[:-1] 
 
 def delete_material(
-		material_name: str
+		material_name: str,
+		tcl: Optional[str] = '',
+		new_line: Optional[bool] = True,
 ) -> str:
-	tcl = f'set avail_materials [material list]\n' 
+	tcl += f'set avail_materials [material list]\n' 
 	tcl += (
 		f'if {{[lsearch -exact $avail_materials "{material_name}"] >= 0}} {{\n'
 		f'    material delete {material_name}\n'
 		f'}}\n'
 	)
-	return tcl
+	if new_line:
+		return tcl
+	return tcl[:-1]
 
 def add_material(
 		name: str,
 		properties: Optional[Dict] = {},
+		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 ) -> str:
-	tcl = delete_material(name)
+	tcl += delete_material(name)
 	tcl += f'material add {name}\n' 
 	for property_name, property_ in properties.items():
 		tcl += (
@@ -177,71 +334,72 @@ def add_material(
 	return tcl[:-1]
 
 def last_color_index(
+		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 )-> str:
 	if new_line:
-		tcl = f'set last_color_index [expr [colorinfo num] - 1] \n'
+		tcl += f'set last_color_index [expr [colorinfo num] - 1] \n'
 	else:
-		tcl = f'set last_color_index [expr [colorinfo num] - 1]'
+		tcl += f'set last_color_index [expr [colorinfo num] - 1]'
 	return tcl
 
 def new_color_index(
+		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 )-> str:
+	tcl = f'set color_index [colorinfo num] \n'
 	if new_line:
-		tcl = f'set color_index [colorinfo num] \n'
-	else:
-		tcl = f'set color_index [colorinfo num]'
-	return tcl
+		return tcl
+	return tcl[:-1]
 
 def set_representation(
 			representation: Licorice,
+			tcl: Optional[str] = '',
 			new_line: Optional[bool] = True
 ):
+	tcl = f'mol representation {representation}\n'
 	if new_line:
-		tcl = f'mol representation {representation}\n'
-	else:
-		tcl = f'mol representation {representation}'
-	return tcl
+		return tcl
+	return tcl[:-1]
 
 def modify_representation(
 		representation: Licorice, 
 		molid: Optional[int] = 'top', 
 		repid: Optional[int] = None, 
+		tcl: Optional[str] = '',
 		new_line = True
 ) -> str:
 	if repid == None:
-		tcl = get_last_repid()
+		tcl += get_last_repid()
 		tcl += f'set repid $last_repid\n'		
 	else:
-		tcl = f'set repid {repid}\n'		
+		tcl += f'set repid {repid}\n'		
+	tcl += f'mol modstyle $repid {molid} {representation}\n'
 	if new_line:
-		tcl += f'mol modstyle $repid {molid} {representation}\n'
-	else:
-		tcl += f'mol modstyle $repid {molid} {representation}'
-	return tcl
+		return tcl
+	return tcl[:-1]
 
 def add_representation(
 		molid: Optional[int] = 'top',
+		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 ) -> str:
+	tcl += f'mol addrep {molid}\n'
 	if new_line:
-		tcl = f'mol addrep {molid}\n'
-	else:
-		tcl = f'mol addrep {molid}'
-	return tcl
+		return tcl
+	return tcl[:-1]
 
 def get_last_repid(
 		molid: Optional[int] = 'top',
+		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True
 ) -> str:
-	tcl = f'set molid {molid}\n'
+	tcl += f'set molid {molid}\n'
 	tcl += f'set numreps [molinfo $molid get numreps]\n'
+	tcl += f'set last_repid [expr $numreps - 1]\n'
 	if new_line:
-		tcl += f'set last_repid [expr $numreps - 1]\n'
-	else:
-		tcl += f'set last_repid [expr $numreps - 1]'
-	return tcl
+		return tcl
+	return tcl[:-1]
 
 def add_color( 
 		red: float,
@@ -250,58 +408,59 @@ def add_color(
 		color_index: Optional[int] = None,
 		incr: Optional[int] = 0,
 		molid: Optional[int] = 'top',
+		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True
 ) -> str:
 	if color_index == None:
-		tcl = new_color_index()
+		tcl += new_color_index()
 		tcl += f'set colour_index [expr $color_index + {incr}]\n'
 	else: 
-		tcl = f'set colour_index {colour_index}\n'
+		tcl += f'set colour_index {colour_index}\n'
+	tcl += f'color change rgb $colour_index {red} {green} {blue}\n'
 	if new_line:
-		tcl += f'color change rgb $colour_index {red} {green} {blue}\n'
-	else:
-		tcl += f'color change rgb $colour_index {red} {green} {blue}'
-	return tcl
+		return tcl
+	return tcl[:-1]
 
 def set_graphics_color(	
 		colour: Union[str, int],
 		molid: Optional[int] = 'top',
+		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 ) -> str:
+	tcl += f'graphics {molid} color {colour}\n'
 	if new_line:
-		tcl = f'graphics {molid} color {colour}\n'
-	else:
-		tcl = f'graphics {molid} color {colour}'
-	return tcl
+		return tcl
+	return tcl[:-1]
 
 def set_draw_color(	
 		colour: Union[str, int],
+		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 ) -> str:
+	tcl += f'draw color {colour}\n'
 	if new_line:
-		tcl = f'draw color {colour}\n'
-	else:
-		tcl = f'draw color {colour}'
-	return tcl
+		return tcl
+	return tcl[:-1]
 
 def set_representation_coloring_method(	
 		coloring_method: Union[str, Tuple],
+		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 ) -> str:
 	if isinstance(coloring_method, tuple): 
 		coloring_method = tuple_list_ndarray_to_str(
 			coloring_method
 		)
+	tcl += f'mol color {coloring_method}\n'
 	if new_line:
-		tcl = f'mol color {coloring_method}\n'
-	else:
-		tcl = f'mol color {coloring_method}'
-	return tcl
+		return tcl	
+	return tcl[:-1]
 
 def modify_representation_coloring_method(	
 		coloring_method: Union[str, Tuple],
 		molid: Optional[int] = 'top',
 		repid: Optional[int] = None,
+		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 ) -> str:
 	if isinstance(coloring_method, tuple): 
@@ -309,21 +468,21 @@ def modify_representation_coloring_method(
 			coloring_method
 		)
 	if repid == None:
-		tcl = get_last_repid()
+		tcl += get_last_repid()
 		tcl += f'set repid $last_repid\n'		
 	else:
-		tcl = f'set repid {repid}\n'		
+		tcl += f'set repid {repid}\n'		
+	tcl += f'mol modcolor $repid {molid} {coloring_method}\n'
 	if new_line:
-		tcl = f'mol modcolor $repid {molid} {coloring_method}\n'
-	else:
-		tcl = f'mol modcolor $repid {molid} {coloring_method}\n'
-	return tcl
+		return tcl
+	return tcl[:-1]
 
 def delete_all_representations(	
 		molid: Optional[int] = 'top',
+		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 ) -> str:
-	tcl = get_last_repid(molid=molid)	
+	tcl += get_last_repid(molid=molid)	
 	tcl += (
 		f'while {{$last_repid >= 0}} {{\n'
 		+ f'    mol delrep $last_repid {molid}\n' 
@@ -347,6 +506,7 @@ def modify_representation_selection(
 		selection: Union[str, Tuple],
 		molid: Optional[int] = 'top',
 		repid: Optional[int] = None,
+		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True
 ) -> str:
 	if isinstance(selection, tuple):
@@ -360,74 +520,71 @@ def modify_representation_selection(
 		selection_key = ''
 		selection_value = selection
 	if repid == None:
-		tcl = get_last_repid()
+		tcl += get_last_repid()
 		tcl += f'set repid $last_repid\n'
 	else:
-		tcl = f'set repid {repid}\n'
+		tcl += f'set repid {repid}\n'
+	tcl += (
+		f'mol modselect $repid {molid} '
+		+ f'{selection_key} {selection_value}\n'
+	)
 	if new_line:
-		tcl += (
-			f'mol modselect $repid {molid} '
-			+ f'{selection_key} {selection_value}\n'
-		)
-	else:
-		tcl += (
-			f'mol modselect $repid {molid} '
-			+ f'{selection_key} {selection_value}'
-		)
-	return tcl
+		return tcl
+	return tcl[:-1]
 
 
 def atomselect(
 		name: str,
 		selection: Union[str, Tuple],
 		molid: Optional[int] = 'top',
+		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 ):
 	if isinstance(selection, tuple):
 		selection_key, selection_value = selection
 		selection_value = tuple_list_ndarray_to_str(selection_value)
 		selection = ''.join([selection_key, ' ', selection_value])
+	tcl += f'set {name} [atomselect {molid} "{selection}"]\n' 
 	if new_line:
-		tcl = f'set {name} [atomselect {molid} "{selection}"]\n' 
-	else:
-		tcl = f'set {name} [atomselect {molid} "{selection}"]\n' 
-	return tcl
+		return tcl
+	return tcl[:-1]
 
 def selection_atom_indices(
 		name: str,
 		selection_name: str,
+		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 ):
+	tcl += f'set {name} [${selection_name} list]\n' 
 	if new_line:
-		tcl = f'set {name} [${selection_name} list]\n' 
-	else:
-		tcl = f'set {name} [${selection_name} list]' 
-	return tcl
+		return tcl
+	return tcl[:-1]
 
 def modify_representation_material(
 		material_name: str,
 		molid: Optional[int] = 'top',
 		repid: Optional[int] = None,
+		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 ) -> str:
 	if repid == None:
-		tcl = get_last_repid()
+		tcl += get_last_repid()
 		tcl += f'set repid $last_repid\n'
 	else:
-		tcl = f'set repid {repid}\n'
+		tcl += f'set repid {repid}\n'
+	tcl += f'mol modmaterial $repid {molid} {material_name}\n' 
 	if new_line:
-		tcl += f'mol modmaterial $repid {molid} {material_name}\n' 
-	else:
-		tcl += f'mol modmaterial $repid {molid} {material_name}' 
-	return tcl
+		return tcl
+	return tcl[:-1]
 
 def pbc_wrap(
 		center_selection: str,
 		center: Optional[str] = 'com',
 		compound: Optional[str] = 'residue',
+		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 ) -> str:
-	tcl = (
+	tcl += (
 		f'pbc wrap -center {center} '
 		+ f'-centersel "{center_selection}" '
 		+ f'-compound {compound} -all\n'
@@ -441,24 +598,25 @@ def modify_representation_style(
 		style_name: str,
 		molid: Optional[int] = 'top',
 		repid: Optional[int] = None,
+		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 ) -> str:
 	if repid == None:
-		tcl = get_last_repid()
+		tcl += get_last_repid()
 		tcl += f'set repid $last_repid\n'
 	else:
-		tcl = f'set repid {repid}\n'
+		tcl += f'set repid {repid}\n'
+	tcl += f'mol modstyle $repid {molid} {style_name}\n' 
 	if new_line:
-		tcl += f'mol modstyle $repid {molid} {style_name}\n' 
-	else:
-		tcl += f'mol modstyle $repid {molid} {style_name}' 
-	return tcl
+		return tcl
+	return tcl[:-1]
 
 def get_center_of_mass(
 		selection_name: str,
+		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 ) -> str:
-	tcl = f'measure center ${selection_name} weight mass\n'
+	tcl += f'measure center ${selection_name} weight mass\n'
 	if new_line:
 		return tcl
 	return tcl[:-1]
@@ -466,13 +624,14 @@ def get_center_of_mass(
 def center_of_mass_selection(
 		name: str, 
 		selection_name: str,
+		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 ) -> str:
 	com = get_center_of_mass(
 		selection_name,
 		new_line=False
 	)
-	tcl = f'set {name} [{com}]\n'
+	tcl += f'set {name} [{com}]\n'
 	if new_line:
 		return tcl
 	return tcl[:-1]
@@ -480,13 +639,14 @@ def center_of_mass_selection(
 def move_selection_to_origin_transformation(
 		name: str, 
 		selection_name: str,
+		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 ) -> str:
 	com = get_center_of_mass(
 		selection_name,
 		new_line=False,
 	)
-	tcl = f'set {name} [vecsub {{0 0 0}} [{com}]]\n'
+	tcl += f'set {name} [vecsub {{0 0 0}} [{com}]]\n'
 	if new_line:
 		return tcl
 	return tcl[:-1]
@@ -494,9 +654,10 @@ def move_selection_to_origin_transformation(
 def apply_transformation_to_selection(
 		selection_name: str, 
 		transformation_name: str,
+		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 ) -> str:
-	tcl = f'${selection_name} moveby ${transformation_name}\n'
+	tcl += f'${selection_name} moveby ${transformation_name}\n'
 	if new_line:
 		return tcl
 	return tcl[:-1]
@@ -505,9 +666,10 @@ def create_color_gradient(
 		name: str,
 		colors: List,
 		molid: Optional[int] = 'top',
+		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 ) -> str:
-	tcl = f'set list {name}\n' 
+	tcl += f'set list {name}\n' 
 	tcl += new_color_index()
 	index = 0
 	for color in colors:
@@ -519,12 +681,12 @@ def create_color_gradient(
 		return tcl
 	return tcl[:-1]
 
-def tcl(
-		commands: str,
+def save_tcl(
+		tcl: str,
 		tcl_filename: str,
 		write_method: Optional[str] = 'w',
 ) -> None:
-	with open(tcl_filename, write_method) as tcl:
-		tcl.write(commands)
-		tcl.close()
+	with open(tcl_filename, write_method) as tcl_file:
+		tcl_file.write(tcl)
+		tcl_file.close()
 
