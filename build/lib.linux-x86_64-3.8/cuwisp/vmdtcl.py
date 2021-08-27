@@ -282,11 +282,7 @@ def generate_spline(
 		s=smoothing_factor, 
 		k=degree
 	) 
-	u_new = np.arange(
-		0, 
-		1.0 + spline_input_points_incr,
-		spline_input_points_incr
-	)
+	u_new = np.arange(0, 1.001, spline_input_points_incr)
 	return interpolate.splev(u_new, tck)
 
 def draw_curve_from_spline(
