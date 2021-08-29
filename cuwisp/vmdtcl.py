@@ -270,7 +270,6 @@ def generate_spline(
 	num_edges = (
 		max(nodes.shape) - 1
 	)
-	print(num_edges)
 	degree = num_edges - 1
 	if num_edges > 3:
 		degree = 3 

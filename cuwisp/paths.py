@@ -25,6 +25,27 @@ class SubOptimalPaths(serializer):
 		for path in self.paths:
 			yield path
 
+	def __repr__(self):
+		suboptimal_paths = ''
+		for path in self.paths:
+			path = f'{path}\n'
+			suboptimal_paths += path
+		return suboptimal_paths
+
+	def __getitem__(self, index):
+		if index < len(self.paths):
+			return self.paths[index]
+		return
+
+	def __setitem__(self, index, path):
+		if index >= len(self.paths):
+			self.paths.append(path)
+		else:
+			selt.paths[index] = path
+
+	def __len__(self):
+		return len(self.paths)
+
 	def reverse(self):
 		for path in reversed(self.paths):
 			yield path
@@ -41,11 +62,27 @@ class Path(serializer):
 		self.length = None
 
 	def __repr__(self):
-		return str(self.edges)
+		edges = self.edges
+		length = self.length
+		return f'{edges}: {length}' 
 
 	def __iter__(self):
 		for edge in self.edges:
 			yield edge 
+
+	def __getitem__(self, index):
+		if index < len(self.edges):
+			return self.edges[index]
+		return
+
+	def __setitem__(self, index, edge):
+		if index >= len(self.edges):
+			self.edges.append(edge)
+		else:
+			selt.edges[index] = edge
+
+	def __len__(self):
+		return len(self.edges)
 
 class Edge(serializer):
 
@@ -63,6 +100,21 @@ class Edge(serializer):
 		nodes = [self.node1, self.node2]
 		for node in nodes:
 			yield node 
+
+	def __getitem__(self, index):
+		if index == 0:
+			return self.node1
+		elif index == 1:
+			return self.node2
+
+	def __setitem__(self, index, node):
+		if index == 0:
+			self.node1 = node
+		elif index == 1:
+			self.node2 = node
+
+	def __len__(self):
+		return 2 
 
 def ordered_paths(
 		paths: List,

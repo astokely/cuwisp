@@ -36,9 +36,12 @@ class Nodes(serializer):
 			self, 
 			index: int,
 	) -> Node:
-		if index <= len(self.nodes):
+		if index < len(self.nodes):
 			return self.nodes[index]
 		return
+
+	def __len__(self):
+		return len(self.nodes)
 
 	def get_node_from_atom_index(
 			self, 
