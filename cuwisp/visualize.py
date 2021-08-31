@@ -69,6 +69,16 @@ class VmdRepresentation(serializer):
 		)
 		return tcl
 
+	def to_tcl(
+			self,
+			tcl: Optional[str] = '',
+			new_line: Optional[bool] = True,
+	) -> str:
+		tcl = ''.join([tcl, self.__repr__()]) 
+		if new_line:
+			return tcl
+		return tcl[:-1]	
+
 		
 def get_src_and_sink_node_coordinates(
 		path: Union[
@@ -229,6 +239,39 @@ def draw_suboptimal_paths(
 		return tcl
 	return tcl[:-1]
 
+def visualize_nodes(
+		suboptimal_paths: SuboptimalPaths,
+		style: Optional[Union[
+			vmdtcl.Lines,
+			vmdtcl.Licorice,
+			vmdtcl.VDW,
+			vmdtcl.NewCartoon,
+			vmdtcl.QuickSurf
+		]] = vmdtcl.Lines(),
+		coloring_method: Optional[str] = 'name',
+		material: Optional[str] = 'Opaque',
+		tcl: Optional[str] = '',
+		new_line: Optional[bool] = True
+) -> str:
+	node_indices = set([]) 
+	for path in suboptimal_paths:
+		for edge in path:
+			for node in edge:
+				node_indices_size = len(node_indices)
+				node_indices.add(node.index)
+				if len(node_indices) != node_indices_size:	
+					node_representation = VmdRepresentation(
+						selection=("index", node.atom_indices), 
+						style=style,
+						coloring_method=coloring_method,
+						material=material
+					)
+					tcl = node_representation.to_tcl(tcl=tcl)  
+	if new_line:
+		return tcl
+	return tcl[:-1]
+
+
 def load_pdb(
 		pdb_filename,
 		background_color: Optional[Union[str, int]] = 'white',
@@ -246,10 +289,7 @@ def load_pdb(
 	tcl = vmdtcl.set_projection(projection, tcl=tcl)	
 	tcl = vmdtcl.delete_all_representations(tcl=tcl)
 	if initial_representation != None:
-		initial_representation_copy = (
-			str(initial_representation)
-		)
-		tcl = ''.join([tcl, initial_representation_copy]) 
+		tcl = initial_representation.to_tcl(tcl=tcl)  
 	if new_line:
 		return tcl
 	return tcl[:-1]
