@@ -374,7 +374,7 @@ def load_pdb(
 		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 ) -> str:
-	tcl += f'mol new {pdb}'
+	tcl += f'mol new {pdb}\n'
 	if new_line:
 		return tcl
 	return tcl[:-1] 

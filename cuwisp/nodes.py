@@ -36,7 +36,14 @@ class Nodes(serializer):
 			self, 
 			index: int,
 	) -> Node:
-		if index < len(self.nodes):
+		if isinstance(index, slice):
+			if index.stop != None:
+				if abs(index.stop) < len(self.nodes):
+					return self.nodes[index.start:index.stop]
+			else:
+				if abs(index.start) < len(self.nodes):
+					return self.nodes[index.start:index.stop]
+		if abs(index) < len(self.nodes):
 			return self.nodes[index]
 		return
 
