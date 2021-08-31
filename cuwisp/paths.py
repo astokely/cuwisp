@@ -12,7 +12,7 @@ from math import floor
 from abserdes import Serializer as serializer
 from .nodes import Nodes, Node
 
-class SubOptimalPaths(serializer):
+class SuboptimalPaths(serializer):
 
 	def __init__(self) -> None:
 		self.paths = []
@@ -357,7 +357,7 @@ def get_suboptimal_paths(
 		cutoff: Union[float, None],
 		threads_per_block: int,
 ):
-	suboptimal_paths = SubOptimalPaths()
+	suboptimal_paths = SuboptimalPaths()
 	a = np.array(np.loadtxt(input_files_path + "/" + correlation_matrix_file))
 	n = len(a)
 	h = np.array(hedetniemi_distance(a, n, n, threads_per_block))

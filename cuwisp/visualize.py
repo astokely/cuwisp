@@ -1,11 +1,9 @@
 from colour import Color
 from typing import Optional, Tuple, Union, NamedTuple, Dict, List
-from cuwisp.paths import SubOptimalPaths
+from cuwisp.paths import SuboptimalPaths
 from cuwisp.paths import Path
-from cuwisp.nodes import Nodes 
 from cuwisp import vmdtcl
 import numpy as np
-from collections import namedtuple
 from abserdes import Serializer as serializer
 import os
 
@@ -13,7 +11,7 @@ class VisualizeSuboptimalPaths(serializer):
 
 	def __init__(
 			self,
-			suboptimal_paths: SubOptimalPaths,
+			suboptimal_paths: SuboptimalPaths,
 			color: Union[str, Tuple[str]],
 			radii: Union[float, Tuple[float]],
 			node_spheres: Optional[Dict] = False,
@@ -74,10 +72,10 @@ class VmdRepresentation(serializer):
 		
 def get_src_and_sink_node_coordinates(
 		path: Union[
-			SubOptimalPaths, Path
+			SuboptimalPaths, Path
 		],
 ) -> Tuple[np.ndarray]:
-	if isinstance(path, SubOptimalPaths):
+	if isinstance(path, SuboptimalPaths):
 		src_coordinates = path[0][0][0].coordinates
 		sink_coordinates = path[0][-1][1].coordinates
 	else:
@@ -241,15 +239,17 @@ def load_pdb(
 		tcl: Optional[str] = '',
 		new_line: Optional[str] = True,
 ) -> str:
-	tcl = vmdtcl.load_pdb(pdb, tcl=tcl)
+	tcl = vmdtcl.load_pdb(pdb_filename, tcl=tcl)
 	tcl = vmdtcl.set_background_color(background_color, tcl=tcl)	
 	tcl = vmdtcl.set_render_mode(render_mode, tcl=tcl)	
 	tcl = vmdtcl.set_depth_cueing(depth_cueing, tcl=tcl)	
 	tcl = vmdtcl.set_projection(projection, tcl=tcl)	
 	tcl = vmdtcl.delete_all_representations(tcl=tcl)
 	if initial_representation != None:
-		rep = str(initial_representation)
-		tcl = ''.join([tcl, rep]) 
+		initial_representation_copy = (
+			str(initial_representation)
+		)
+		tcl = ''.join([tcl, initial_representation_copy]) 
 	if new_line:
 		return tcl
 	return tcl[:-1]
@@ -257,30 +257,3 @@ def load_pdb(
 	
 
 
-'''
-node_spheres = {'color' : 'silver', 'radius' : 1.0, 'resolution' : 250}
-src_node_sphere = {'color' : 'red', 'radius' : 2.0, 'resolution' : 250}
-sink_node_sphere = {'color' : 'blue', 'radius' : 2.0, 'resolution' : 250}
-pdb = '/home/astokely/cuwisp/example/example_output/average.pdb'
-sp_xml = '/home/astokely/cuwisp/example/example_output/suboptimal_paths.xml'
-sp = SubOptimalPaths()
-sp.deserialize(sp_xml)
-vs = VisualizeSuboptimalPaths(
-	sp, 
-	('red', 'green'), 
-	(0.05, 0.3), 
-	node_spheres=node_spheres,
-	src_node_sphere = src_node_sphere,
-	sink_node_sphere = sink_node_sphere,
-) 
-tcl = ''
-init_rep = VmdRepresentation(style=vmdtcl.QuickSurf(), material="GlassBubble")
-tcl = load_pdb(
-	pdb, 
-	initial_representation=init_rep, 
-	tcl=tcl
-)
-tcl = draw_suboptimal_paths(vs, tcl=tcl)
-vmdtcl.save_tcl(tcl, 'sp.tcl')
-'''
-	

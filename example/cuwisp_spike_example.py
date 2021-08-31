@@ -3,7 +3,7 @@ from scipy import interpolate
 import numpy as np
 from cuwisp import calculate_suboptimal_paths 
 from cuwisp import calculate_correlation_matrix 
-from cuwisp.paths import SubOptimalPaths  
+from cuwisp.paths import SuboptimalPaths  
 from colour import Color
 calculate_correlation_matrix(
 	"example_output",
@@ -20,5 +20,5 @@ calculate_suboptimal_paths(
 	cutoff=4.5,
 )
 
-suboptimal_paths = SubOptimalPaths()
+suboptimal_paths = SuboptimalPaths()
 suboptimal_paths.deserialize("example_output/suboptimal_paths.xml")

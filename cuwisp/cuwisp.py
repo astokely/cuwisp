@@ -1,4 +1,3 @@
-
 import shutil
 import mdtraj as md
 import os

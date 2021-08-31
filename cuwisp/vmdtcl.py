@@ -22,8 +22,9 @@ class Licorice(serializer):
 		bond_radius = self.bond_radius
 		bond_resolution = self.bond_resolution
 		return (
-			f'{name} {bond_radius} '
-			f'{sphere_resolution} {bond_resolution}'
+			f'{self.name} {self.bond_radius} '
+			+ f'{self.sphere_resolution} '
+			+ f'{self.bond_resolution}'
 		)
 
 	def __iter__(self):
@@ -52,8 +53,8 @@ class VDW(serializer):
 		sphere_scale = self.sphere_scale
 		sphere_resolution = self.sphere_resolution
 		return (
-			f'{name} {sphere_scale} '
-			f'{sphere_resolution}'
+			f'{self.name} {self.sphere_scale} '
+			+ f'{self.sphere_resolution}'
 		)
 
 	def __iter__(self):
@@ -78,7 +79,7 @@ class Lines(serializer):
 		thickness = self.thickness
 		name = self.name
 		return (
-			f'{name} {thickness}'
+			f'{self.name} {self.thickness}'
 		)
 
 	def __iter__(self):
@@ -105,15 +106,11 @@ class QuickSurf(serializer):
 		self.surface_quality = surface_quality
 
 	def __repr__(self):
-		name = self.name
-		radius_scale = self.radius_scale
-		density_isovalue = self.density_isovalue
-		grid_spacing = self.grid_spacing
-		surface_quality = self.surface_quality
 		return (
-			f'{name} {radius_scale} '
-			f'{density_isovalue} {grid_spacing} '
-			f'{surface_quality}' 
+			f'{self.name} {self.radius_scale} '
+			+ f'{self.density_isovalue} '
+			+ f'{self.grid_spacing} '
+			+ f'{self.surface_quality}' 
 		)
 
 	def __iter__(self):
@@ -144,14 +141,10 @@ class NewCartoon(serializer):
 		self.spline_style = spline_style
 
 	def __repr__(self):
-		name = self.name
-		aspect_ratio = self.aspect_ratio
-		thickness = self.thickness
-		resolution = self.resolution
-		spline_style = self.spline_style
 		return (
-			f'{name} {thickness} {resolution}'
-			+ f'{aspect_ratio} {spline_style}'
+			f'{self.name} {self.thickness} '
+			+ f'{self.resolution} {self.aspect_ratio} '
+			+ f'{self.spline_style}'
 		)
 
 	def __iter__(self):
@@ -180,11 +173,10 @@ class Sphere(serializer):
 
 	def __repr__(self):
 		x, y, z = self.center
-		radius = self.radius
-		resolution = self.resolution
 		return (
 			f'draw sphere {{{x} {y} {z}}} ' 
-			+ f'radius {radius} resolution {resolution}'
+			+ f'radius {self.radius} '
+			+ f'resolution {self.resolution}'
 		)
 
 	def __iter__(self):
@@ -228,14 +220,12 @@ class Cylinder(serializer):
 	def __repr__(self):
 		x1, y1, z1 = self.center1
 		x2, y2, z2 = self.center2
-		radius = self.radius
-		resolution = self.resolution
-		filled = self.filled
 		return (
 			f'draw cylinder '
 			+ f'{{{x1} {y1} {z1}}} {{{x2} {y2} {z2}}} ' 
-			+ f'radius {radius} resolution {resolution} '
-			+ f'filled {filled}'
+			+ f'radius {self.radius} '
+			+ f'resolution {self.resolution} '
+			+ f'filled {self.filled}'
 		)
 
 	def __iter__(self):
@@ -260,6 +250,62 @@ class Cylinder(serializer):
 		else:
 			tcl += self.__repr__()
 		return tcl
+
+class Material(serializer):
+
+	def __init__(
+		self,
+		name: str,
+		ambient: Optional[float] = 0.0,
+		diffuse: Optional[float] = 0.65,
+		specular: Optional[float] = 0.50,
+		shininess: Optional[float] = 0.53,
+		mirror: Optional[float] = 0.0,
+		opacity: Optional[float] = 1.0,
+		outline: Optional[float] = 0.0,
+		outline_width: Optional[float] = 0.0,
+		angle_modulated_transparency: Optional[bool] = False,
+	) -> None:
+		self.name = name
+		self.ambient = ambient
+		self.diffuse = diffuse
+		self.specular = specular
+		self.shininess = shininess
+		self.mirror = mirror
+		self.opacity = opacity
+		self.outline = outline
+		self.outline_width = outline_width
+		self.angle_modulated_transparency = (
+			angle_modulated_transparency
+		)
+
+	def __repr__(self):
+		return (
+			f'material change ambient {self.name} {self.ambient}\n'
+			+ f'material change diffuse {self.name} {self.diffuse}\n'
+			+ f'material change specular {self.name} {self.specular}\n'
+			+ f'material change mirror {self.name} {self.mirror}\n'
+			+ f'material change opacity {self.name} {self.opacity}\n'
+			+ f'material change outline {self.name} {self.outline}\n'
+			+ f'material change outlinewidth {self.name} '
+			+ f'{self.outline_width}\n'
+			+ f'material change transmode {self.name} '
+			+ f'{int(self.angle_modulated_transparency)}\n'
+		)
+
+	def __iter__(self):
+		material_properties = {
+			'name' : self.name,
+			'diffuse' : self.diffuse,
+			'specular' : self.specular,
+			'mirror' : self.mirror,
+			'opacity' : self.opacity,
+			'outline' : self.outline,
+			'outlinewidth' : self.outline_width
+		}
+		for name, property_ in material_properties.items():
+			yield name, property_
+
 
 def generate_spline(
 		nodes: np.ndarray,
@@ -379,6 +425,16 @@ def load_pdb(
 		return tcl
 	return tcl[:-1] 
 
+def delete_molecule(
+		molid: Optional[int] = 'top',
+		tcl: Optional[str] = '',
+		new_line: Optional[bool] = True,
+) -> str:
+	tcl += f'mol delete {molid}\n'
+	if new_line:
+		return tcl
+	return tcl[:-1] 
+
 def set_antialiasing(
 		antialiasing: str,	
 		tcl: Optional[str] = '',
@@ -425,17 +481,14 @@ def delete_material(
 	return tcl[:-1]
 
 def add_material(
-		name: str,
-		properties: Optional[Dict] = {},
+		material: Material,
 		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 ) -> str:
-	tcl += delete_material(name)
-	tcl += f'material add {name}\n' 
-	for property_name, property_ in properties.items():
-		tcl += (
-			f'material change {property_name} {name} {property_}\n'
-		)
+	tcl += delete_material(material.name)
+	tcl += f'material add {material.name}\n' 
+	material_copy = str(material)
+	tcl = ''.join([tcl, material_copy])	
 	if new_line:
 		return tcl
 	return tcl[:-1]
@@ -545,6 +598,16 @@ def set_draw_color(
 		new_line: Optional[bool] = True,
 ) -> str:
 	tcl += f'draw color {colour}\n'
+	if new_line:
+		return tcl
+	return tcl[:-1]
+
+def set_draw_material(	
+		material: str,
+		tcl: Optional[str] = '',
+		new_line: Optional[bool] = True,
+) -> str:
+	tcl += f'draw material {material}\n'
 	if new_line:
 		return tcl
 	return tcl[:-1]
