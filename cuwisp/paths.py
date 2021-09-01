@@ -12,6 +12,14 @@ from math import floor
 from abserdes import Serializer as serializer
 from .nodes import Nodes, Node
 
+class CorrelationMatrix(serializer):
+	
+	def __init__(
+			self,
+			correlation_matrix: Optional[np.ndarray] = None,
+	) -> None:
+		self.correlation_matrix = correlation_matrix 
+
 class SuboptimalPaths(serializer):
 
 	def __init__(self) -> None:
@@ -295,7 +303,21 @@ def explore_paths(
 		pop: int,
 		cutoff: Union[float, None], 
 		threads_per_block: int,
+		serialization_file: str,
+		serialization_frequency: int,
+		nodes_obj: Nodes,
+		ssp: np.ndarray,
 ) -> Set:
+	correlation_matrix_serialization_index = 0
+	if serialization_file != '':
+		correlation_matrix = CorrelationMatrix(a)
+		prefix = serialization_file[:-4]
+		xml_filename = (
+			f'{prefix}_matrix'
+			+ f'{correlation_matrix_serialization_index}.xml'
+		)
+		correlation_matrix.serialize(xml_filename)
+		correlation_matrix_serialization_index += 1
 	h = np.array(hedetniemi_distance(a, n, n, threads_per_block))
 	q = deque([])
 	s = set([])
@@ -327,6 +349,55 @@ def explore_paths(
 		prev_s_size = len(s)
 		s.add(tuple(path))
 		new_s_size = len(s)
+		if new_s_size != prev_s_size:
+			if serialization_file != '':
+				if (
+					correlation_matrix_serialization_index
+					% serialization_frequency == 0
+				):
+					correlation_matrix = CorrelationMatrix(a)
+					prefix = serialization_file[:-4]
+					xml_filename = (
+						f'{prefix}_correlation_matrix'
+						+ f'{correlation_matrix_serialization_index}.xml'
+					)
+					correlation_matrix.serialize(
+						xml_filename
+					)
+					d = {i[-1] : i[:-1] for i in s}
+					d[ssp[-1]] = ssp[:-1]
+					path_index = 0
+					suboptimal_paths = SuboptimalPaths()
+					for k in sorted(d):
+						path = Path()
+						path.length = k
+						path.edges = [] 
+						path_nodes = set([])
+						for path_edge in ordered_paths(d[k], src):
+							node1_index, node2_index = path_edge
+							path_nodes.add(node1_index)
+							path_nodes.add(node2_index)
+							edge = Edge()	
+							edge.node1 = nodes_obj[node1_index]
+							edge.node2 = nodes_obj[node2_index]
+							path.edges.append(edge)
+						path.src = src
+						path.sink = sink 
+						path.index = path_index
+						path.num_nodes = len(path_nodes) 
+						path.num_edges = len(path.edges) 
+						suboptimal_paths.paths.append(path)
+						path_index += 1
+					suboptimal_paths.src = src
+					suboptimal_paths.sink = sink 
+					suboptimal_paths.num_paths = len(suboptimal_paths.paths) 
+					xml_filename = (
+						f'{prefix}_suboptimal_paths'
+						+ f'{correlation_matrix_serialization_index}.xml'
+					)
+					suboptimal_paths.serialize(xml_filename)
+				correlation_matrix_serialization_index += 1
+		h = np.array(hedetniemi_distance(a, n, n, threads_per_block))
 		nodes = [(nodes[i], nodes[i+1]) for i in range(len(nodes)-1)]
 		for i in nodes:
 			if i not in n_p:
@@ -356,8 +427,11 @@ def get_suboptimal_paths(
 		suboptimal_paths_xml: str, 
 		cutoff: Union[float, None],
 		threads_per_block: int,
-):
-	suboptimal_paths = SuboptimalPaths()
+		serialization_file: str,
+		serialization_frequency: int,
+) -> None:
+	nodes_obj = Nodes()
+	nodes_obj.deserialize(input_files_path + "/" + nodes_xml_file)
 	a = np.array(np.loadtxt(input_files_path + "/" + correlation_matrix_file))
 	n = len(a)
 	h = np.array(hedetniemi_distance(a, n, n, threads_per_block))
@@ -373,7 +447,20 @@ def get_suboptimal_paths(
 	ssp = path
 	ssp.append(h[src][sink])
 	nodes = [(nodes[i], nodes[i+1]) for i in range(len(nodes)-1)]
-	paths1 = list(explore_paths(src, sink, a, nodes, n, 0, cutoff, threads_per_block))
+	paths1 = list(explore_paths(
+		src,
+		sink,
+		a,
+		nodes,
+		n,
+		0,
+		cutoff,
+		threads_per_block,
+		serialization_file,
+		serialization_frequency,
+		nodes_obj,
+		ssp,
+	))
 	d1 = {i[-1] : i[:-1] for i in paths1}
 
 	a = np.array(np.loadtxt(input_files_path + "/" + correlation_matrix_file))
@@ -383,7 +470,20 @@ def get_suboptimal_paths(
 	ssp = path
 	ssp.append(h[src][sink])
 	nodes = [(nodes[i], nodes[i+1]) for i in range(len(nodes)-1)]
-	paths2 = list(explore_paths(src, sink, a, nodes, n, 1, cutoff, threads_per_block))
+	paths2 = list(explore_paths(
+		src,
+		sink,
+		a,
+		nodes,
+		n,
+		1,
+		cutoff,
+		threads_per_block,
+		serialization_file,
+		serialization_frequency,
+		nodes_obj,
+		ssp,
+	))
 	d2 = {i[-1] : i[:-1] for i in paths2}
 
 	a = np.array(np.loadtxt(input_files_path + "/" + correlation_matrix_file))
@@ -393,7 +493,20 @@ def get_suboptimal_paths(
 	ssp = path
 	ssp.append(h[src][sink])
 	nodes = [(nodes[i], nodes[i+1]) for i in range(len(nodes)-1)]
-	paths3 = list(explore_paths(src, sink, a, nodes, n, 2, cutoff, threads_per_block))
+	paths3 = list(explore_paths(
+		src,
+		sink,
+		a,
+		nodes,
+		n,
+		2,
+		cutoff,
+		threads_per_block,
+		serialization_file,
+		serialization_frequency,
+		nodes_obj,
+		ssp,
+	))
 	d3 = {i[-1] : i[:-1] for i in paths3}
 
 	a = np.array(np.loadtxt(input_files_path + "/" + correlation_matrix_file))
@@ -403,7 +516,20 @@ def get_suboptimal_paths(
 	ssp = path
 	ssp.append(h[src][sink])
 	nodes = [(nodes[i], nodes[i+1]) for i in range(len(nodes)-1)]
-	paths4 = list(explore_paths(src, sink, a, nodes, n, 3, cutoff, threads_per_block))
+	paths4 = list(explore_paths(
+		src,
+    	sink,
+    	a,
+    	nodes,
+    	n,
+    	3,
+    	cutoff,
+    	threads_per_block,
+    	serialization_file,
+		serialization_frequency,
+		nodes_obj,
+		ssp,
+	))
 	d4 = {i[-1] : i[:-1] for i in paths4}
 
 	d = {}
@@ -412,9 +538,8 @@ def get_suboptimal_paths(
 	d.update(d3)
 	d.update(d4)
 	d[ssp[-1]] = ssp[:-1]
-	nodes = Nodes()
-	nodes.deserialize(input_files_path + "/" + nodes_xml_file)
 	path_index = 0
+	suboptimal_paths = SuboptimalPaths()
 	for k in sorted(d):
 		path = Path()
 		path.length = k
@@ -425,8 +550,8 @@ def get_suboptimal_paths(
 			path_nodes.add(node1_index)
 			path_nodes.add(node2_index)
 			edge = Edge()	
-			edge.node1 = nodes[node1_index]
-			edge.node2 = nodes[node2_index]
+			edge.node1 = nodes_obj[node1_index]
+			edge.node2 = nodes_obj[node2_index]
 			path.edges.append(edge)
 		path.src = src
 		path.sink = sink 

@@ -61,6 +61,12 @@ def calculate_suboptimal_paths(
 		correlation_matrix_filename: Optional[str] = '',
 		nodes_xml_filename: Optional[str] = '',
 		suboptimal_paths_xml_filename: Optional[str] = '',
+		serialization_xml_filename: Optional[
+			str
+		] = '',
+		serialization_frequency: Optional[
+			int
+		] = 1,
 ) -> None:
 		if correlation_matrix_filename == '':
 			if use_contact_map_correlation_matrix: 
@@ -81,7 +87,9 @@ def calculate_suboptimal_paths(
 			sink,
 			suboptimal_paths_xml_filename, 
 			cutoff,
-			threads_per_block
+			threads_per_block,
+			serialization_xml_filename,
+			serialization_frequency,
 		)
 
 

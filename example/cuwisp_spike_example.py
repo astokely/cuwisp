@@ -16,8 +16,9 @@ calculate_suboptimal_paths(
 	80, 
 	100,
 	threads_per_block=1024, 
-	#use_contact_map_correlation_matrix=False,
-	cutoff=4.5,
+	use_contact_map_correlation_matrix=False,
+	serialization_xml_filename='xmls/spike.xml',
+	serialization_frequency=1,
 )
 
 suboptimal_paths = SuboptimalPaths()
