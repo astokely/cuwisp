@@ -26,7 +26,7 @@ setup(
 		"data-science-types",
 		"abserdes",
 		"matplotlib",
-		"colours"
+		"colour",
 	],              
     platforms=['Linux',
                 'Unix',],

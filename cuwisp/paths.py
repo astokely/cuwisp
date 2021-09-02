@@ -1,3 +1,4 @@
+import time
 import mdtraj as md
 from collections import deque
 from mpl_toolkits import mplot3d
@@ -229,7 +230,9 @@ def hedetniemi_distance(
 	a_device = cuda.to_device(a)
 	b_device = cuda.device_array(shape=(n,n))
 	h_device = cuda.device_array(shape=(n,n))
-	dimGrid, dimBlock = cuda_grid_and_block_dims(n, threads_per_block)
+	dimGrid, dimBlock = (
+		cuda_grid_and_block_dims(n, threads_per_block)
+	)
 	init_matrix[dimGrid, dimBlock](
 		a_device, 
 		b_device, 
@@ -238,7 +241,9 @@ def hedetniemi_distance(
 	)
 	for i in range(max_edges_in_ssp):
 		found_ssp = cuda.to_device([True])
-		dimGrid, dimBlock = cuda_grid_and_block_dims(n, threads_per_block)
+		dimGrid, dimBlock = (
+			cuda_grid_and_block_dims(n, threads_per_block)
+		)
 		all_pair_hedetniemit[dimGrid, dimBlock](
 			a_device, 
 			b_device, 
@@ -294,6 +299,70 @@ def get_ssp(
 			found_next_node = True
 	return path, nodes
 
+def serialize_correlation_matrix(
+		a: np.ndarray,
+		serialization_file: str,
+		serialization_index: int,
+		round_index: int,
+		correlation_matrix_serialization_path: str,
+) -> None:
+	correlation_matrix = CorrelationMatrix(a)
+	prefix = serialization_file[:-4]
+	xml_filename = (
+		f'{correlation_matrix_serialization_path}/'
+		+ f'{prefix}_correlation_matrix'
+		+ f'_{round_index}_{serialization_index}.xml'
+	)
+	correlation_matrix.serialize(
+		xml_filename
+	)
+
+def serialize_suboptimal_paths(
+		src: int,
+		sink: int,
+		serialization_file: str,
+		serialization_index: int,
+		ssp: np.ndarray,
+		nodes: Nodes,
+		s: Set, 	
+		round_index: int,
+		suboptimal_paths_serialization_path: str,
+) -> None:
+	prefix = serialization_file[:-4]
+	d = {i[-1] : i[:-1] for i in s}
+	d[ssp[-1]] = ssp[:-1]
+	path_index = 0
+	suboptimal_paths = SuboptimalPaths()
+	for k in sorted(d):
+		path = Path()
+		path.length = k
+		path.edges = [] 
+		path_nodes = set([])
+		for path_edge in ordered_paths(d[k], src):
+			node1_index, node2_index = path_edge
+			path_nodes.add(node1_index)
+			path_nodes.add(node2_index)
+			edge = Edge()	
+			edge.node1 = nodes[node1_index]
+			edge.node2 = nodes[node2_index]
+			path.edges.append(edge)
+		path.src = src
+		path.sink = sink 
+		path.index = path_index
+		path.num_nodes = len(path_nodes) 
+		path.num_edges = len(path.edges) 
+		suboptimal_paths.paths.append(path)
+		path_index += 1
+	suboptimal_paths.src = src
+	suboptimal_paths.sink = sink 
+	suboptimal_paths.num_paths = len(suboptimal_paths.paths) 
+	xml_filename = (
+		f'{suboptimal_paths_serialization_path}/'
+		+ f'{prefix}_suboptimal_paths'
+		+ f'_{round_index}_{serialization_index}.xml'
+	)
+	suboptimal_paths.serialize(xml_filename)
+
 def explore_paths(
 		src: int, 
 		sink: int, 
@@ -307,24 +376,33 @@ def explore_paths(
 		serialization_frequency: int,
 		nodes_obj: Nodes,
 		ssp: np.ndarray,
+		round_index: int,
+		correlation_matrix_serialization_path: str,
+		suboptimal_paths_serialization_path: str,
 ) -> Set:
-	correlation_matrix_serialization_index = 0
+	serialization_index = 0
 	if serialization_file != '':
-		correlation_matrix = CorrelationMatrix(a)
-		prefix = serialization_file[:-4]
-		xml_filename = (
-			f'{prefix}_matrix'
-			+ f'{correlation_matrix_serialization_index}.xml'
+		serialize_correlation_matrix(
+			a,	
+			serialization_file,
+			serialization_index,
+			round_index,
+			correlation_matrix_serialization_path,
 		)
-		correlation_matrix.serialize(xml_filename)
-		correlation_matrix_serialization_index += 1
-	h = np.array(hedetniemi_distance(a, n, n, threads_per_block))
+		serialization_index += 1
+	h = np.array(hedetniemi_distance(
+		a, 
+		n, 
+		n, 
+		threads_per_block
+	))
 	q = deque([])
 	s = set([])
 	n_p = set([])
 	for i in nodes:
 		q.append(i)
 		n_p.add(i)
+	start = time.time()
 	while q:
 		for i in nodes:
 			n_p.add(i)
@@ -351,54 +429,31 @@ def explore_paths(
 		new_s_size = len(s)
 		if new_s_size != prev_s_size:
 			if serialization_file != '':
-				if (
-					correlation_matrix_serialization_index
-					% serialization_frequency == 0
-				):
-					correlation_matrix = CorrelationMatrix(a)
-					prefix = serialization_file[:-4]
-					xml_filename = (
-						f'{prefix}_correlation_matrix'
-						+ f'{correlation_matrix_serialization_index}.xml'
+				if (time.time() - start) > serialization_frequency:
+					serialize_correlation_matrix(
+						a,
+						serialization_file,
+						serialization_index,
+						round_index,
+						correlation_matrix_serialization_path,
 					)
-					correlation_matrix.serialize(
-						xml_filename
-					)
-					d = {i[-1] : i[:-1] for i in s}
-					d[ssp[-1]] = ssp[:-1]
-					path_index = 0
-					suboptimal_paths = SuboptimalPaths()
-					for k in sorted(d):
-						path = Path()
-						path.length = k
-						path.edges = [] 
-						path_nodes = set([])
-						for path_edge in ordered_paths(d[k], src):
-							node1_index, node2_index = path_edge
-							path_nodes.add(node1_index)
-							path_nodes.add(node2_index)
-							edge = Edge()	
-							edge.node1 = nodes_obj[node1_index]
-							edge.node2 = nodes_obj[node2_index]
-							path.edges.append(edge)
-						path.src = src
-						path.sink = sink 
-						path.index = path_index
-						path.num_nodes = len(path_nodes) 
-						path.num_edges = len(path.edges) 
-						suboptimal_paths.paths.append(path)
-						path_index += 1
-					suboptimal_paths.src = src
-					suboptimal_paths.sink = sink 
-					suboptimal_paths.num_paths = len(suboptimal_paths.paths) 
-					xml_filename = (
-						f'{prefix}_suboptimal_paths'
-						+ f'{correlation_matrix_serialization_index}.xml'
-					)
-					suboptimal_paths.serialize(xml_filename)
-				correlation_matrix_serialization_index += 1
-		h = np.array(hedetniemi_distance(a, n, n, threads_per_block))
-		nodes = [(nodes[i], nodes[i+1]) for i in range(len(nodes)-1)]
+					serialize_suboptimal_paths(
+						src,
+						sink,
+						serialization_file,
+						serialization_index,
+						ssp,
+						nodes_obj,
+						s, 	
+						round_index,
+						suboptimal_paths_serialization_path,
+					)	
+					start = time.time()
+					serialization_index += 1
+		nodes = [
+			(nodes[i], nodes[i+1]) 
+			for i in range(len(nodes)-1)
+		]
 		for i in nodes:
 			if i not in n_p:
 				if pop == 0:
@@ -429,10 +484,16 @@ def get_suboptimal_paths(
 		threads_per_block: int,
 		serialization_file: str,
 		serialization_frequency: int,
+		correlation_matrix_serialization_path: str,
+		suboptimal_paths_serialization_path: str,
+		simulation_round_index: int,
 ) -> None:
+	
 	nodes_obj = Nodes()
 	nodes_obj.deserialize(input_files_path + "/" + nodes_xml_file)
-	a = np.array(np.loadtxt(input_files_path + "/" + correlation_matrix_file))
+	a = np.array(np.loadtxt(
+		input_files_path + "/" + correlation_matrix_file
+	))
 	n = len(a)
 	h = np.array(hedetniemi_distance(a, n, n, threads_per_block))
 	if get_ssp(src, sink, h, a) is None:
@@ -460,16 +521,22 @@ def get_suboptimal_paths(
 		serialization_frequency,
 		nodes_obj,
 		ssp,
+		simulation_round_index,
+		correlation_matrix_serialization_path,
+		suboptimal_paths_serialization_path,
 	))
 	d1 = {i[-1] : i[:-1] for i in paths1}
 
-	a = np.array(np.loadtxt(input_files_path + "/" + correlation_matrix_file))
+	a = np.array(np.loadtxt(
+		input_files_path + "/" + correlation_matrix_file
+	))
 	n = len(a)
 	h = np.array(hedetniemi_distance(a, n, n, threads_per_block))
 	path, nodes = get_ssp(src, sink, h, a)
 	ssp = path
 	ssp.append(h[src][sink])
 	nodes = [(nodes[i], nodes[i+1]) for i in range(len(nodes)-1)]
+	simulation_round_index += 1
 	paths2 = list(explore_paths(
 		src,
 		sink,
@@ -483,16 +550,22 @@ def get_suboptimal_paths(
 		serialization_frequency,
 		nodes_obj,
 		ssp,
+		simulation_round_index,
+		correlation_matrix_serialization_path,
+		suboptimal_paths_serialization_path,
 	))
 	d2 = {i[-1] : i[:-1] for i in paths2}
 
-	a = np.array(np.loadtxt(input_files_path + "/" + correlation_matrix_file))
+	a = np.array(np.loadtxt(
+		input_files_path + "/" + correlation_matrix_file
+	))
 	n = len(a)
 	h = np.array(hedetniemi_distance(a, n, n, threads_per_block))
 	path, nodes = get_ssp(src, sink, h, a)
 	ssp = path
 	ssp.append(h[src][sink])
 	nodes = [(nodes[i], nodes[i+1]) for i in range(len(nodes)-1)]
+	simulation_round_index += 1
 	paths3 = list(explore_paths(
 		src,
 		sink,
@@ -506,16 +579,22 @@ def get_suboptimal_paths(
 		serialization_frequency,
 		nodes_obj,
 		ssp,
+		simulation_round_index,
+		correlation_matrix_serialization_path,
+		suboptimal_paths_serialization_path,
 	))
 	d3 = {i[-1] : i[:-1] for i in paths3}
 
-	a = np.array(np.loadtxt(input_files_path + "/" + correlation_matrix_file))
+	a = np.array(np.loadtxt(
+		input_files_path + "/" + correlation_matrix_file
+	))
 	n = len(a)
 	h = np.array(hedetniemi_distance(a, n, n, threads_per_block))
 	path, nodes = get_ssp(src, sink, h, a)
 	ssp = path
 	ssp.append(h[src][sink])
 	nodes = [(nodes[i], nodes[i+1]) for i in range(len(nodes)-1)]
+	simulation_round_index += 1
 	paths4 = list(explore_paths(
 		src,
     	sink,
@@ -529,6 +608,9 @@ def get_suboptimal_paths(
 		serialization_frequency,
 		nodes_obj,
 		ssp,
+		simulation_round_index,
+		correlation_matrix_serialization_path,
+		suboptimal_paths_serialization_path,
 	))
 	d4 = {i[-1] : i[:-1] for i in paths4}
 
@@ -563,5 +645,7 @@ def get_suboptimal_paths(
 	suboptimal_paths.src = src
 	suboptimal_paths.sink = sink 
 	suboptimal_paths.num_paths = len(suboptimal_paths.paths) 
-	suboptimal_paths.serialize(input_files_path + "/" + suboptimal_paths_xml)
+	suboptimal_paths.serialize(
+		input_files_path + "/" + suboptimal_paths_xml
+	)
 

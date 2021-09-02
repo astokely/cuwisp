@@ -61,12 +61,11 @@ def calculate_suboptimal_paths(
 		correlation_matrix_filename: Optional[str] = '',
 		nodes_xml_filename: Optional[str] = '',
 		suboptimal_paths_xml_filename: Optional[str] = '',
-		serialization_xml_filename: Optional[
-			str
-		] = '',
-		serialization_frequency: Optional[
-			int
-		] = 1,
+		serialization_xml_filename: Optional[str] = '',
+		serialization_frequency: Optional[float] = 1,
+		correlation_matrix_serialization_path: Optional[str] = '',
+		suboptimal_paths_serialization_path: Optional[str] = '', 
+		simulation_round_index: Optional[int] = 0,
 ) -> None:
 		if correlation_matrix_filename == '':
 			if use_contact_map_correlation_matrix: 
@@ -79,6 +78,27 @@ def calculate_suboptimal_paths(
 			nodes_xml_file = "nodes.xml"
 		if suboptimal_paths_xml_filename == '':
 			suboptimal_paths_xml_filename = "suboptimal_paths.xml" 
+		if serialization_xml_filename:
+			if correlation_matrix_serialization_path == '':
+				correlation_matrix_serialization_path = (
+					'serialized_correlation_matrices'
+				)
+			if not os.path.exists(
+				correlation_matrix_serialization_path
+			):
+				os.makedirs(
+					correlation_matrix_serialization_path
+				)
+			if suboptimal_paths_serialization_path == '':
+				suboptimal_paths_serialization_path = (
+					'serialized_suboptimal_paths'
+				)
+			if not os.path.exists(
+				suboptimal_paths_serialization_path
+			):
+				os.makedirs(
+					suboptimal_paths_serialization_path
+				)
 		get_suboptimal_paths(
 			input_files_path, 
 			correlation_matrix_file,
@@ -90,6 +110,9 @@ def calculate_suboptimal_paths(
 			threads_per_block,
 			serialization_xml_filename,
 			serialization_frequency,
+			correlation_matrix_serialization_path,
+			suboptimal_paths_serialization_path,
+			simulation_round_index,
 		)
 
 
