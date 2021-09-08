@@ -326,53 +326,63 @@ class GetCorrelationMatrix:
 					pdb.nodes_array[index]
 				)
 		
+		num_nodes = len(self.average_pdb.residue_identifiers_in_order)
 		numpyify_dict(nodes, np.float64)
+		node_indices = [i for i in range(len(nodes))]	
 
-		set_of_deltas = {}
-
-		for index, residue_iden in enumerate(
-			self.average_pdb.residue_identifiers_in_order
-		):
-			set_of_deltas[residue_iden] = (
-				nodes[residue_iden] 
-				- self.average_pdb.nodes_array[index]
+		new_nodes = {}
+		new_id_to_atom = {}
+		for i in node_indices:
+			new_nodes[i] = nodes[list(nodes)[i]]
+		for i in node_indices:
+			new_id_to_atom[i] = (
+				self.average_pdb.residue_identifier_to_atom_indices[
+					list(self.average_pdb.residue_identifier_to_atom_indices)[i]
+				]
 			)
+		self.average_pdb.residue_identifier_to_atom_indices = new_id_to_atom
+		nodes = new_nodes
+		self.average_pdb.residue_identifiers_in_order = list(nodes.keys())
 
-		ensmeble_average_deltas_self_dotproducted = {}
-		
-		for residue_iden in self.average_pdb.residue_identifiers_in_order:
+		set_of_deltas = [] 
+		for index in range(num_nodes):
+			set_of_deltas.append((
+				nodes[index] 
+				- self.average_pdb.nodes_array[index]
+			))
+		ensmeble_average_deltas_self_dotproducted = np.zeros(
+			len(self.average_pdb.residue_identifiers_in_order),
+			dtype=np.float64 
+		)
+		for index in range(num_nodes):
 			dot_products = (
-				set_of_deltas[residue_iden] * set_of_deltas[residue_iden]
+				set_of_deltas[index] * set_of_deltas[index]
 			).sum(axis=1)
-			ensmeble_average_deltas_self_dotproducted[residue_iden] = np.average(
+			ensmeble_average_deltas_self_dotproducted[index] = np.average(
 				dot_products
 			)
 
 		self.correlations = np.empty(
 			(
-				len(self.average_pdb.residue_identifiers_in_order),
-				len(self.average_pdb.residue_identifiers_in_order),
+				num_nodes,
+				num_nodes
 			)
 		)
+		for x in range(num_nodes):
+			for y in range(num_nodes):
 
-		for x in range(len(self.average_pdb.residue_identifiers_in_order)):
-			residue1_key = self.average_pdb.residue_identifiers_in_order[x]
-			for y in range(len(self.average_pdb.residue_identifiers_in_order)):
-				residue2_key = self.average_pdb.residue_identifiers_in_order[y]
-
-				residue1_deltas = set_of_deltas[residue1_key]
-				residue2_deltas = set_of_deltas[residue2_key]
+				residue1_deltas = set_of_deltas[x]
+				residue2_deltas = set_of_deltas[y]
 
 				if len(residue1_deltas) != len(residue2_deltas):
 					sys.exit(0)
 
 				dot_products = (residue1_deltas * residue2_deltas).sum(axis=1)
-
 				ensemble_average_dot_products = np.average(dot_products)
 
 				C = ensemble_average_dot_products / np.power(
-					ensmeble_average_deltas_self_dotproducted[residue1_key]
-					* ensmeble_average_deltas_self_dotproducted[residue2_key],
+					ensmeble_average_deltas_self_dotproducted[x]
+					* ensmeble_average_deltas_self_dotproducted[y],
 					0.5,
 				)
 
@@ -387,7 +397,7 @@ class GetCorrelationMatrix:
 		contact_map = np.ones(self.correlations.shape)
 		if contact_map_distance_limit != np.inf:
 			for index1 in range(
-				len(self.average_pdb.residue_identifiers_in_order) - 1
+				num_nodes-1
 			):
 				residue_iden1 = self.average_pdb.residue_identifiers_in_order[
 					index1
@@ -398,7 +408,7 @@ class GetCorrelationMatrix:
 					]
 				]
 				for index2 in range(
-					index1 + 1, len(self.average_pdb.residue_identifiers_in_order)
+					index1 + 1, num_nodes 
 				):
 					residue_iden2 = self.average_pdb.residue_identifiers_in_order[
 						index2
