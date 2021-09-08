@@ -7,22 +7,16 @@ import cuwisp.visualize as visualize
 from colour import Color
 calculate_correlation_matrix(
 	"example_output",
-	10.0,
-	'spike_example.pdb',
-	cuda_parameters = (256, 100, 1024, 1000),
+	4.5,
+	'/home/astokely/Downloads/wisp/example_commandline/trajectory_20_frames.pdb',
+	cuda_parameters = (64, 10, 256, 100),
 )
-
 calculate_suboptimal_paths(
 	"example_output", 
-	80, 
-	100,
+	9, 
+	10,
 	threads_per_block=1024, 
-	use_contact_map_correlation_matrix=False,
-	serialization_xml_filename='spike.xml',
-	serialization_frequency=0.05, #In seconds
-	simulation_round_index=0,
-	correlation_matrix_serialization_path='correlation_matrices',
-	suboptimal_paths_serialization_path='suboptimal_paths',
+	cutoff=3.2,
 )
 
 suboptimal_paths = SuboptimalPaths()

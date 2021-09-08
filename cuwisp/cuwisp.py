@@ -63,8 +63,8 @@ def calculate_suboptimal_paths(
 		suboptimal_paths_xml_filename: Optional[str] = '',
 		serialization_xml_filename: Optional[str] = '',
 		serialization_frequency: Optional[float] = 1,
-		correlation_matrix_serialization_path: Optional[str] = '',
-		suboptimal_paths_serialization_path: Optional[str] = '', 
+		correlation_matrix_serialization_directory: Optional[str] = '',
+		suboptimal_paths_serialization_directory: Optional[str] = '', 
 		simulation_round_index: Optional[int] = 0,
 ) -> None:
 		if correlation_matrix_filename == '':
@@ -79,25 +79,25 @@ def calculate_suboptimal_paths(
 		if suboptimal_paths_xml_filename == '':
 			suboptimal_paths_xml_filename = "suboptimal_paths.xml" 
 		if serialization_xml_filename:
-			if correlation_matrix_serialization_path == '':
-				correlation_matrix_serialization_path = (
+			if correlation_matrix_serialization_directory == '':
+				correlation_matrix_serialization_directory = (
 					'serialized_correlation_matrices'
 				)
 			if not os.path.exists(
-				correlation_matrix_serialization_path
+				correlation_matrix_serialization_directory
 			):
 				os.makedirs(
-					correlation_matrix_serialization_path
+					correlation_matrix_serialization_directory
 				)
-			if suboptimal_paths_serialization_path == '':
-				suboptimal_paths_serialization_path = (
+			if suboptimal_paths_serialization_directory == '':
+				suboptimal_paths_serialization_directory = (
 					'serialized_suboptimal_paths'
 				)
 			if not os.path.exists(
-				suboptimal_paths_serialization_path
+				suboptimal_paths_serialization_directory
 			):
 				os.makedirs(
-					suboptimal_paths_serialization_path
+					suboptimal_paths_serialization_directory
 				)
 		get_suboptimal_paths(
 			input_files_path, 
@@ -110,8 +110,8 @@ def calculate_suboptimal_paths(
 			threads_per_block,
 			serialization_xml_filename,
 			serialization_frequency,
-			correlation_matrix_serialization_path,
-			suboptimal_paths_serialization_path,
+			correlation_matrix_serialization_directory,
+			suboptimal_paths_serialization_directory,
 			simulation_round_index,
 		)
 

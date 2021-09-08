@@ -1,3 +1,4 @@
+from collections import namedtuple
 import shutil
 import mdtraj as md
 import os
@@ -6,10 +7,12 @@ import numpy as np
 from scipy.spatial.distance import cdist
 from .calccom import calc_com as calc_com
 from .cparse import parsePdb as parse
-from typing import Any, Optional
+from typing import Any, Optional, Tuple, \
+	Union, List, Dict
 from .sum_coordinates import sumCoords
 from abserdes import Serializer as serializer
 from multiprocessing import Pool
+from collections import defaultdict
 from multiprocessing import sharedctypes
 from .nodes import Nodes, Node
 
@@ -32,7 +35,12 @@ def shared_ctypes_multiprocessing_array(
 
 class Molecule:
 
-	def load_pdb_from_list(self, traj, num_frames=False, frame=False):
+	def load_pdb_from_list(
+				self, 
+				traj: md.core.trajectory, 
+				num_frames: Optional[bool] = False, 
+				frame: Optional[bool] = False,
+	) -> None:
 		self.trajectory = traj
 		top = self.trajectory.topology
 		atoms = [atom for atom in top.atoms]
@@ -43,47 +51,210 @@ class Molecule:
 				scmat[i][num_frames + frame] = coords[i][1]
 				scmat[i][2*num_frames + frame] = coords[i][2]
 		
-		self.atomnames = np.array([atom.name for atom in atoms]) 
-		self.chains = np.array([atom.residue.chain.index for atom in atoms]) 
-		self.masses = np.array([atom.element.mass for atom in atoms]) 
-		self.resids = np.array([atom.residue.index+1 for atom in atoms])
-		self.resnames = np.array([atom.residue.name for atom in atoms])
-		self.elements = np.array([atom.element.symbol for atom in atoms])
+		self.atomnames = np.array([
+			atom.name for atom in atoms
+		]) 
+		self.chains = np.array([
+			atom.residue.chain.index for atom in atoms
+		]) 
+		self.masses = np.array([
+			atom.element.mass for atom in atoms
+		]) 
+		self.resids = np.array([
+			atom.residue.index+1 for atom in atoms
+		])
+		self.resnames = np.array([
+			atom.residue.name for atom in atoms
+		])
+		self.elements = np.array([
+			atom.element.symbol for atom in atoms
+		])
 		self.coordinates = np.array(coords, np.float64)
 
-	def map_atoms_to_residues(self):
+	def map_atoms_to_residues(self) -> None:
 
 		d = {}
-		for i in range(len(self.coordinates)):
-			d[i] = str(self.chains[i]) + "_" + self.resnames[i] + "_" + str(self.resids[i])
-		ident = {} 
-		for v in d.values():
-			ident[v] = 'a'
-		ri = list(ident.keys())
-		self.residue_identifiers_in_order = np.array(ri)
-		self.residue_identifier_to_atom_indices = {}
-		for k, v in d.items():
-			if v not in self.residue_identifier_to_atom_indices:
-				self.residue_identifier_to_atom_indices[v] = []
-			self.residue_identifier_to_atom_indices[v].append(k)
-		for k in self.residue_identifier_to_atom_indices.keys():
-			self.residue_identifier_to_atom_indices[k] = np.array(self.residue_identifier_to_atom_indices[k])
+		atom_indices_to_identifiers_map = {
+			index : (
+				f'{self.chains[index]}_'
+				+ f'{self.resnames[index]}_'
+				+ f'{self.resids[index]}'
+			) 
+			for index in range(len(self.coordinates))
+		}
+		self.residue_identifiers_in_order = np.array(list({ 
+			identifier : None 
+			for identifier in 
+			atom_indices_to_identifiers_map.values()
+		}))
+		self.residue_identifier_to_atom_indices = defaultdict(list)
+		for k, v in atom_indices_to_identifiers_map.items():
+			self.residue_identifier_to_atom_indices[v].append(k)		 
 
 
-	def map_nodes_to_residues(self, coms):
+	def map_nodes_to_residues(
+			self, 
+			coms: np.ndarray,
+	) -> None:
 		self.nodes_array = np.empty((len(self.residue_identifiers_in_order), 3))
 		for index in range(len(coms)):
 			self.nodes_array[index][0] = coms[index][0]
 			self.nodes_array[index][1] = coms[index][1]
 			self.nodes_array[index][2] = coms[index][2]
 
-def parse_pdb(args):
+def parse_pdb(
+		args: Tuple[Union[int, int, str]],
+) -> Molecule:
 	path, pdb_file, num_frames = args
 	frame = int(pdb_file[:-4])
 	traj = md.load(path+pdb_file)
 	pdb = Molecule()
 	pdb.load_pdb_from_list(traj, num_frames, frame)
 	return pdb
+
+def prepare_trajectory_for_analysis(
+		temp_file_directory: str,
+		pdb_trajectory_filename: str,
+) -> List[str]:
+	if os.path.exists(temp_file_directory):
+		shutil.rmtree(temp_file_directory)
+	os.makedirs(temp_file_directory)
+	parse(pdb_trajectory_filename, temp_file_directory + "/")
+	pdb_single_frame_files = [
+		pdb_file for pdb_file 
+		in os.listdir(temp_file_directory + "/")
+	]
+	return pdb_single_frame_files
+
+def get_parameters_for_multiprocessing_pdb_parser(
+		temp_file_directory: str,
+		pdb_from_trajectory: Molecule,
+) -> Tuple[Union[int, int, List[str], int]]:
+	num_traj_frames = len(
+		os.listdir(temp_file_directory + "/")
+	) 
+	num_atoms = len(
+		pdb_from_trajectory.coordinates
+	)
+	paths = [
+		temp_file_directory + "/" 
+		for path in range(num_traj_frames)
+	]
+	num_frames = [
+		num_traj_frames for path 	
+		in range(num_traj_frames)
+	]
+	return (
+		num_traj_frames,
+		num_atoms,
+		paths,
+		num_frames,
+	)
+
+def multiprocessing_pdb_parser(
+		num_traj_frames: int,
+		num_atoms: int,
+		num_multiprocessing_processes: int,
+		paths: List[str],
+		pdb_single_frame_files: List[str],
+		num_frames: int,
+		average_pdb: Molecule,
+		num_blocks_sum_coordinates_calc: int, 
+		threads_per_block_sum_coordinates_calc: int,
+) -> Molecule:
+	global scmat
+	cmat = ctypes_matrix(
+		3*num_traj_frames, 
+		num_atoms
+	)
+	scmat = shared_ctypes_multiprocessing_array(cmat)
+	with Pool(num_multiprocessing_processes) as pool:
+		pdbs = list(pool.map(
+			parse_pdb, 
+			zip(
+				paths, 
+				pdb_single_frame_files, 
+				num_frames
+			)
+		))
+	coordinates = np.ctypeslib.as_array(scmat)
+	del scmat
+	average_pdb.coordinates = sumCoords(
+		coordinates,
+		num_traj_frames, 
+		num_atoms, 
+		num_blocks_sum_coordinates_calc, 
+		threads_per_block_sum_coordinates_calc
+	)
+	for pdb in pdbs:
+		pdb.map_atoms_to_residues()
+	average_pdb.map_atoms_to_residues()
+	pdbs.append(average_pdb)
+	return pdbs
+
+def serialize_nodes(
+		average_pdb: Molecule,
+		coms: np.ndarray,
+		output_directory: str,
+		nodes_xml_filename: str,
+) -> None:
+	nodes = Nodes()
+	node_index = 0
+	for node_identifier, atom_indices in \
+	average_pdb.residue_identifier_to_atom_indices.items():
+		node = Node()
+		node.index = node_index
+		node.atom_indices = atom_indices
+		node.identifier = node_identifier
+		nodes[node_index] = node
+		node_index += 1
+		nodes[node.index].coordinates = (
+			coms[-1][node.index]
+		)
+	nodes.num_nodes = node_index + 1
+	if nodes_xml_filename == '':
+		nodes_xml_filename = (
+			f'{output_directory}/nodes.xml'
+		)
+	nodes.serialize(nodes_xml_filename)
+	
+def calculate_center_of_masses(	
+		pdbs: List[Molecule],
+		threads_per_block_com_calc: int, 
+		num_blocks_com_calc: int,
+) -> np.ndarray:
+	all_indices = []
+	for pdb in pdbs:
+		all_indices.append([
+			pdb.residue_identifier_to_atom_indices[residue_iden] 
+			for residue_iden 
+			in pdb.residue_identifiers_in_order
+		])
+	
+	all_coords = [
+		pdb.coordinates for pdb in pdbs
+	]
+	all_masses = [
+		pdb.masses for pdb in pdbs
+	]
+	all_coms = calc_com(
+		all_indices, 
+		all_coords, 
+		all_masses, 
+		threads_per_block_com_calc, 
+		num_blocks_com_calc
+	)
+	return all_coms
+
+def numpyify_dict(
+		d: Dict,
+		dtype,
+) -> np.ndarray:
+	return {
+		key : np.array(value, dtype=dtype)
+		for key, value in d.items()
+	}
+	
 
 class GetCorrelationMatrix:
 
@@ -101,112 +272,69 @@ class GetCorrelationMatrix:
 			threads_per_block_sum_coordinates_calc: int,
 			num_blocks_sum_coordinates_calc: int,
 			num_multiprocessing_processes: int,
-	):
+	) -> None:
 		current_frame = 0
-		if os.path.exists(temp_file_directory):
-			shutil.rmtree(temp_file_directory)
-		os.makedirs(temp_file_directory)
-		parse(pdb_trajectory_filename, temp_file_directory + "/")
-		num_traj_frames = len(os.listdir(temp_file_directory + "/")) 
+		pdb_single_frame_files = prepare_trajectory_for_analysis(
+			temp_file_directory,
+			pdb_trajectory_filename
+		)
 		self.average_pdb = Molecule() 
-		self.average_pdb.load_pdb_from_list(md.load(temp_file_directory + "/0.pdb"))
-		pdb_single_frame_files = [f for f in os.listdir(temp_file_directory + "/")]
-		pdbs = []
-
-
-		num_atoms = len(self.average_pdb.coordinates)
-		paths = [temp_file_directory + "/" for path in range(num_traj_frames)]
-		num_frames = [num_traj_frames for path in range(num_traj_frames)]
-		global scmat
-		cmat = ctypes_matrix(3*num_traj_frames, num_atoms)
-		scmat = shared_ctypes_multiprocessing_array(cmat)
-		with Pool(num_multiprocessing_processes) as pool:
-			pdbs = list(pool.map(parse_pdb, zip(paths, pdb_single_frame_files, num_frames)))
-		mat = np.ctypeslib.as_array(scmat)
-		del scmat
-		self.average_pdb.coordinates = sumCoords(
-			mat, 
-			num_traj_frames, 
-			num_atoms, 
-			num_blocks_sum_coordinates_calc, 
-			threads_per_block_sum_coordinates_calc
+		self.average_pdb.load_pdb_from_list(
+			md.load(temp_file_directory + "/0.pdb")
 		)
-		self.atom_indices_in_same_node = {}
-		top = self.average_pdb.trajectory.topology
-		atom_indices_in_nodes = []
-		for residue in top.residues:
-			atom_indices_in_nodes.append(tuple([atom.index for atom in residue._atoms]))
-		for atom_indices in atom_indices_in_nodes:
-			for atom_index in atom_indices:
-				self.atom_indices_in_same_node[atom_index] = atom_indices
-		nodes_dict = {}
-
-		for pdb in pdbs:
-			pdb.map_atoms_to_residues()
-		self.average_pdb.map_atoms_to_residues()
-		nodes = Nodes()
-		node_index = 0
-		pdbs.append(self.average_pdb)
-		all_indices = []
-		for pdb in pdbs:
-			all_indices.append([
-				pdb.residue_identifier_to_atom_indices[residue_iden] 
-				for residue_iden in pdb.residue_identifiers_in_order
-			])
-		
-		all_coords = [pdb.coordinates for pdb in pdbs]
-		all_masses = [pdb.masses for pdb in pdbs]
-		all_coms = calc_com(
-			all_indices, 
-			all_coords, 
-			all_masses, 
-			threads_per_block_com_calc, 
-			num_blocks_com_calc
-		)
-		nodes = Nodes()
-		node_index = 0
-		for node_identifier, atom_indices in \
-		self.average_pdb.residue_identifier_to_atom_indices.items():
-			node = Node()
-			node.index = node_index
-			node.atom_indices = atom_indices
-			node.identifier = node_identifier
-			nodes[node_index] = node
-			node_index += 1
-			nodes[node.index].coordinates = (
-				all_coms[-1][node.index]
+		num_traj_frames, num_atoms, paths, num_frames = (
+			get_parameters_for_multiprocessing_pdb_parser(
+				temp_file_directory,
+				self.average_pdb
 			)
-		nodes.num_nodes = node_index + 1
-		if nodes_xml_filename == '':
-			nodes_xml_filename = output_directory + "/nodes.xml"
-		nodes.serialize(nodes_xml_filename)
-
+		) 
+		self.atom_indices_in_same_node = {}
+		pdbs = multiprocessing_pdb_parser(
+			num_traj_frames,
+			num_atoms,
+			num_multiprocessing_processes,
+			paths,
+			pdb_single_frame_files,
+			num_frames,
+			self.average_pdb,
+			num_blocks_sum_coordinates_calc, 
+			threads_per_block_sum_coordinates_calc,
+		)
+		self.average_pdb = pdbs[-1]
+		coms = calculate_center_of_masses(
+			pdbs,
+			threads_per_block_com_calc, 
+			num_blocks_com_calc,
+		)
 		for i, pdb in enumerate(pdbs): 
-			pdb.map_nodes_to_residues(all_coms[i])
+			pdb.map_nodes_to_residues(coms[i])
+		serialize_nodes(
+			self.average_pdb,
+			coms,
+			output_directory,
+			nodes_xml_filename,
+		)
+
+
+
+		nodes = defaultdict(list) 
 		for pdb in pdbs:
 			for index, residue_iden in enumerate(
 				pdb.residue_identifiers_in_order
 			):
-				try:
-					nodes_dict[residue_iden].append(pdb.nodes_array[index])
-				except:
-					nodes_dict[residue_iden] = [pdb.nodes_array[index]]
-		dictionary_of_node_lists = nodes_dict
-		for res_iden in dictionary_of_node_lists:
-			dictionary_of_node_lists[res_iden] = np.array(
-				dictionary_of_node_lists[res_iden], np.float64
-			)
+				nodes[residue_iden].append(
+					pdb.nodes_array[index]
+				)
+		
+		numpyify_dict(nodes, np.float64)
+
 		set_of_deltas = {}
-		res_atoms = {}
-		for i in range(len(self.average_pdb.coordinates)):
-			if self.average_pdb.resids[i] not in res_atoms:
-				res_atoms[self.average_pdb.resids[i]] = []
-			res_atoms[self.average_pdb.resids[i]].append(i)
+
 		for index, residue_iden in enumerate(
 			self.average_pdb.residue_identifiers_in_order
 		):
 			set_of_deltas[residue_iden] = (
-				dictionary_of_node_lists[residue_iden] 
+				nodes[residue_iden] 
 				- self.average_pdb.nodes_array[index]
 			)
 
