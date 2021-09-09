@@ -8,7 +8,6 @@ import numpy as np
 import mdtraj as md
 import time
 
-
 def centerOfMassReduction(
 		coordinates: np.ndarray,
 		masses: np.ndarray, 
@@ -90,7 +89,7 @@ def centerOfMassReduction(
 					] = sm[0, 2] / total_masses[node_index] 
 				cuda.syncthreads()
 				i += 1
-
+		return
 	padding = math.ceil(num_frames / num_blocks)*num_blocks - num_frames
 	num_padded_frames = num_frames + padding
 	num_iters = int(num_padded_frames / num_blocks)

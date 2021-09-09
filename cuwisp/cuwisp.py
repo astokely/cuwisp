@@ -4,7 +4,7 @@ import os
 import sys
 import numpy as np
 from typing import Optional, Tuple
-from .correlation_matrix import GetCorrelationMatrix
+from .correlation_matrix import get_correlation_matrix 
 from .paths import get_suboptimal_paths
 
 
@@ -22,7 +22,7 @@ def calculate_correlation_matrix(
 	if temp_file_directory == '':
 		temp_file_directory = (
 			os.path.dirname(os.path.abspath(
-				sys.modules[GetCorrelationMatrix.__module__].__file__
+				sys.modules[get_correlation_matrix.__module__].__file__
 			)) + "/tmp"
 		)
 	if os.path.exists(output_directory):
@@ -35,7 +35,7 @@ def calculate_correlation_matrix(
 		num_blocks_sum_coordinates_calc,
 	) = cuda_parameters
 
-	correlation_matrix = GetCorrelationMatrix(
+	correlation_matrix = get_correlation_matrix(
 		output_directory,
 		contact_map_distance_limit,
 		pdb_trajectory_filename,

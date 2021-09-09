@@ -5,7 +5,7 @@ class Node(serializer):
 	def __init__(self):
 		self.index = 0
 		self.atom_indices = []
-		self.identifier = ''
+		self.tag = ''
 		self.coordinates = None
 
 	def __repr__(self):

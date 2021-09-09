@@ -41,12 +41,18 @@ def sumCoords(
 				c[atomIndex, 1] = sm[0, 1] / nf
 				c[atomIndex, 2] = sm[0, 2] / nf
 			atomIndex += numblocks 
+		return
 	coords_sum = np.zeros((num_atoms, 3), dtype=np.float64)
 	d_coords = cuda.to_device(coords)
 	d_coords_sum = cuda.to_device(coords_sum)
 	blockDim = threadsperblock
 	gridDim = numblocks
-	cuSumCoords[gridDim, blockDim](d_coords, d_coords_sum, num_traj_frames, num_atoms)
+	cuSumCoords[gridDim, blockDim](
+		d_coords, 
+		d_coords_sum, 
+		num_traj_frames, 
+		num_atoms
+	)
 	d_coords_sum.copy_to_host(coords_sum)
 	return coords_sum
 
