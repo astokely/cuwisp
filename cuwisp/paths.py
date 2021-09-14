@@ -42,16 +42,8 @@ class SuboptimalPaths(serializer):
 		return suboptimal_paths
 
 	def __getitem__(self, index):
-		if isinstance(index, slice):
-			if index.stop != None:
-				if abs(index.stop) < len(self.paths):
-					return self.paths[index.start:index.stop]
-			else:
-				if abs(index.start) < len(self.paths):
-					return self.paths[index.start:index.stop]
-		if abs(index) < len(self.paths):
+		if index < len(self.paths):
 			return self.paths[index]
-		return
 
 	def __setitem__(self, index, path):
 		if index >= len(self.paths):
@@ -87,16 +79,8 @@ class Path(serializer):
 			yield edge 
 
 	def __getitem__(self, index):
-		if isinstance(index, slice):
-			if index.stop != None:
-				if abs(index.stop) < len(self.edges):
-					return self.edges[index.start:index.stop]
-			else:
-				if abs(index.start) < len(self.edges):
-					return self.edges[index.start:index.stop]
-		if abs(index) < len(self.edges):
+		if index < len(self.edges):
 			return self.edges[index]
-		return
 
 	def __setitem__(self, index, edge):
 		if index >= len(self.edges):

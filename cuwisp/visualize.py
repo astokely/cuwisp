@@ -131,7 +131,7 @@ def get_node_coordinates(
 		get_src_and_sink_node_coordinates(path)
 	)
 	coordinates = [src_coordinates]
-	for edge in path[1:]:
+	for edge in path.edges[1:]:
 		coordinates.append(edge.node1.coordinates)
 	coordinates.append(sink_coordinates)
 	return coordinates
@@ -168,16 +168,18 @@ def get_sorted_correlation_node_coordinates(
 		(correlation_matrix.shape[0], 3),
 		dtype=np.float64
 	)
-	for i in sorted_node_correlation_dict.keys():
-		sorted_correlation_node_coordinates[i][0] = (
+	j = 0
+	for i in list(sorted_node_correlation_dict):
+		sorted_correlation_node_coordinates[j][0] = (
 			nodes[i].coordinates[0]
 		)
-		sorted_correlation_node_coordinates[i][1] = (
+		sorted_correlation_node_coordinates[j][1] = (
 			nodes[i].coordinates[1]
 		)
-		sorted_correlation_node_coordinates[i][2] = (
+		sorted_correlation_node_coordinates[j][2] = (
 			nodes[i].coordinates[2]
 		)
+		j += 1
 	return sorted_correlation_node_coordinates
 
 def get_radii(
@@ -236,7 +238,8 @@ def visualize_correlation_matrix(
 		tcl += (
 			f'set color_index [lindex '
 			+ f'$color_gradient {color_index}]\n'
-			+ f'graphics {molid} color $color_index]\n'
+			+ f'graphics {molid} color '
+			+ f'$color_index]\n'
 		)
 		tcl = vmdtcl.Sphere(
 			node_coordinates,

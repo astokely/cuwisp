@@ -68,6 +68,9 @@ class Molecule:
 		self.resnames = np.array([
 			atom.residue.name for atom in atoms
 		])
+		self.segment_ids = np.array([
+			atom.residue.segment_id for atom in atoms
+		])
 		self.elements = np.array([
 			atom.element.symbol for atom in atoms
 		])
@@ -76,6 +79,12 @@ class Molecule:
 	def map_atoms_to_node_tags(self) -> None:
 		indices_tags_dict = {
 			index : (
+				f'{self.chains[index]}_'
+				+ f'{self.resnames[index]}_'
+				+ f'{self.resids[index]}_'
+				+ f'{self.segment_ids[index]}'
+			) 
+			if self.segment_ids[index] != '' else (
 				f'{self.chains[index]}_'
 				+ f'{self.resnames[index]}_'
 				+ f'{self.resids[index]}'
@@ -211,6 +220,18 @@ def serialize_nodes(
 		node.index = node_index
 		node.atom_indices = atom_indices
 		node.tag = node_tag
+		node.segment_id = (
+			f'{average_pdb.segment_ids[atom_indices[0]]}' 
+		)
+		node.resname = (
+			f'{average_pdb.resnames[atom_indices[0]]}' 
+		)
+		node.chain_index = (
+			average_pdb.chains[atom_indices[0]] 
+		)
+		node.resid = (
+			average_pdb.resids[atom_indices[0]]  
+		)
 		nodes[node_index] = node
 		node_index += 1
 		nodes[node.index].coordinates = (

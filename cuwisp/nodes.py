@@ -1,15 +1,43 @@
 from abserdes import Serializer as serializer
+from collections import namedtuple
+from typing import List, Optional
+import numpy as np
 
 class Node(serializer):
 
-	def __init__(self):
-		self.index = 0
-		self.atom_indices = []
-		self.tag = ''
-		self.coordinates = None
+	def __init__(
+			self,
+			index: Optional[int] = None,
+			atom_indices: Optional[List] = None,
+			resname: Optional[str] = None,
+			chain_index: Optional[int] = None,
+			resid: Optional[int] = None,
+			segment_id: Optional[str] = None,
+			tag: Optional[str] = None,
+			coordinates: Optional[np.ndarray] = None,
+	):
+		self.index = index 
+		self.atom_indices = atom_indices 
+		self.resname = resname 
+		self.resid = resid
+		self.chain_index = chain_index 
+		self.tag = tag 
+		self.coordinates = coordinates 
+		self.segment_id = segment_id,
 
 	def __repr__(self):
-		return str(self.index)
+		repr_namedtuple = namedtuple(
+			f'Node', 
+			'index tag resname chain_index resid segment_id'
+		)
+		return str(repr_namedtuple(
+			self.index, 
+			self.tag,
+			self.resname,
+			self.chain_index,
+			self.resid,
+			self.segment_id,
+		))  
 
 class Nodes(serializer):
 
@@ -57,3 +85,40 @@ class Nodes(serializer):
 		for node in self.nodes:
 			if index in node.atom_indices:
 				return node
+
+	def find_nodes(
+			self, 
+			chain_index: Optional[int] = None,
+			resid: Optional[int] = None,
+			segment_id: Optional[str] = None,
+			resname: Optional[str] = None
+	) -> List:
+		tag = ''
+		if chain_index is not None:
+			tag += f'{chain_index}_'
+		if resid is not None:
+			tag += f'{resid}_'
+		if segment_id is not None:
+			tag += f'{segment_id}_'
+		if resname is not None:
+			tag += f'{resname}_'
+		tag = tag[:-1]
+		nodes = []
+		for node in self.nodes:
+			node_tag = ''
+			if chain_index is not None:
+				node_tag += f'{node.chain_index}_'
+			if resid is not None:
+				node_tag += f'{node.resid}_'
+			if segment_id is not None:
+				node_tag += f'{node.segment_id}_'
+			if resname is not None:
+				node_tag += f'{node.resname}_'
+			node_tag = node_tag[:-1]
+			if node_tag == tag:
+				nodes.append(node)
+		return nodes
+
+
+
+

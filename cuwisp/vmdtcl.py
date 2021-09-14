@@ -339,7 +339,7 @@ def draw_curve_from_spline(
 		color: Union[Tuple, str, int] = 0,
 		molid: Optional[int] = 'top',
 		radius: Optional[float] = 0.3,
-		resolution: Optional[int] = 10,
+		resolution: Optional[int] = 100,
 		filled: Optional[int] = 0,
 		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
