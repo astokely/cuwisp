@@ -2,8 +2,9 @@ from colour import Color
 from typing import Optional, Tuple, Union, NamedTuple, Dict, List
 from cuwisp.paths import SuboptimalPaths
 from cuwisp.paths import Path
-from cuwisp import vmdtcl
+from cuwisp.nodes import Nodes 
 import numpy as np
+import cuwisp.vmdtcl as vmdtcl
 from abserdes import Serializer as serializer
 import os
 
@@ -26,6 +27,33 @@ class VisualizeSuboptimalPaths(serializer):
 		self.node_atoms_representation = node_atoms_representation
 		self.radii = radii
 		self.color = color 
+
+class VisualizeCorrelationMatrix(serializer):
+
+	def __init__(
+			self,
+			node_index: int,
+			correlation_matrix_filename: str,
+			nodes_xml_filename: str,
+			color: Union[Tuple[str]],
+			sphere_radius: Optional[float] = 1.0,
+			sphere_resolution: Optional[int] = 25 ,
+			node_color: Optional[Union[str, int]] = False,
+			node_sphere_radius: Optional[float] = 1.0,
+			num_nodes: Optional[int] = 1000,
+			
+	) -> None:
+		self.nodes_xml_filename = nodes_xml_filename
+		self.correlation_matrix_filename = (
+			correlation_matrix_filename
+		)
+		self.color = color 
+		self.sphere_radius = sphere_radius
+		self.sphere_resolution = sphere_resolution 
+		self.node_index = node_index
+		self.node_color = node_color
+		self.node_sphere_radius = node_sphere_radius
+		self.num_nodes = num_nodes
 
 class VmdRepresentation(serializer):
 
@@ -120,6 +148,38 @@ def get_color_gradient(
 		color.rgb for color in colors
 	] 
 
+def get_sorted_correlation_node_coordinates(
+		correlation_matrix: np.ndarray,
+		nodes: Nodes,
+		node_index: int,
+) -> np.ndarray:
+	node_correlation_dict = {
+		i : correlation_matrix[node_index][i]
+		for i in range(correlation_matrix.shape[0])
+	}
+	sorted_node_correlation_dict = {
+		i : correlation for i, correlation 
+		in sorted(
+			node_correlation_dict.items(), 
+			key=lambda item: item[1]
+		)
+	}
+	sorted_correlation_node_coordinates = np.zeros(
+		(correlation_matrix.shape[0], 3),
+		dtype=np.float64
+	)
+	for i in sorted_node_correlation_dict.keys():
+		sorted_correlation_node_coordinates[i][0] = (
+			nodes[i].coordinates[0]
+		)
+		sorted_correlation_node_coordinates[i][1] = (
+			nodes[i].coordinates[1]
+		)
+		sorted_correlation_node_coordinates[i][2] = (
+			nodes[i].coordinates[2]
+		)
+	return sorted_correlation_node_coordinates
+
 def get_radii(
 		smallest: float,
 		largest: float,
@@ -138,12 +198,71 @@ def get_radii(
 		num_radii
 	)
 
+def visualize_correlation_matrix(
+		parameters: VisualizeCorrelationMatrix,
+		molid: Optional[int] = 'top',
+		tcl: Optional[str] = '',
+		new_line: Optional[bool] = True,
+) -> str:
+	correlation_matrix = np.loadtxt(
+		parameters.correlation_matrix_filename
+	)
+	nodes = Nodes()
+	nodes.deserialize(
+		parameters.nodes_xml_filename
+	)
+	num_nodes = parameters.num_nodes 
+	sphere_resolution = parameters.sphere_resolution
+	sphere_radius = parameters.sphere_radius
+	node_index = parameters.node_index
+	coordinates = get_sorted_correlation_node_coordinates(
+		correlation_matrix,
+		nodes,
+		node_index,
+	)	
+	if len(coordinates) > num_nodes:
+		coordinates = coordinates[:num_nodes]
+	color_gradient = get_color_gradient(
+		*parameters.color,
+		len(coordinates)
+	)
+	tcl = vmdtcl.create_color_gradient(
+		'color_gradient',
+		color_gradient,
+		tcl=tcl
+	)
+	color_index = 0
+	for node_coordinates in coordinates:
+		tcl += (
+			f'set color_index [lindex '
+			+ f'$color_gradient {color_index}]\n'
+			+ f'graphics {molid} color $color_index]\n'
+		)
+		tcl = vmdtcl.Sphere(
+			node_coordinates,
+			radius=sphere_radius,
+			resolution=sphere_resolution,
+			
+		).tcl(tcl=tcl)	
+		color_index += 1
+	if parameters.node_color:
+		tcl = vmdtcl.set_draw_color(
+			parameters.node_color, 
+			tcl=tcl
+		)
+		tcl = vmdtcl.Sphere(
+			nodes[node_index].coordinates,
+			radius=parameters.node_sphere_radius,
+			resolution=sphere_resolution,
+			
+		).tcl(tcl=tcl)	
+	if new_line:
+		return tcl
+	return tcl[:-1]
+
 
 def draw_suboptimal_paths(
 		parameters: VisualizeSuboptimalPaths,
-		tcl_output_filename: Optional[str] = (
-			'suboptimal_paths_curve.tcl'
-		),
 		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 ) -> str:

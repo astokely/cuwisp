@@ -1,3 +1,4 @@
+import gc
 import shutil
 import mdtraj as md
 import os
@@ -6,7 +7,6 @@ import numpy as np
 from typing import Optional, Tuple
 from .correlation_matrix import get_correlation_matrix 
 from .paths import get_suboptimal_paths
-
 
 def calculate_correlation_matrix(
 		output_directory: str,
@@ -35,7 +35,7 @@ def calculate_correlation_matrix(
 		num_blocks_sum_coordinates_calc,
 	) = cuda_parameters
 
-	correlation_matrix = get_correlation_matrix(
+	get_correlation_matrix(
 		output_directory,
 		contact_map_distance_limit,
 		pdb_trajectory_filename,

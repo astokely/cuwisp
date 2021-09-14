@@ -15,6 +15,8 @@ from multiprocessing import Pool
 from collections import defaultdict
 from multiprocessing import sharedctypes
 from .nodes import Nodes, Node
+from .hollow_matrix import hollowMatrix
+from .cuda_correlation_matrix import cuda_correlation_matrix
 
 def ctypes_matrix(
 		n: int,
@@ -251,15 +253,6 @@ def calculate_center_of_masses(
 	)
 	return all_coms
 
-def numpyify_dict(
-		d: Dict,
-		dtype,
-) -> np.ndarray:
-	return {
-		key : np.array(value, dtype=dtype)
-		for key, value in d.items()
-	}
-
 def save_matrix(
 		output_directory: str,	
 		matrix_filename: str,
@@ -356,82 +349,29 @@ def get_contact_map(
 					contact_map[j][j] = 0.0
 	return contact_map
 
-def get_node_coordinate_deviations(
-		nodes: np.ndarray,
-		node_atom_indices: List,
-		average_pdb: Molecule,
-		num_nodes: int,
-) -> np.ndarray:
-	num_pdbs = len(nodes[0])
-	node_coordinate_deviations = np.array([
-		np.zeros(
-			(num_pdbs, 3),
-			dtype=np.float64
-		)
-		for index in range(num_nodes)
-	])
-	for node_index in range(num_nodes):
-		for pdb_index in range(num_pdbs):	
-			node_coordinate_deviations[node_index][pdb_index][0] = (
-				nodes[node_index][pdb_index][0]
-				- average_pdb.nodes_array[node_index][0]
-			)
-			node_coordinate_deviations[node_index][pdb_index][1] = (
-				nodes[node_index][pdb_index][1]
-				- average_pdb.nodes_array[node_index][1]
-			)
-			node_coordinate_deviations[node_index][pdb_index][2] = (
-				nodes[node_index][pdb_index][2]
-				- average_pdb.nodes_array[node_index][2]
-			)
-	return node_coordinate_deviations
-
-def get_ensemble_average_delta_square_magnitudes(
-		num_nodes: int,
-		node_coordinate_deviations: np.ndarray,
-) -> np.ndarray:
-	ensmeble_average_delta_square_magnitudes = np.zeros(
-		num_nodes,
-		dtype=np.float64
-	)
-	for index in range(num_nodes):
-		square_magnitude = (
-			node_coordinate_deviations[index] 
-			* node_coordinate_deviations[index]
-		).sum(axis=1)
-		ensmeble_average_delta_square_magnitudes[index] = np.average(
-			square_magnitude
-		)
-	return ensmeble_average_delta_square_magnitudes
-
 def _get_correlation_matrix(
 		num_nodes: int,
-		node_coordinate_deviations: np.ndarray,
-		ensemble_average_delta_square_magnitudes: np.ndarray,
+		nodes,
+		average_pdb
 ) -> np.ndarray:
-	correlation_matrix = np.empty((
+	correlation_matrix = np.zeros((
 		num_nodes,
 		num_nodes
-	))
-	for i in range(num_nodes):
-		for j in range(num_nodes):
-			delta1 = node_coordinate_deviations[i]
-			delta2 = node_coordinate_deviations[j]
-			if len(delta1) != len(delta2):
-				raise Exception
-			delta_dot_products = (delta1 * delta2).sum(axis=1)
-			ensemble_average_dot_products = np.average(
-				delta_dot_products
-			)
-			C = ensemble_average_dot_products / np.power(
-				ensemble_average_delta_square_magnitudes[i]
-				* ensemble_average_delta_square_magnitudes[j],
-				0.5,
-			)
-			correlation_matrix[i][j] = -np.log(
-				np.fabs(C)
-			)  
-	return correlation_matrix
+	), dtype=np.float64)
+	h_correlation_matrix = np.zeros((
+		num_nodes,
+		num_nodes
+	), dtype=np.float64)
+	cuda_correlation_matrix(
+		nodes,
+		average_pdb.nodes_array,
+		correlation_matrix
+	)
+	hollowMatrix(
+		correlation_matrix,
+		h_correlation_matrix
+	)
+	return h_correlation_matrix
 
 def get_correlation_matrix(
 		output_directory: str,
@@ -497,23 +437,11 @@ def get_correlation_matrix(
 		num_pdbs,
 		pdbs,
 	)
-	node_coordinate_deviations = get_node_coordinate_deviations(
-		nodes,
-		node_atom_indices,
-		average_pdb,
-		num_nodes,
-	)
-	ensemble_average_delta_square_magnitudes = (
-		get_ensemble_average_delta_square_magnitudes(
-			num_nodes,
-			node_coordinate_deviations,
-		)
-	)
 	correlation_matrix = (
 		_get_correlation_matrix(
 			num_nodes,
-			node_coordinate_deviations,
-			ensemble_average_delta_square_magnitudes,
+			nodes.astype(np.float64),
+			average_pdb,
 		)
 	)
 	save_matrix(

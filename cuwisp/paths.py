@@ -324,7 +324,7 @@ def serialize_suboptimal_paths(
 		serialization_index: int,
 		ssp: np.ndarray,
 		nodes: Nodes,
-		s: Set, 	
+		s: Set,		
 		round_index: int,
 		suboptimal_paths_serialization_path: str,
 ) -> None:
@@ -423,6 +423,9 @@ def explore_paths(
 			path, nodes = get_ssp(src, sink, h, a)
 		else:
 			break
+		if cutoff is not None:
+			if h[src][sink] >= cutoff:
+				break
 		path.append(h[src][sink])
 		prev_s_size = len(s)
 		s.add(tuple(path))
@@ -444,7 +447,7 @@ def explore_paths(
 						serialization_index,
 						ssp,
 						nodes_obj,
-						s, 	
+						s,	
 						round_index,
 						suboptimal_paths_serialization_path,
 					)	
@@ -466,9 +469,6 @@ def explore_paths(
 					deque_append_middle(q, i)
 				elif pop == 4:
 					deque_append_middle(q, i)
-		if cutoff is not None:
-			if h[src][sink] >= cutoff:
-				break
 		if not q:
 			break
 	return s
@@ -494,6 +494,7 @@ def get_suboptimal_paths(
 	a = np.array(np.loadtxt(
 		input_files_path + "/" + correlation_matrix_file
 	))
+
 	n = len(a)
 	h = np.array(hedetniemi_distance(a, n, n, threads_per_block))
 	if get_ssp(src, sink, h, a) is None:
@@ -502,7 +503,7 @@ def get_suboptimal_paths(
 			+ "Either perform the suboptimal path calculation" + '\n'
 			+ "using the correlation matrix without the contact map" + '\n'
 			+ "applied, or rerun the correlation matrix calculation with" + '\n'
-		    + "a larger cutoff distance."
+			+ "a larger cutoff distance."
 		)
 	path, nodes = get_ssp(src, sink, h, a)
 	ssp = path
@@ -597,14 +598,14 @@ def get_suboptimal_paths(
 	simulation_round_index += 1
 	paths4 = list(explore_paths(
 		src,
-    	sink,
-    	a,
-    	nodes,
-    	n,
-    	3,
-    	cutoff,
-    	threads_per_block,
-    	serialization_file,
+		sink,
+		a,
+		nodes,
+		n,
+		3,
+		cutoff,
+		threads_per_block,
+		serialization_file,
 		serialization_frequency,
 		nodes_obj,
 		ssp,
@@ -648,4 +649,3 @@ def get_suboptimal_paths(
 	suboptimal_paths.serialize(
 		input_files_path + "/" + suboptimal_paths_xml
 	)
-
