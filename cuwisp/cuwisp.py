@@ -62,7 +62,7 @@ def calculate_suboptimal_paths(
 		correlation_matrix_filename: Optional[str] = '',
 		nodes_xml_filename: Optional[str] = '',
 		suboptimal_paths_xml_filename: Optional[str] = '',
-		serialization_xml_filename: Optional[str] = '',
+		serialization_filename: Optional[str] = '',
 		serialization_frequency: Optional[float] = 1,
 		correlation_matrix_serialization_directory: Optional[str] = '',
 		suboptimal_paths_serialization_directory: Optional[str] = '', 
@@ -79,7 +79,7 @@ def calculate_suboptimal_paths(
 			nodes_xml_file = "nodes.xml"
 		if suboptimal_paths_xml_filename == '':
 			suboptimal_paths_xml_filename = "suboptimal_paths.xml" 
-		if serialization_xml_filename:
+		if serialization_filename:
 			if correlation_matrix_serialization_directory == '':
 				correlation_matrix_serialization_directory = (
 					'serialized_correlation_matrices'
@@ -109,7 +109,7 @@ def calculate_suboptimal_paths(
 			suboptimal_paths_xml_filename, 
 			cutoff,
 			threads_per_block,
-			serialization_xml_filename,
+			serialization_filename,
 			serialization_frequency,
 			correlation_matrix_serialization_directory,
 			suboptimal_paths_serialization_directory,

@@ -274,6 +274,7 @@ def draw_suboptimal_paths(
 	src_node_coordinates, sink_node_coordinates = (
 		get_src_and_sink_node_coordinates(suboptimal_paths)
 	)	
+	tcl += f'proc draw_suboptimal_paths {{}} {{\n'
 	if parameters.src_node_sphere:
 		src_node_sphere_color = (
 			parameters.src_node_sphere.pop('color')
@@ -357,6 +358,7 @@ def draw_suboptimal_paths(
 			tcl=tcl
 		)
 		color_and_radii_index += 1
+	tcl += '}\n'
 	if new_line:
 		return tcl
 	return tcl[:-1]

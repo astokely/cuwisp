@@ -154,7 +154,6 @@ def prepare_trajectory_for_analysis(
 		pdb_file for pdb_file 
 		in os.listdir(temp_file_directory + "/")
 	]
-	print(pdb_single_frame_files)
 	return pdb_single_frame_files
 
 def get_parameters_for_multiprocessing_pdb_parser(

@@ -17,7 +17,9 @@ calculate_suboptimal_paths(
 	9, #src node 
 	10, #sink node
 	threads_per_block=1024, #You shouldn't have to change this, but if you get a cuda error change it to 256 
-	#use_contact_map_correlation_matrix=False, #Probably don't change this
+	use_contact_map_correlation_matrix=False, #Probably don't change this
 	cutoff=3.2, #Cutoff correlation path length...you may have to decrease/increase this. A lower value will make the calculation faster but will not output as many paths
+	serialization_filename='spike_protein',
+	serialization_frequency=0.5,
 )
 print(time.time()-start)

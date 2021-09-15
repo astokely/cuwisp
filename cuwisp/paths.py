@@ -285,26 +285,25 @@ def get_ssp(
 
 def serialize_correlation_matrix(
 		a: np.ndarray,
-		serialization_file: str,
+		serialization_filename: str,
 		serialization_index: int,
 		round_index: int,
 		correlation_matrix_serialization_path: str,
 ) -> None:
-	correlation_matrix = CorrelationMatrix(a)
-	prefix = serialization_file[:-4]
-	xml_filename = (
+	numpy_txt_filename = (
 		f'{correlation_matrix_serialization_path}/'
-		+ f'{prefix}_correlation_matrix'
-		+ f'_{round_index}_{serialization_index}.xml'
+		+ f'{serialization_filename}_correlation_matrix'
+		+ f'_{round_index}_{serialization_index}.txt'
 	)
-	correlation_matrix.serialize(
-		xml_filename
+	np.savetxt(
+		numpy_txt_filename,
+		a
 	)
 
 def serialize_suboptimal_paths(
 		src: int,
 		sink: int,
-		serialization_file: str,
+		serialization_filename: str,
 		serialization_index: int,
 		ssp: np.ndarray,
 		nodes: Nodes,
@@ -312,7 +311,6 @@ def serialize_suboptimal_paths(
 		round_index: int,
 		suboptimal_paths_serialization_path: str,
 ) -> None:
-	prefix = serialization_file[:-4]
 	d = {i[-1] : i[:-1] for i in s}
 	d[ssp[-1]] = ssp[:-1]
 	path_index = 0
@@ -342,7 +340,7 @@ def serialize_suboptimal_paths(
 	suboptimal_paths.num_paths = len(suboptimal_paths.paths) 
 	xml_filename = (
 		f'{suboptimal_paths_serialization_path}/'
-		+ f'{prefix}_suboptimal_paths'
+		+ f'{serialization_filename}_suboptimal_paths'
 		+ f'_{round_index}_{serialization_index}.xml'
 	)
 	suboptimal_paths.serialize(xml_filename)
@@ -356,7 +354,7 @@ def explore_paths(
 		pop: int,
 		cutoff: Union[float, None], 
 		threads_per_block: int,
-		serialization_file: str,
+		serialization_filename: str,
 		serialization_frequency: int,
 		nodes_obj: Nodes,
 		ssp: np.ndarray,
@@ -365,10 +363,10 @@ def explore_paths(
 		suboptimal_paths_serialization_path: str,
 ) -> Set:
 	serialization_index = 0
-	if serialization_file != '':
+	if serialization_filename != '':
 		serialize_correlation_matrix(
 			a,	
-			serialization_file,
+			serialization_filename,
 			serialization_index,
 			round_index,
 			correlation_matrix_serialization_path,
@@ -415,11 +413,11 @@ def explore_paths(
 		s.add(tuple(path))
 		new_s_size = len(s)
 		if new_s_size != prev_s_size:
-			if serialization_file != '':
+			if serialization_filename != '':
 				if (time.time() - start) > serialization_frequency:
 					serialize_correlation_matrix(
 						a,
-						serialization_file,
+						serialization_filename,
 						serialization_index,
 						round_index,
 						correlation_matrix_serialization_path,
@@ -427,7 +425,7 @@ def explore_paths(
 					serialize_suboptimal_paths(
 						src,
 						sink,
-						serialization_file,
+						serialization_filename,
 						serialization_index,
 						ssp,
 						nodes_obj,
@@ -466,7 +464,7 @@ def get_suboptimal_paths(
 		suboptimal_paths_xml: str, 
 		cutoff: Union[float, None],
 		threads_per_block: int,
-		serialization_file: str,
+		serialization_filename: str,
 		serialization_frequency: int,
 		correlation_matrix_serialization_path: str,
 		suboptimal_paths_serialization_path: str,
@@ -502,7 +500,7 @@ def get_suboptimal_paths(
 		0,
 		cutoff,
 		threads_per_block,
-		serialization_file,
+		serialization_filename,
 		serialization_frequency,
 		nodes_obj,
 		ssp,
@@ -531,7 +529,7 @@ def get_suboptimal_paths(
 		1,
 		cutoff,
 		threads_per_block,
-		serialization_file,
+		serialization_filename,
 		serialization_frequency,
 		nodes_obj,
 		ssp,
@@ -560,7 +558,7 @@ def get_suboptimal_paths(
 		2,
 		cutoff,
 		threads_per_block,
-		serialization_file,
+		serialization_filename,
 		serialization_frequency,
 		nodes_obj,
 		ssp,
@@ -589,7 +587,7 @@ def get_suboptimal_paths(
 		3,
 		cutoff,
 		threads_per_block,
-		serialization_file,
+		serialization_filename,
 		serialization_frequency,
 		nodes_obj,
 		ssp,
