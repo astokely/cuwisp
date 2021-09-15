@@ -28,7 +28,7 @@ class Node(serializer):
 	def __repr__(self):
 		repr_namedtuple = namedtuple(
 			f'Node', 
-			'index tag resname chain_index resid segment_id'
+			'index tag resname chain_index resid segment_id res_seq'
 		)
 		return str(repr_namedtuple(
 			self.index, 
@@ -37,6 +37,7 @@ class Node(serializer):
 			self.chain_index,
 			self.resid,
 			self.segment_id,
+			self.res_seq
 		))  
 
 class Nodes(serializer):

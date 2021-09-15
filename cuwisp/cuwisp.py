@@ -11,13 +11,14 @@ from .paths import get_suboptimal_paths
 def calculate_correlation_matrix(
 		output_directory: str,
 		contact_map_distance_limit: float,
-		pdb_trajectory_filename: str,
+		trajectory_filename: str,
 		correlation_matrix_filename: Optional[str] = '',
 		correlation_matrix_after_contact_map_filename: Optional[str] = '',
 		nodes_xml_filename: Optional[str] = '',
 		cuda_parameters: Optional[Tuple] = (256, 10, 256, 100),
 		num_multiprocessing_processes: Optional[int] = 10,
 		temp_file_directory: Optional[str] = '',
+		topology_filename: Optional[str] = ''
 ) -> None:
 	if temp_file_directory == '':
 		temp_file_directory = (
@@ -38,7 +39,8 @@ def calculate_correlation_matrix(
 	get_correlation_matrix(
 		output_directory,
 		contact_map_distance_limit,
-		pdb_trajectory_filename,
+		trajectory_filename,
+		topology_filename,
 		temp_file_directory,
 		correlation_matrix_filename,
 		correlation_matrix_after_contact_map_filename,
@@ -47,9 +49,8 @@ def calculate_correlation_matrix(
 		num_blocks_com_calc,
 		threads_per_block_sum_coordinates_calc,
 		num_blocks_sum_coordinates_calc,
-		num_multiprocessing_processes
+		num_multiprocessing_processes,
 	)
-	shutil.rmtree(temp_file_directory)
 
 def calculate_suboptimal_paths(
 		input_files_path: str,

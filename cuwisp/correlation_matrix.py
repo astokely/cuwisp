@@ -17,7 +17,7 @@ from multiprocessing import sharedctypes
 from .nodes import Nodes, Node
 from .hollow_matrix import hollowMatrix
 from .cuda_correlation_matrix import cuda_correlation_matrix
-
+from .cuda_contact_map import cuda_contact_map 
 def ctypes_matrix(
 		n: int,
 		m: int,
@@ -63,7 +63,7 @@ class Molecule:
 			atom.element.mass for atom in atoms
 		]) 
 		self.resids = np.array([
-			atom.residue.index+1 for atom in atoms
+			atom.residue.index for atom in atoms
 		])
 		self.resnames = np.array([
 			atom.residue.name for atom in atoms
@@ -127,16 +127,34 @@ def parse_pdb(
 
 def prepare_trajectory_for_analysis(
 		temp_file_directory: str,
-		pdb_trajectory_filename: str,
+		pdb_trajectory_filename: Optional[str] = '',
+		dcd_trajectory_filename: Optional[str] = '',
+		topology_filename: Optional[str] = '',
 ) -> List[str]:
 	if os.path.exists(temp_file_directory):
 		shutil.rmtree(temp_file_directory)
 	os.makedirs(temp_file_directory)
-	parse(pdb_trajectory_filename, temp_file_directory + "/")
+	if pdb_trajectory_filename != '':
+		parse(
+			pdb_trajectory_filename, 
+			temp_file_directory + "/"
+		)
+	else:
+		index = 0
+		for frame in md.iterload(
+			dcd_trajectory_filename,
+			top=topology_filename,
+			chunk = 1,
+		):
+			frame.save_pdb(
+				f'{temp_file_directory}/{index}.pdb'
+			)
+			index += 1
 	pdb_single_frame_files = [
 		pdb_file for pdb_file 
 		in os.listdir(temp_file_directory + "/")
 	]
+	print(pdb_single_frame_files)
 	return pdb_single_frame_files
 
 def get_parameters_for_multiprocessing_pdb_parser(
@@ -344,31 +362,22 @@ def get_contact_map(
 		num_nodes: int,
 ) -> np.ndarray:
 	contact_map = np.ones(correlation_matrix.shape)
+	avg_coords = average_pdb.coordinates
+	correlation_matrix_after_contact_map = np.zeros(
+		correlation_matrix.shape,
+		dtype=np.float64
+	)
 	if contact_map_distance_limit != np.inf:
-		for i in range(
-			num_nodes-1
-		):
-			node1_coords = average_pdb.coordinates[
-				node_atom_indices[i]
-			]
-			for j in range(
-				i + 1, num_nodes 
-			):
-				node2_coords = average_pdb.coordinates[
-					node_atom_indices[j]
-				]
-				min_dist_between_node_atoms = np.min(
-					cdist(node1_coords, node2_coords)
-				)
-				if (
-					min_dist_between_node_atoms
-					> contact_map_distance_limit
-				):
-					correlation_matrix[i][j] = np.inf 
-					correlation_matrix[j][i] = np.inf 
-					contact_map[i][i] = 0.0
-					contact_map[j][j] = 0.0
-	return contact_map
+		cuda_contact_map(
+			correlation_matrix, 
+			correlation_matrix_after_contact_map, 
+			contact_map, 
+			contact_map_distance_limit, 
+			avg_coords, 
+			node_atom_indices
+		)
+		return contact_map, correlation_matrix_after_contact_map
+	return contact_map, correlation_matrix
 
 def _get_correlation_matrix(
 		num_nodes: int,
@@ -397,7 +406,8 @@ def _get_correlation_matrix(
 def get_correlation_matrix(
 		output_directory: str,
 		contact_map_distance_limit: float,
-		pdb_trajectory_filename: str,
+		trajectory_filename: str,
+		topology_filename: str,
 		temp_file_directory: str,	
 		correlation_matrix_filename: str,
 		correlation_matrix_after_contact_map_filename: str,
@@ -409,10 +419,19 @@ def get_correlation_matrix(
 		num_multiprocessing_processes: int,
 ) -> None:
 	current_frame = 0
-	pdb_single_frame_files = prepare_trajectory_for_analysis(
-		temp_file_directory,
-		pdb_trajectory_filename
-	)
+	if trajectory_filename[-3:] == 'pdb':
+		pdb_single_frame_files = prepare_trajectory_for_analysis(
+			temp_file_directory,
+			pdb_trajectory_filename = trajectory_filename
+		)
+	elif trajectory_filename[-3:] == 'dcd':
+		pdb_single_frame_files = prepare_trajectory_for_analysis(
+			temp_file_directory,
+			dcd_trajectory_filename = trajectory_filename,
+			topology_filename = topology_filename
+		)
+	else:
+		raise Exception
 	average_pdb = Molecule() 
 	average_pdb.load_pdb_from_list(
 		md.load(f'{temp_file_directory}/0.pdb')
@@ -434,6 +453,7 @@ def get_correlation_matrix(
 		num_blocks_sum_coordinates_calc, 
 		threads_per_block_sum_coordinates_calc,
 	)
+	shutil.rmtree(temp_file_directory)
 	average_pdb = pdbs[-1]
 	coms = calculate_center_of_masses(
 		pdbs,
@@ -472,7 +492,7 @@ def get_correlation_matrix(
 		correlation_matrix,
 	)
 
-	contact_map = get_contact_map( 
+	contact_map, correlation_matrix = get_contact_map( 
 		correlation_matrix,
 		average_pdb,
 		contact_map_distance_limit,
