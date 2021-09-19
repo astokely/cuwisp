@@ -66,7 +66,9 @@ def calculate_suboptimal_paths(
 		serialization_frequency: Optional[float] = 1,
 		correlation_matrix_serialization_directory: Optional[str] = '',
 		suboptimal_paths_serialization_directory: Optional[str] = '', 
-		simulation_round_index: Optional[int] = 0,
+		simulation_round: Optional[int] = 0,
+		serialization_index: Optional[int] = 0,
+		max_edges: Optional[int] = 0,
 ) -> None:
 		if correlation_matrix_filename == '':
 			if use_contact_map_correlation_matrix: 
@@ -113,7 +115,9 @@ def calculate_suboptimal_paths(
 			serialization_frequency,
 			correlation_matrix_serialization_directory,
 			suboptimal_paths_serialization_directory,
-			simulation_round_index,
+			simulation_round,
+			serialization_index,
+			max_edges,
 		)
 
 

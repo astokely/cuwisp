@@ -8,9 +8,9 @@ start = time.time()
 calculate_correlation_matrix(
 	"example_output", #output directory
 	4.5, #contact map cutoff limit
-	'spike_example.pdb', #input pdb
+	#'spike_example.pdb', #input pdb
+	'/home/astokely/Downloads/wisp/example_commandline/trajectory_20_frames.pdb', #input pdb
 	cuda_parameters = (64, 10, 256, 100), #Probably don't change these
-	num_multiprocessing_processes = 50,
 )
 calculate_suboptimal_paths(
 	"example_output", #same as above 
@@ -18,6 +18,10 @@ calculate_suboptimal_paths(
 	10, #sink node
 	threads_per_block=1024, #You shouldn't have to change this, but if you get a cuda error change it to 256 
 	#use_contact_map_correlation_matrix=False, #Probably don't change this
-	cutoff=3.2, #Cutoff correlation path length...you may have to decrease/increase this. A lower value will make the calculation faster but will not output as many paths
+	#simulation_round_index=0,
+	#max_edges = 2,
+	#serialization_filename='spike_protein',
+	#serialization_frequency=0.5,
+	cutoff=3.2,
 )
 print(time.time()-start)

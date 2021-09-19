@@ -5,15 +5,15 @@ from cuwisp.vmdtcl import save_tcl
 
 tcl = ''
 suboptimal_paths = SuboptimalPaths()
-suboptimal_paths.deserialize('example_output/suboptimal_paths.xml') 
+suboptimal_paths.deserialize('serialized_suboptimal_paths/spike_protein_suboptimal_paths_2_5.xml')
 
-node_spheres = {'radius' : 0.3, 'color':'silver', 'resolution':250}
-src_node_sphere = {'radius' : 0.5, 'color':'blue', 'resolution':250}
-sink_node_sphere = {'radius' : 0.5, 'color':'purple', 'resolution':250}
+node_spheres = {'radius' : 1, 'color':'silver', 'resolution':250}
+src_node_sphere = {'radius' : 2.0, 'color':'blue', 'resolution':250}
+sink_node_sphere = {'radius' : 2.0, 'color':'purple', 'resolution':250}
 visualize_suboptimal_paths = VisualizeSuboptimalPaths(
 	suboptimal_paths,
 	('red', 'green'),
-	(0.03, 0.08),
+	(0.35, .8),
 	node_spheres = node_spheres,
 	src_node_sphere = src_node_sphere,
 	sink_node_sphere = sink_node_sphere,

@@ -13,14 +13,6 @@ from math import floor
 from abserdes import Serializer as serializer
 from .nodes import Nodes, Node
 
-class CorrelationMatrix(serializer):
-	
-	def __init__(
-			self,
-			correlation_matrix: Optional[np.ndarray] = None,
-	) -> None:
-		self.correlation_matrix = correlation_matrix 
-
 class SuboptimalPaths(serializer):
 
 	def __init__(self) -> None:
@@ -188,7 +180,7 @@ def all_pair_hedetniemit(
 		b, 
 		h, 
 		num_nodes,
-		found_ssp
+		found_ssp,
 	):
 	i, j = cuda.grid(2)
 	if i < num_nodes  and j < num_nodes:
@@ -253,7 +245,8 @@ def get_ssp(
 	a_col = a[sink,:]
 	path = []
 	nodes = []
-	heapq.heappush(nodes, pos)
+	#heapq.heappush(nodes, pos)
+	nodes.append(pos)
 	while pos != src:
 		closest = {} 
 		found_next_node = False
@@ -267,8 +260,10 @@ def get_ssp(
 				prev_pos = pos 
 				pos = i
 				a_col = a[pos,:]
-				heapq.heappush(path, (pos, prev_pos))
-				heapq.heappush(nodes, pos)
+				#heapq.heappush(path, (pos, prev_pos))
+				#heapq.heappush(nodes, pos)
+				path.append((pos, prev_pos))
+				nodes.append(pos)
 				p = h_row[pos] 
 				found_next_node = True
 				break
@@ -277,8 +272,10 @@ def get_ssp(
 			prev_pos = pos 
 			pos = closest[minn]
 			a_col = a[pos,:]
-			heapq.heappush(path, (pos, prev_pos))
-			heapq.heappush(nodes, pos)
+			#heapq.heappush(path, (pos, prev_pos))
+			#heapq.heappush(nodes, pos)
+			path.append((pos, prev_pos))
+			nodes.append(pos)
 			p = h_row[pos] 
 			found_next_node = True
 	return path, nodes
@@ -361,8 +358,9 @@ def explore_paths(
 		round_index: int,
 		correlation_matrix_serialization_path: str,
 		suboptimal_paths_serialization_path: str,
+		serialization_index: int,
+		max_edges_in_ssp: int,
 ) -> Set:
-	serialization_index = 0
 	if serialization_filename != '':
 		serialize_correlation_matrix(
 			a,	
@@ -375,7 +373,7 @@ def explore_paths(
 	h = np.array(hedetniemi_distance(
 		a, 
 		n, 
-		n, 
+		max_edges_in_ssp,
 		threads_per_block
 	))
 	q = deque([])
@@ -400,7 +398,7 @@ def explore_paths(
 			i, j = q.pop()
 		a[i][j] = np.inf
 		a[j][i] = np.inf
-		h = np.array(hedetniemi_distance(a, n, n, threads_per_block))
+		h = np.array(hedetniemi_distance(a, n, max_edges_in_ssp, threads_per_block))
 		if get_ssp(src, sink, h, a) is not None:
 			path, nodes = get_ssp(src, sink, h, a)
 		else:
@@ -469,139 +467,63 @@ def get_suboptimal_paths(
 		correlation_matrix_serialization_path: str,
 		suboptimal_paths_serialization_path: str,
 		simulation_round_index: int,
+		serialization_index: int,
+		max_edges: int,
 ) -> None:
-	
+
+	d = {}	
 	nodes_obj = Nodes()
-	nodes_obj.deserialize(input_files_path + "/" + nodes_xml_file)
-	a = np.array(np.loadtxt(
-		input_files_path + "/" + correlation_matrix_file
-	))
-
-	n = len(a)
-	h = np.array(hedetniemi_distance(a, n, n, threads_per_block))
-	if get_ssp(src, sink, h, a) is None:
-		raise Exception(
-			"Sink node is unreachable from source node.".upper() + '\n'
-			+ "Either perform the suboptimal path calculation" + '\n'
-			+ "using the correlation matrix without the contact map" + '\n'
-			+ "applied, or rerun the correlation matrix calculation with" + '\n'
-			+ "a larger cutoff distance."
+	if '/' not in nodes_xml_file:
+		nodes_xml_file = (
+			f'{input_files_path}/{nodes_xml_file}'
 		)
-	path, nodes = get_ssp(src, sink, h, a)
-	ssp = path
-	ssp.append(h[src][sink])
-	nodes = [(nodes[i], nodes[i+1]) for i in range(len(nodes)-1)]
-	paths1 = list(explore_paths(
-		src,
-		sink,
-		a,
-		nodes,
-		n,
-		0,
-		cutoff,
-		threads_per_block,
-		serialization_filename,
-		serialization_frequency,
-		nodes_obj,
-		ssp,
-		simulation_round_index,
-		correlation_matrix_serialization_path,
-		suboptimal_paths_serialization_path,
-	))
-	d1 = {i[-1] : i[:-1] for i in paths1}
-
-	a = np.array(np.loadtxt(
-		input_files_path + "/" + correlation_matrix_file
-	))
-	n = len(a)
-	h = np.array(hedetniemi_distance(a, n, n, threads_per_block))
-	path, nodes = get_ssp(src, sink, h, a)
-	ssp = path
-	ssp.append(h[src][sink])
-	nodes = [(nodes[i], nodes[i+1]) for i in range(len(nodes)-1)]
-	simulation_round_index += 1
-	paths2 = list(explore_paths(
-		src,
-		sink,
-		a,
-		nodes,
-		n,
-		1,
-		cutoff,
-		threads_per_block,
-		serialization_filename,
-		serialization_frequency,
-		nodes_obj,
-		ssp,
-		simulation_round_index,
-		correlation_matrix_serialization_path,
-		suboptimal_paths_serialization_path,
-	))
-	d2 = {i[-1] : i[:-1] for i in paths2}
-
-	a = np.array(np.loadtxt(
-		input_files_path + "/" + correlation_matrix_file
-	))
-	n = len(a)
-	h = np.array(hedetniemi_distance(a, n, n, threads_per_block))
-	path, nodes = get_ssp(src, sink, h, a)
-	ssp = path
-	ssp.append(h[src][sink])
-	nodes = [(nodes[i], nodes[i+1]) for i in range(len(nodes)-1)]
-	simulation_round_index += 1
-	paths3 = list(explore_paths(
-		src,
-		sink,
-		a,
-		nodes,
-		n,
-		2,
-		cutoff,
-		threads_per_block,
-		serialization_filename,
-		serialization_frequency,
-		nodes_obj,
-		ssp,
-		simulation_round_index,
-		correlation_matrix_serialization_path,
-		suboptimal_paths_serialization_path,
-	))
-	d3 = {i[-1] : i[:-1] for i in paths3}
-
-	a = np.array(np.loadtxt(
-		input_files_path + "/" + correlation_matrix_file
-	))
-	n = len(a)
-	h = np.array(hedetniemi_distance(a, n, n, threads_per_block))
-	path, nodes = get_ssp(src, sink, h, a)
-	ssp = path
-	ssp.append(h[src][sink])
-	nodes = [(nodes[i], nodes[i+1]) for i in range(len(nodes)-1)]
-	simulation_round_index += 1
-	paths4 = list(explore_paths(
-		src,
-		sink,
-		a,
-		nodes,
-		n,
-		3,
-		cutoff,
-		threads_per_block,
-		serialization_filename,
-		serialization_frequency,
-		nodes_obj,
-		ssp,
-		simulation_round_index,
-		correlation_matrix_serialization_path,
-		suboptimal_paths_serialization_path,
-	))
-	d4 = {i[-1] : i[:-1] for i in paths4}
-
-	d = {}
-	d.update(d1)
-	d.update(d2)
-	d.update(d3)
-	d.update(d4)
+	nodes_obj.deserialize(nodes_xml_file)
+	if '/' not in correlation_matrix_file:
+		correlation_matrix_file = (
+			f'{input_files_path}/{correlation_matrix_file}'
+		)
+	while simulation_round_index < 4:
+		a = np.array(np.loadtxt(
+			correlation_matrix_file
+		))
+		n = len(a)
+		if max_edges == 0:
+			max_edges = n
+		h = np.array(hedetniemi_distance(a, n, max_edges, threads_per_block))
+		if get_ssp(src, sink, h, a) is None:
+			raise Exception(
+				"Sink node is unreachable from source node.".upper() + '\n'
+				+ "Either perform the suboptimal path calculation" + '\n'
+				+ "using the correlation matrix without the contact map" + '\n'
+				+ "applied, or rerun the correlation matrix calculation with" + '\n'
+				+ "a larger cutoff distance."
+			)
+		path, nodes = get_ssp(src, sink, h, a)
+		ssp = path
+		ssp.append(h[src][sink])
+		nodes = [(nodes[i], nodes[i+1]) for i in range(len(nodes)-1)]
+		paths = list(explore_paths(
+			src,
+			sink,
+			a,
+			nodes,
+			n,
+			simulation_round_index,
+			cutoff,
+			threads_per_block,
+			serialization_filename,
+			serialization_frequency,
+			nodes_obj,
+			ssp,
+			simulation_round_index,
+			correlation_matrix_serialization_path,
+			suboptimal_paths_serialization_path,
+			serialization_index,
+			max_edges,
+		))
+		for i in paths:
+			d[i[-1]] = i[:-1]	
+		simulation_round_index += 1
 	d[ssp[-1]] = ssp[:-1]
 	path_index = 0
 	suboptimal_paths = SuboptimalPaths()
@@ -628,6 +550,10 @@ def get_suboptimal_paths(
 	suboptimal_paths.src = src
 	suboptimal_paths.sink = sink 
 	suboptimal_paths.num_paths = len(suboptimal_paths.paths) 
+	if '/' not in suboptimal_paths_xml:
+		suboptimal_paths_xml= (
+			f'{input_files_path}/{suboptimal_paths_xml}'
+		)
 	suboptimal_paths.serialize(
-		input_files_path + "/" + suboptimal_paths_xml
+		suboptimal_paths_xml
 	)
