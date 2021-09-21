@@ -384,6 +384,8 @@ def explore_paths(
 		n_p.add(i)
 	start = time.time()
 	while q:
+		if len(s) > 25:
+			break
 		for i in nodes:
 			n_p.add(i)
 		if pop == 0:
@@ -466,7 +468,7 @@ def get_suboptimal_paths(
 		serialization_frequency: int,
 		correlation_matrix_serialization_path: str,
 		suboptimal_paths_serialization_path: str,
-		simulation_round_index: int,
+		simulation_rounds: int,
 		serialization_index: int,
 		max_edges: int,
 		gpu_index: int,
@@ -483,7 +485,7 @@ def get_suboptimal_paths(
 		correlation_matrix_file = (
 			f'{input_files_path}/{correlation_matrix_file}'
 		)
-	while simulation_round_index < 4:
+	for simulation_round in simulation_rounds:
 		a = np.array(np.loadtxt(
 			correlation_matrix_file
 		))
@@ -509,14 +511,14 @@ def get_suboptimal_paths(
 			a,
 			nodes,
 			n,
-			simulation_round_index,
+			simulation_round,
 			cutoff,
 			threads_per_block,
 			serialization_filename,
 			serialization_frequency,
 			nodes_obj,
 			ssp,
-			simulation_round_index,
+			simulation_round,
 			correlation_matrix_serialization_path,
 			suboptimal_paths_serialization_path,
 			serialization_index,
@@ -524,7 +526,6 @@ def get_suboptimal_paths(
 		))
 		for path in paths:
 			suboptimal_paths_dict[path[-1]] = path[:-1]	
-		simulation_round_index += 1
 	suboptimal_paths_dict[ssp[-1]] = ssp[:-1]
 	path_index = 0
 	suboptimal_paths = SuboptimalPaths()

@@ -1,10 +1,11 @@
+from multiprocessing import Pool
 import gc
 import shutil
 import mdtraj as md
 import os
 import sys
 import numpy as np
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Union, List, Dict
 from .correlation_matrix import get_correlation_matrix 
 from .paths import get_suboptimal_paths
 
@@ -52,6 +53,11 @@ def calculate_correlation_matrix(
 		num_multiprocessing_processes,
 	)
 
+def launch_get_suboptimal_paths(
+		parameters: Dict,
+) -> None:
+	get_suboptimal_paths(**parameters)
+
 def calculate_suboptimal_paths(
 		input_files_path: str,
 		src: int,
@@ -66,61 +72,94 @@ def calculate_suboptimal_paths(
 		serialization_frequency: Optional[float] = 1,
 		correlation_matrix_serialization_directory: Optional[str] = '',
 		suboptimal_paths_serialization_directory: Optional[str] = '', 
-		simulation_round: Optional[int] = 0,
+		simulation_rounds: Optional[List[int]] = [0, 1, 2, 3, 4],
 		serialization_index: Optional[int] = 0,
 		max_edges: Optional[int] = 0,
-		gpu_index: Optional[int] = 0,
+		gpu: Optional[Union[int, List[int]]] = 0,
 ) -> None:
-		if correlation_matrix_filename == '':
-			if use_contact_map_correlation_matrix: 
-				correlation_matrix_file = (
-					"correlation_matrix_after_contact_map.txt" 
-				)
-			else:
-				correlation_matrix_file = "correlation_matrix.txt" 
-		if nodes_xml_filename == '':
-			nodes_xml_file = "nodes.xml"
-		if suboptimal_paths_xml_filename == '':
-			suboptimal_paths_xml_filename = "suboptimal_paths.xml" 
-		if serialization_filename:
-			if correlation_matrix_serialization_directory == '':
+		if isinstance(gpu, int):
+			gpu = [gpu] 
+		if not isinstance(simulation_rounds[0], list):
+			simulation_rounds = [simulation_rounds] 
+		args = []
+		for i in range(len(gpu)):
+			if correlation_matrix_filename == '':
+				if use_contact_map_correlation_matrix: 
+					correlation_matrix_file = (
+						"correlation_matrix_after_contact_map.txt" 
+					)
+				else:
+					correlation_matrix_file = "correlation_matrix.txt" 
+			if nodes_xml_filename == '':
+				nodes_xml_file = "nodes.xml"
+			if suboptimal_paths_xml_filename == '':
+				suboptimal_paths_xml_filename = "suboptimal_paths.xml" 
+			if serialization_filename:
+				serialization_suffix = f''
+				for simulation_round in simulation_rounds[i]:
+					serialization_suffix += f'{simulation_round}_'
+				serialization_suffix = serialization_suffix[:-1]
+				if correlation_matrix_serialization_directory == '':
+					correlation_matrix_serialization_directory = (
+						f'serialized_correlation_matrices'
+					)
 				correlation_matrix_serialization_directory = (
-					'serialized_correlation_matrices'
+					f'{correlation_matrix_serialization_directory}'
+					f'_{serialization_suffix}'
 				)
-			if not os.path.exists(
-				correlation_matrix_serialization_directory
-			):
-				os.makedirs(
+				if not os.path.exists(
 					correlation_matrix_serialization_directory
-				)
-			if suboptimal_paths_serialization_directory == '':
+				):
+					os.makedirs(
+						correlation_matrix_serialization_directory
+					)
+				if suboptimal_paths_serialization_directory == '':
+					suboptimal_paths_serialization_directory = (
+						f'serialized_suboptimal_paths'
+					)
 				suboptimal_paths_serialization_directory = (
-					'serialized_suboptimal_paths'
+					f'{suboptimal_paths_serialization_directory}'
+					f'_{serialization_suffix}'
 				)
-			if not os.path.exists(
-				suboptimal_paths_serialization_directory
-			):
-				os.makedirs(
+				if not os.path.exists(
 					suboptimal_paths_serialization_directory
-				)
-		get_suboptimal_paths(
-			input_files_path, 
-			correlation_matrix_file,
-			nodes_xml_file,
-			src, 
-			sink,
-			suboptimal_paths_xml_filename, 
-			cutoff,
-			threads_per_block,
-			serialization_filename,
-			serialization_frequency,
-			correlation_matrix_serialization_directory,
-			suboptimal_paths_serialization_directory,
-			simulation_round,
-			serialization_index,
-			max_edges,
-			gpu_index,
-		)
+				):
+					os.makedirs(
+						suboptimal_paths_serialization_directory
+					)
+			parameters = {
+				'input_files_path' : input_files_path, 
+				'correlation_matrix_file' : (
+					correlation_matrix_file
+				),
+				'nodes_xml_file' : nodes_xml_file,
+				'src' : src, 
+				'sink' : sink,
+				'suboptimal_paths_xml' : (
+					suboptimal_paths_xml_filename 
+				),
+				'cutoff' : cutoff,
+				'threads_per_block' : threads_per_block,
+				'serialization_filename' : (
+					serialization_filename
+				),
+				'serialization_frequency' : (
+					serialization_frequency
+				),
+				'correlation_matrix_serialization_path' : (
+					correlation_matrix_serialization_directory
+				),
+				'suboptimal_paths_serialization_path' : (
+					suboptimal_paths_serialization_directory
+				),
+				'simulation_rounds' : simulation_rounds[i],
+				'serialization_index' : serialization_index,
+				'max_edges' : max_edges,
+				'gpu_index' : gpu[i],
+			}
+			args.append(parameters)
+		with Pool(len(gpu)) as pool:
+			pool.map(launch_get_suboptimal_paths, args)
 
 
 

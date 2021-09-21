@@ -5,7 +5,7 @@ from cuwisp.vmdtcl import save_tcl
 
 tcl = ''
 suboptimal_paths = SuboptimalPaths()
-suboptimal_paths.deserialize('serialized_suboptimal_paths/spike_protein_suboptimal_paths_2_5.xml')
+suboptimal_paths.deserialize('example_output/suboptimal_paths.xml')
 
 node_spheres = {'radius' : 1, 'color':'silver', 'resolution':250}
 src_node_sphere = {'radius' : 2.0, 'color':'blue', 'resolution':250}
