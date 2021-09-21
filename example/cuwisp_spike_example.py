@@ -24,4 +24,5 @@ calculate_suboptimal_paths(
 	#serialization_frequency=0.5,
 	cutoff=3.2,
 )
+print('')
 print(time.time()-start)

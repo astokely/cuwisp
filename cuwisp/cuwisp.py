@@ -69,6 +69,7 @@ def calculate_suboptimal_paths(
 		simulation_round: Optional[int] = 0,
 		serialization_index: Optional[int] = 0,
 		max_edges: Optional[int] = 0,
+		gpu_index: Optional[int] = 0,
 ) -> None:
 		if correlation_matrix_filename == '':
 			if use_contact_map_correlation_matrix: 
@@ -118,6 +119,7 @@ def calculate_suboptimal_paths(
 			simulation_round,
 			serialization_index,
 			max_edges,
+			gpu_index,
 		)
 
 

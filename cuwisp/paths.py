@@ -469,9 +469,10 @@ def get_suboptimal_paths(
 		simulation_round_index: int,
 		serialization_index: int,
 		max_edges: int,
+		gpu_index: int,
 ) -> None:
-
-	d = {}	
+	cuda.select_device(gpu_index)
+	suboptimal_paths_dict = {}	
 	nodes_obj = Nodes()
 	if '/' not in nodes_xml_file:
 		nodes_xml_file = (
@@ -521,18 +522,20 @@ def get_suboptimal_paths(
 			serialization_index,
 			max_edges,
 		))
-		for i in paths:
-			d[i[-1]] = i[:-1]	
+		for path in paths:
+			suboptimal_paths_dict[path[-1]] = path[:-1]	
 		simulation_round_index += 1
-	d[ssp[-1]] = ssp[:-1]
+	suboptimal_paths_dict[ssp[-1]] = ssp[:-1]
 	path_index = 0
 	suboptimal_paths = SuboptimalPaths()
-	for k in sorted(d):
+	for path_length in sorted(suboptimal_paths_dict):
 		path = Path()
-		path.length = k
+		path.length = path_length
 		path.edges = [] 
 		path_nodes = set([])
-		for path_edge in ordered_paths(d[k], src):
+		for path_edge in ordered_paths(
+			suboptimal_paths_dict[path_length], src
+		):
 			node1_index, node2_index = path_edge
 			path_nodes.add(node1_index)
 			path_nodes.add(node2_index)
