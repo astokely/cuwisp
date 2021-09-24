@@ -9,6 +9,7 @@ def sumCoords(
 		threadsperblock: int,
 ) -> np.ndarray:
 
+
 	@cuda.jit('void(float64[:,:], float64[:,:], int32, int32)')
 	def cuSumCoords(v, c, nf, na):
 		b = cuda.blockIdx.x

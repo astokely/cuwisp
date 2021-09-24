@@ -15,16 +15,18 @@ class VisualizeSuboptimalPaths(serializer):
 			suboptimal_paths: SuboptimalPaths,
 			color: Union[str, Tuple[str]],
 			radii: Union[float, Tuple[float]],
+			frame: Optional[int] = 0,
 			node_spheres: Optional[Dict] = False,
 			src_node_sphere: Optional[Dict] = False,	
 			sink_node_sphere: Optional[Dict] = False,	
-			node_atoms_representation: Optional[Dict] = False,
+			node_atoms_representations: Optional[Dict] = False,
 	) -> None:
 		self.suboptimal_paths = suboptimal_paths
+		self.frame = frame
 		self.node_spheres = node_spheres
 		self.src_node_sphere = src_node_sphere
 		self.sink_node_sphere = sink_node_sphere
-		self.node_atoms_representation = node_atoms_representation
+		self.node_atoms_representations = node_atoms_representations
 		self.radii = radii
 		self.color = color 
 
@@ -41,6 +43,7 @@ class VisualizeCorrelationMatrix(serializer):
 			node_color: Optional[Union[str, int]] = False,
 			node_sphere_radius: Optional[float] = 1.0,
 			num_nodes: Optional[int] = 1000,
+			frame: Optional[int] = 0
 			
 	) -> None:
 		self.nodes_xml_filename = nodes_xml_filename
@@ -54,6 +57,7 @@ class VisualizeCorrelationMatrix(serializer):
 		self.node_color = node_color
 		self.node_sphere_radius = node_sphere_radius
 		self.num_nodes = num_nodes
+		self.frame = frame 
 
 class VmdRepresentation(serializer):
 
@@ -112,13 +116,22 @@ def get_src_and_sink_node_coordinates(
 		path: Union[
 			SuboptimalPaths, Path
 		],
+		frame: int,
 ) -> Tuple[np.ndarray]:
 	if isinstance(path, SuboptimalPaths):
-		src_coordinates = path[0][0][0].coordinates
-		sink_coordinates = path[0][-1][1].coordinates
+		src_coordinates = path[0][0][0].coordinates[
+			frame
+		]
+		sink_coordinates = path[0][-1][1].coordinates[
+			frame
+		]
 	else:
-		src_coordinates = path[0][0].coordinates
-		sink_coordinates = path[-1][1].coordinates
+		src_coordinates = path[0][0].coordinates[
+			frame
+		]
+		sink_coordinates = path[-1][1].coordinates[
+			frame
+		]
 	return (
 		src_coordinates,
 		sink_coordinates
@@ -126,13 +139,17 @@ def get_src_and_sink_node_coordinates(
 
 def get_node_coordinates(
 		path: Path,
+		frame: int,
 ) -> Tuple[np.ndarray]:
 	src_coordinates, sink_coordinates = (
-		get_src_and_sink_node_coordinates(path)
+		get_src_and_sink_node_coordinates(
+			path,
+			frame,
+		)
 	)
 	coordinates = [src_coordinates]
 	for edge in path.edges[1:]:
-		coordinates.append(edge.node1.coordinates)
+		coordinates.append(edge.node1.coordinates[frame])
 	coordinates.append(sink_coordinates)
 	return coordinates
 
@@ -152,6 +169,7 @@ def get_sorted_correlation_node_coordinates(
 		correlation_matrix: np.ndarray,
 		nodes: Nodes,
 		node_index: int,
+		frame: int,
 ) -> np.ndarray:
 	node_correlation_dict = {
 		i : correlation_matrix[node_index][i]
@@ -169,15 +187,16 @@ def get_sorted_correlation_node_coordinates(
 		dtype=np.float64
 	)
 	j = 0
+
 	for i in list(sorted_node_correlation_dict):
 		sorted_correlation_node_coordinates[j][0] = (
-			nodes[i].coordinates[0]
+			nodes[i].coordinates[frame][0]
 		)
 		sorted_correlation_node_coordinates[j][1] = (
-			nodes[i].coordinates[1]
+			nodes[i].coordinates[frame][1]
 		)
 		sorted_correlation_node_coordinates[j][2] = (
-			nodes[i].coordinates[2]
+			nodes[i].coordinates[frame][2]
 		)
 		j += 1
 	return sorted_correlation_node_coordinates
@@ -213,6 +232,15 @@ def visualize_correlation_matrix(
 	nodes.deserialize(
 		parameters.nodes_xml_filename
 	)
+	frame_index_dict = {
+		nodes.nodes[0].coordinate_frames[
+			frame_index
+		] : frame_index for frame_index in
+		range(len(
+			nodes.nodes[0].coordinate_frames
+		))	
+	}
+	frame = frame_index_dict[parameters.frame]
 	num_nodes = parameters.num_nodes 
 	sphere_resolution = parameters.sphere_resolution
 	sphere_radius = parameters.sphere_radius
@@ -221,6 +249,7 @@ def visualize_correlation_matrix(
 		correlation_matrix,
 		nodes,
 		node_index,
+		frame,
 	)	
 	if len(coordinates) > num_nodes:
 		coordinates = coordinates[:num_nodes]
@@ -254,7 +283,7 @@ def visualize_correlation_matrix(
 			tcl=tcl
 		)
 		tcl = vmdtcl.Sphere(
-			nodes[node_index].coordinates,
+			nodes[node_index].coordinates[frame],
 			radius=parameters.node_sphere_radius,
 			resolution=sphere_resolution,
 			
@@ -263,16 +292,42 @@ def visualize_correlation_matrix(
 		return tcl
 	return tcl[:-1]
 
+def get_suboptimal_paths_nodes_atom_indices(
+		suboptimal_paths: SuboptimalPaths,
+) -> List[List[int]]:
+	nodes_atom_indices = []
+	for path in suboptimal_paths:
+		nodes_atom_indices.append(
+			path.edges[0].node1.atom_indices
+		)
+		for edge in path.edges:
+			nodes_atom_indices.append(
+				edge.node2.atom_indices
+			)
+	return nodes_atom_indices
 
 def draw_suboptimal_paths(
 		parameters: VisualizeSuboptimalPaths,
 		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 ) -> str:
+	frame = parameters.frame
 	suboptimal_paths = parameters.suboptimal_paths
+	frame_index_dict = {
+		suboptimal_paths[0][0][0].coordinate_frames[
+			frame_index
+		] : frame_index for frame_index in
+		range(len(
+			suboptimal_paths[0][0][0].coordinate_frames
+		))	
+	}
+	frame = frame_index_dict[frame]
 	num_paths = len(suboptimal_paths)
 	src_node_coordinates, sink_node_coordinates = (
-		get_src_and_sink_node_coordinates(suboptimal_paths)
+		get_src_and_sink_node_coordinates(
+			suboptimal_paths,
+			frame,
+		)
 	)	
 	tcl += f'proc draw_suboptimal_paths {{}} {{\n'
 	if parameters.src_node_sphere:
@@ -305,6 +360,17 @@ def draw_suboptimal_paths(
 			**parameters.sink_node_sphere
 		)
 		tcl = sink_node_sphere.tcl(tcl=tcl)
+	if parameters.node_atoms_representations:
+		nodes_atom_indices = (
+			get_suboptimal_paths_nodes_atom_indices(
+				parameters.suboptimal_paths
+			) 
+		)
+		for node_atoms_representation in \
+		parameters.node_atoms_representations.values():
+			if node_atoms_representation.selection[1] \
+			in nodes_atom_indices:
+				tcl += node_atoms_representation.to_tcl()
 	if isinstance(parameters.radii, tuple):
 		radii = get_radii(*parameters.radii, num_paths)
 	else:
@@ -334,7 +400,7 @@ def draw_suboptimal_paths(
 			parameters.node_spheres.pop('color')
 		)
 	for path in suboptimal_paths:
-		node_coordinates = get_node_coordinates(path)
+		node_coordinates = get_node_coordinates(path, frame)
 		node_index = 0
 		for node_coordinate in node_coordinates[1:-1]:
 			if parameters.node_spheres:

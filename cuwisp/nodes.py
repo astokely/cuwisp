@@ -1,7 +1,9 @@
+import re
 from abserdes import Serializer as serializer
 from collections import namedtuple
 from typing import List, Optional
 import numpy as np
+import os
 
 class Node(serializer):
 
@@ -14,7 +16,9 @@ class Node(serializer):
 			resid: Optional[int] = None,
 			segment_id: Optional[str] = None,
 			tag: Optional[str] = None,
-			coordinates: Optional[np.ndarray] = None,
+			coordinates_directory: Optional[str] = None,
+			xml_directory: Optional[str] = False,
+			coordinate_frames: Optional[List[int]] = None,	
 	):
 		self.index = index 
 		self.atom_indices = atom_indices 
@@ -22,8 +26,10 @@ class Node(serializer):
 		self.resid = resid
 		self.chain_index = chain_index 
 		self.tag = tag 
-		self.coordinates = coordinates 
+		self.coordinates_directory = coordinates_directory 
 		self.segment_id = segment_id,
+		self.xml_directory = xml_directory
+		self.coordinate_frames = coordinate_frames
 
 	def __repr__(self):
 		repr_namedtuple = namedtuple(
@@ -38,6 +44,38 @@ class Node(serializer):
 			self.resid,
 			self.segment_id,
 		))  
+	@property
+	def coordinates(
+			self,
+	) -> np.ndarray:
+		if self.xml_directory:
+			self.coordinates_directory = (
+				f'{self.xml_directory}/node_coordinates'
+			)
+		coordinates_directory = (
+			f'{self.coordinates_directory}'
+		)
+		coordinate_files = [
+			os.path.abspath(os.path.join(coordinates_directory, f)) 
+			for f in os.listdir(coordinates_directory)
+		]
+		coordinate_file_frames_dict = {}
+		for coordinate_file in coordinate_files: 
+			coordinate_file_frame = (
+				int(re.findall(
+					'\d+', coordinate_file.rsplit('/', 1).pop()
+				).pop())
+			)
+			coordinate_file_frames_dict[coordinate_file_frame] = (
+				coordinate_file
+			)
+		coordinates = []
+		for frame in self.coordinate_frames:
+			coordinates.append(np.loadtxt(
+				coordinate_file_frames_dict[frame])[self.index]
+			)
+		return np.array(coordinates)
+
 
 class Nodes(serializer):
 

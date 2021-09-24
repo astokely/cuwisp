@@ -172,6 +172,7 @@ class Sphere(serializer):
 		self.resolution = resolution
 
 	def __repr__(self):
+		print(self.center)
 		x, y, z = self.center
 		return (
 			f'draw sphere {{{x} {y} {z}}} ' 

@@ -196,11 +196,11 @@ def all_pair_hedetniemit(
 			found_ssp[0] = False
 
 def hedetniemi_distance(
-		a: Any,
+		a: np.ndarray,
 		num_nodes: int,
 		max_edges_in_ssp: int,
 		threads_per_block: int,
-) -> Any:
+) -> np.ndarray:
 	threads_per_block = int(np.sqrt(threads_per_block))
 	n = num_nodes
 	a_device = cuda.to_device(a)

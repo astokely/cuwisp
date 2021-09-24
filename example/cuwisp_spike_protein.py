@@ -5,7 +5,6 @@ from cuwisp.paths import SuboptimalPaths
 import time
 
 start = time.time()
-'''
 calculate_correlation_matrix(
 	"example_output", #output directory
 	4.5, #contact map cutoff limit
@@ -24,4 +23,5 @@ calculate_suboptimal_paths(
 	serialization_filename='spike_protein',
 	serialization_frequency=900,
 )
+'''
 print(time.time()-start)

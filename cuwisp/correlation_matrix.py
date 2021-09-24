@@ -1,4 +1,3 @@
-from collections import namedtuple
 import shutil
 import mdtraj as md
 import os
@@ -18,6 +17,7 @@ from .nodes import Nodes, Node
 from .hollow_matrix import hollowMatrix
 from .cuda_correlation_matrix import cuda_correlation_matrix
 from .cuda_contact_map import cuda_contact_map 
+
 def ctypes_matrix(
 		n: int,
 		m: int,
@@ -37,7 +37,7 @@ def shared_ctypes_multiprocessing_array(
 
 class Molecule:
 
-	def load_pdb_from_list(
+	def parse(
 				self, 
 				traj: md.core.trajectory, 
 				num_frames: Optional[bool] = False, 
@@ -122,7 +122,7 @@ def parse_pdb(
 	frame = int(pdb_file[:-4])
 	traj = md.load(path+pdb_file)
 	pdb = Molecule()
-	pdb.load_pdb_from_list(traj, num_frames, frame)
+	pdb.parse(traj, num_frames, frame)
 	return pdb
 
 def prepare_trajectory_for_analysis(
@@ -209,6 +209,7 @@ def multiprocessing_pdb_parser(
 		))
 	coordinates = np.ctypeslib.as_array(scmat)
 	del scmat
+	c = average_pdb.coordinates
 	average_pdb.coordinates = sumCoords(
 		coordinates,
 		num_traj_frames, 
@@ -227,10 +228,17 @@ def serialize_nodes(
 		coms: np.ndarray,
 		output_directory: str,
 		nodes_xml_filename: str,
+		node_coordinate_frames: List[int],
 ) -> None:
 	nodes = Nodes()
 	node_index = 0
 	atom_indices_list = []
+	node_coordinates_directory = (
+		f'{output_directory}/node_coordinates'
+	)
+	if os.path.exists(node_coordinates_directory):
+		shutil.rmtree(node_coordinates_directory)
+	os.makedirs(node_coordinates_directory)
 	for node_tag, atom_indices in \
 	average_pdb.node_tag_to_atom_indices.items():
 		node = Node()
@@ -251,10 +259,17 @@ def serialize_nodes(
 		)
 		nodes[node_index] = node
 		node_index += 1
-		nodes[node.index].coordinates = (
-			coms[-1][node.index]
-		)
+		for frame in node_coordinate_frames:
+			np.savetxt(
+				(
+					f'{node_coordinates_directory}/'
+					+ f'frame_{frame}_node_coordinates.txt'
+				)
+				, coms[frame]
+			)
+		node.coordinates_directory = node_coordinates_directory
 		atom_indices_list.append(atom_indices)
+		node.coordinate_frames = node_coordinate_frames
 	nodes.num_nodes = node_index + 1
 	if nodes_xml_filename == '':
 		nodes_xml_filename = (
@@ -310,24 +325,6 @@ def save_matrix(
 		numpy_array,
 	)
 
-def save_average_pdb(
-		output_directory: str,
-		average_pdb_filename: str,
-		default_average_pdb_filename: str,
-		average_pdb: Molecule,
-) -> None:
-	if average_pdb_filename == '':
-		average_pdb_filename = (
-			f'{output_directory}/{default_average_pdb_filename}'
-		)
-	else:
-		average_pdb_filename = (
-			f'{output_directory}/{average_pdb_filename}'
-		)
-	average_pdb.trajectory.save_pdb(
-		average_pdb_filename
-	)	
-		
 def get_node_com_coordinates_array(
 			num_nodes: int,
 			num_pdbs: int,
@@ -416,6 +413,7 @@ def get_correlation_matrix(
 		threads_per_block_sum_coordinates_calc: int,
 		num_blocks_sum_coordinates_calc: int,
 		num_multiprocessing_processes: int,
+		node_coordinate_frames: List[int],
 ) -> None:
 	current_frame = 0
 	if trajectory_filename[-3:] == 'pdb':
@@ -432,8 +430,11 @@ def get_correlation_matrix(
 	else:
 		raise Exception
 	average_pdb = Molecule() 
-	average_pdb.load_pdb_from_list(
+	average_pdb_trajectory = (
 		md.load(f'{temp_file_directory}/0.pdb')
+	)
+	average_pdb.parse(
+		average_pdb_trajectory
 	)
 	num_traj_frames, num_atoms, paths, num_frames = (
 		get_parameters_for_multiprocessing_pdb_parser(
@@ -441,6 +442,10 @@ def get_correlation_matrix(
 			average_pdb
 		)
 	) 
+	if not node_coordinate_frames:
+		node_coordinate_frames = [
+			frame for frame in range(num_traj_frames)
+		]
 	pdbs = multiprocessing_pdb_parser(
 		num_traj_frames,
 		num_atoms,
@@ -467,6 +472,7 @@ def get_correlation_matrix(
 			coms,
 			output_directory,
 			nodes_xml_filename,
+			node_coordinate_frames,
 		)
 	)
 
@@ -512,10 +518,5 @@ def get_correlation_matrix(
 		'contact_map.txt',
 		contact_map,
 	)
+
 		
-	save_average_pdb(
-		output_directory,
-		'',
-		'average.pdb',
-		average_pdb,
-	)

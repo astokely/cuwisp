@@ -7,7 +7,7 @@ vmd_init_rep = VmdRepresentation(
 	material='GlassBubble',
 )
 tcl = load_pdb(
-	'example_output/average.pdb', 
+	'/home/astokely/Downloads/wisp/example_commandline/trajectory_20_frames.pdb', 
 	initial_representation=vmd_init_rep,
 	tcl=tcl,
 )
