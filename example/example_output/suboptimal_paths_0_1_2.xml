@@ -1,0 +1,2017 @@
+<?xml version="1.0" ?>
+<SuboptimalPaths type="instance" class_name="SuboptimalPaths" module="cuwisp.paths">
+	  <paths type="list">
+	  	  <paths_e0 type="instance" class_name="Path" module="cuwisp.paths">
+	  	  	  <index type="int">0</index>
+	  	  	  <num_nodes type="int">2</num_nodes>
+	  	  	  <num_edges type="int">1</num_edges>
+	  	  	  <src type="int">9</src>
+	  	  	  <sink type="int">10</sink>
+	  	  	  <edges type="list">
+	  	  	  	  <edges_e0 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">9</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">153</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">154</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">155</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">156</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">157</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">158</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">159</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">160</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">161</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">162</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">163</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">164</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">165</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">166</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">167</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">168</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">169</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">170</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">171</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">LEU</resname>
+	  	  	  	  	  	  <resid type="int64">9</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_LEU_9_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">10</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">172</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">173</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">174</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">175</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">176</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">177</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">178</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">179</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">180</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">181</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">182</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">183</atom_indices_e11>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">ASP</resname>
+	  	  	  	  	  	  <resid type="int64">10</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_ASP_10_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e0>
+	  	  	  </edges>
+	  	  	  <length type="float64">1.1363598678052158</length>
+	  	  </paths_e0>
+	  	  <paths_e1 type="instance" class_name="Path" module="cuwisp.paths">
+	  	  	  <index type="int">1</index>
+	  	  	  <num_nodes type="int">3</num_nodes>
+	  	  	  <num_edges type="int">2</num_edges>
+	  	  	  <src type="int">9</src>
+	  	  	  <sink type="int">10</sink>
+	  	  	  <edges type="list">
+	  	  	  	  <edges_e0 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">9</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">153</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">154</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">155</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">156</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">157</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">158</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">159</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">160</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">161</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">162</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">163</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">164</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">165</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">166</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">167</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">168</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">169</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">170</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">171</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">LEU</resname>
+	  	  	  	  	  	  <resid type="int64">9</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_LEU_9_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">11</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">184</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">185</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">186</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">187</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">188</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">189</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">190</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">191</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">192</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">193</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">194</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">195</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">196</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">197</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">198</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">199</atom_indices_e15>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">VAL</resname>
+	  	  	  	  	  	  <resid type="int64">11</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_VAL_11_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e0>
+	  	  	  	  <edges_e1 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">11</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">184</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">185</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">186</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">187</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">188</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">189</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">190</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">191</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">192</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">193</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">194</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">195</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">196</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">197</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">198</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">199</atom_indices_e15>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">VAL</resname>
+	  	  	  	  	  	  <resid type="int64">11</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_VAL_11_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">10</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">172</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">173</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">174</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">175</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">176</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">177</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">178</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">179</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">180</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">181</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">182</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">183</atom_indices_e11>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">ASP</resname>
+	  	  	  	  	  	  <resid type="int64">10</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_ASP_10_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e1>
+	  	  	  </edges>
+	  	  	  <length type="float64">2.027419973170703</length>
+	  	  </paths_e1>
+	  	  <paths_e2 type="instance" class_name="Path" module="cuwisp.paths">
+	  	  	  <index type="int">2</index>
+	  	  	  <num_nodes type="int">4</num_nodes>
+	  	  	  <num_edges type="int">3</num_edges>
+	  	  	  <src type="int">9</src>
+	  	  	  <sink type="int">10</sink>
+	  	  	  <edges type="list">
+	  	  	  	  <edges_e0 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">9</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">153</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">154</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">155</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">156</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">157</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">158</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">159</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">160</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">161</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">162</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">163</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">164</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">165</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">166</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">167</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">168</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">169</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">170</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">171</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">LEU</resname>
+	  	  	  	  	  	  <resid type="int64">9</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_LEU_9_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">49</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">775</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">776</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">777</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">778</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">779</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">780</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">781</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">782</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">783</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">784</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">785</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">786</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">787</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">788</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">789</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">790</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">791</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">792</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">793</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">LEU</resname>
+	  	  	  	  	  	  <resid type="int64">49</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_LEU_49_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e0>
+	  	  	  	  <edges_e1 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">49</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">775</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">776</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">777</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">778</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">779</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">780</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">781</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">782</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">783</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">784</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">785</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">786</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">787</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">788</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">789</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">790</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">791</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">792</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">793</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">LEU</resname>
+	  	  	  	  	  	  <resid type="int64">49</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_LEU_49_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">11</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">184</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">185</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">186</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">187</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">188</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">189</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">190</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">191</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">192</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">193</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">194</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">195</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">196</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">197</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">198</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">199</atom_indices_e15>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">VAL</resname>
+	  	  	  	  	  	  <resid type="int64">11</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_VAL_11_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e1>
+	  	  	  	  <edges_e2 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">11</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">184</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">185</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">186</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">187</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">188</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">189</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">190</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">191</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">192</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">193</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">194</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">195</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">196</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">197</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">198</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">199</atom_indices_e15>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">VAL</resname>
+	  	  	  	  	  	  <resid type="int64">11</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_VAL_11_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">10</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">172</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">173</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">174</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">175</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">176</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">177</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">178</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">179</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">180</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">181</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">182</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">183</atom_indices_e11>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">ASP</resname>
+	  	  	  	  	  	  <resid type="int64">10</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_ASP_10_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e2>
+	  	  	  </edges>
+	  	  	  <length type="float64">2.20590394221895</length>
+	  	  </paths_e2>
+	  	  <paths_e3 type="instance" class_name="Path" module="cuwisp.paths">
+	  	  	  <index type="int">3</index>
+	  	  	  <num_nodes type="int">3</num_nodes>
+	  	  	  <num_edges type="int">2</num_edges>
+	  	  	  <src type="int">9</src>
+	  	  	  <sink type="int">10</sink>
+	  	  	  <edges type="list">
+	  	  	  	  <edges_e0 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">9</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">153</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">154</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">155</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">156</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">157</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">158</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">159</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">160</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">161</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">162</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">163</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">164</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">165</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">166</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">167</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">168</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">169</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">170</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">171</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">LEU</resname>
+	  	  	  	  	  	  <resid type="int64">9</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_LEU_9_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">49</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">775</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">776</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">777</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">778</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">779</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">780</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">781</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">782</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">783</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">784</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">785</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">786</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">787</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">788</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">789</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">790</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">791</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">792</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">793</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">LEU</resname>
+	  	  	  	  	  	  <resid type="int64">49</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_LEU_49_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e0>
+	  	  	  	  <edges_e1 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">49</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">775</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">776</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">777</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">778</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">779</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">780</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">781</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">782</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">783</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">784</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">785</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">786</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">787</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">788</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">789</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">790</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">791</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">792</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">793</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">LEU</resname>
+	  	  	  	  	  	  <resid type="int64">49</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_LEU_49_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">10</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">172</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">173</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">174</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">175</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">176</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">177</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">178</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">179</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">180</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">181</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">182</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">183</atom_indices_e11>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">ASP</resname>
+	  	  	  	  	  	  <resid type="int64">10</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_ASP_10_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e1>
+	  	  	  </edges>
+	  	  	  <length type="float64">2.307450347977407</length>
+	  	  </paths_e3>
+	  	  <paths_e4 type="instance" class_name="Path" module="cuwisp.paths">
+	  	  	  <index type="int">4</index>
+	  	  	  <num_nodes type="int">4</num_nodes>
+	  	  	  <num_edges type="int">3</num_edges>
+	  	  	  <src type="int">9</src>
+	  	  	  <sink type="int">10</sink>
+	  	  	  <edges type="list">
+	  	  	  	  <edges_e0 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">9</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">153</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">154</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">155</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">156</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">157</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">158</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">159</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">160</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">161</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">162</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">163</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">164</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">165</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">166</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">167</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">168</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">169</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">170</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">171</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">LEU</resname>
+	  	  	  	  	  	  <resid type="int64">9</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_LEU_9_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">49</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">775</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">776</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">777</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">778</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">779</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">780</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">781</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">782</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">783</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">784</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">785</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">786</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">787</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">788</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">789</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">790</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">791</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">792</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">793</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">LEU</resname>
+	  	  	  	  	  	  <resid type="int64">49</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_LEU_49_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e0>
+	  	  	  	  <edges_e1 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">49</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">775</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">776</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">777</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">778</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">779</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">780</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">781</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">782</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">783</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">784</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">785</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">786</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">787</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">788</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">789</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">790</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">791</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">792</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">793</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">LEU</resname>
+	  	  	  	  	  	  <resid type="int64">49</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_LEU_49_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">51</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">806</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">807</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">808</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">809</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">810</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">811</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">812</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">813</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">814</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">815</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">816</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">817</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">818</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">819</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">820</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">821</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">822</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">823</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">824</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">ILE</resname>
+	  	  	  	  	  	  <resid type="int64">51</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_ILE_51_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e1>
+	  	  	  	  <edges_e2 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">51</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">806</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">807</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">808</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">809</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">810</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">811</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">812</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">813</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">814</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">815</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">816</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">817</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">818</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">819</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">820</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">821</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">822</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">823</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">824</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">ILE</resname>
+	  	  	  	  	  	  <resid type="int64">51</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_ILE_51_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">10</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">172</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">173</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">174</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">175</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">176</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">177</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">178</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">179</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">180</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">181</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">182</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">183</atom_indices_e11>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">ASP</resname>
+	  	  	  	  	  	  <resid type="int64">10</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_ASP_10_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e2>
+	  	  	  </edges>
+	  	  	  <length type="float64">2.4426257103222615</length>
+	  	  </paths_e4>
+	  	  <paths_e5 type="instance" class_name="Path" module="cuwisp.paths">
+	  	  	  <index type="int">5</index>
+	  	  	  <num_nodes type="int">3</num_nodes>
+	  	  	  <num_edges type="int">2</num_edges>
+	  	  	  <src type="int">9</src>
+	  	  	  <sink type="int">10</sink>
+	  	  	  <edges type="list">
+	  	  	  	  <edges_e0 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">9</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">153</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">154</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">155</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">156</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">157</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">158</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">159</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">160</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">161</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">162</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">163</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">164</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">165</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">166</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">167</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">168</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">169</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">170</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">171</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">LEU</resname>
+	  	  	  	  	  	  <resid type="int64">9</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_LEU_9_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">8</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">142</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">143</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">144</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">145</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">146</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">147</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">148</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">149</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">150</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">151</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">152</atom_indices_e10>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">CYS</resname>
+	  	  	  	  	  	  <resid type="int64">8</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_CYS_8_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e0>
+	  	  	  	  <edges_e1 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">8</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">142</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">143</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">144</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">145</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">146</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">147</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">148</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">149</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">150</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">151</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">152</atom_indices_e10>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">CYS</resname>
+	  	  	  	  	  	  <resid type="int64">8</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_CYS_8_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">10</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">172</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">173</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">174</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">175</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">176</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">177</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">178</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">179</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">180</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">181</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">182</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">183</atom_indices_e11>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">ASP</resname>
+	  	  	  	  	  	  <resid type="int64">10</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_ASP_10_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e1>
+	  	  	  </edges>
+	  	  	  <length type="float64">2.4480950019006342</length>
+	  	  </paths_e5>
+	  	  <paths_e6 type="instance" class_name="Path" module="cuwisp.paths">
+	  	  	  <index type="int">6</index>
+	  	  	  <num_nodes type="int">4</num_nodes>
+	  	  	  <num_edges type="int">3</num_edges>
+	  	  	  <src type="int">9</src>
+	  	  	  <sink type="int">10</sink>
+	  	  	  <edges type="list">
+	  	  	  	  <edges_e0 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">9</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">153</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">154</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">155</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">156</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">157</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">158</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">159</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">160</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">161</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">162</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">163</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">164</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">165</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">166</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">167</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">168</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">169</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">170</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">171</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">LEU</resname>
+	  	  	  	  	  	  <resid type="int64">9</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_LEU_9_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">11</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">184</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">185</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">186</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">187</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">188</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">189</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">190</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">191</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">192</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">193</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">194</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">195</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">196</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">197</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">198</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">199</atom_indices_e15>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">VAL</resname>
+	  	  	  	  	  	  <resid type="int64">11</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_VAL_11_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e0>
+	  	  	  	  <edges_e1 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">11</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">184</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">185</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">186</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">187</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">188</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">189</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">190</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">191</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">192</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">193</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">194</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">195</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">196</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">197</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">198</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">199</atom_indices_e15>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">VAL</resname>
+	  	  	  	  	  	  <resid type="int64">11</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_VAL_11_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">51</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">806</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">807</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">808</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">809</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">810</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">811</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">812</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">813</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">814</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">815</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">816</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">817</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">818</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">819</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">820</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">821</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">822</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">823</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">824</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">ILE</resname>
+	  	  	  	  	  	  <resid type="int64">51</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_ILE_51_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e1>
+	  	  	  	  <edges_e2 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">51</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">806</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">807</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">808</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">809</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">810</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">811</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">812</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">813</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">814</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">815</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">816</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">817</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">818</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">819</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">820</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">821</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">822</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">823</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">824</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">ILE</resname>
+	  	  	  	  	  	  <resid type="int64">51</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_ILE_51_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">10</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">172</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">173</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">174</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">175</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">176</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">177</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">178</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">179</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">180</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">181</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">182</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">183</atom_indices_e11>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">ASP</resname>
+	  	  	  	  	  	  <resid type="int64">10</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_ASP_10_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e2>
+	  	  	  </edges>
+	  	  	  <length type="float64">2.5019351182338756</length>
+	  	  </paths_e6>
+	  	  <paths_e7 type="instance" class_name="Path" module="cuwisp.paths">
+	  	  	  <index type="int">7</index>
+	  	  	  <num_nodes type="int">4</num_nodes>
+	  	  	  <num_edges type="int">3</num_edges>
+	  	  	  <src type="int">9</src>
+	  	  	  <sink type="int">10</sink>
+	  	  	  <edges type="list">
+	  	  	  	  <edges_e0 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">9</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">153</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">154</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">155</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">156</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">157</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">158</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">159</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">160</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">161</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">162</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">163</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">164</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">165</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">166</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">167</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">168</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">169</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">170</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">171</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">LEU</resname>
+	  	  	  	  	  	  <resid type="int64">9</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_LEU_9_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">48</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">755</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">756</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">757</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">758</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">759</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">760</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">761</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">762</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">763</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">764</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">765</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">766</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">767</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">768</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">769</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">770</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">771</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">772</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">773</atom_indices_e18>
+	  	  	  	  	  	  	  <atom_indices_e19 type="int">774</atom_indices_e19>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">PHE</resname>
+	  	  	  	  	  	  <resid type="int64">48</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_PHE_48_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e0>
+	  	  	  	  <edges_e1 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">48</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">755</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">756</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">757</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">758</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">759</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">760</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">761</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">762</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">763</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">764</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">765</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">766</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">767</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">768</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">769</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">770</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">771</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">772</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">773</atom_indices_e18>
+	  	  	  	  	  	  	  <atom_indices_e19 type="int">774</atom_indices_e19>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">PHE</resname>
+	  	  	  	  	  	  <resid type="int64">48</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_PHE_48_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">11</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">184</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">185</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">186</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">187</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">188</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">189</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">190</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">191</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">192</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">193</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">194</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">195</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">196</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">197</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">198</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">199</atom_indices_e15>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">VAL</resname>
+	  	  	  	  	  	  <resid type="int64">11</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_VAL_11_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e1>
+	  	  	  	  <edges_e2 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">11</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">184</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">185</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">186</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">187</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">188</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">189</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">190</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">191</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">192</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">193</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">194</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">195</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">196</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">197</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">198</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">199</atom_indices_e15>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">VAL</resname>
+	  	  	  	  	  	  <resid type="int64">11</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_VAL_11_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">10</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">172</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">173</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">174</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">175</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">176</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">177</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">178</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">179</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">180</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">181</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">182</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">183</atom_indices_e11>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">ASP</resname>
+	  	  	  	  	  	  <resid type="int64">10</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_ASP_10_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e2>
+	  	  	  </edges>
+	  	  	  <length type="float64">2.5026988846041025</length>
+	  	  </paths_e7>
+	  	  <paths_e8 type="instance" class_name="Path" module="cuwisp.paths">
+	  	  	  <index type="int">8</index>
+	  	  	  <num_nodes type="int">4</num_nodes>
+	  	  	  <num_edges type="int">3</num_edges>
+	  	  	  <src type="int">9</src>
+	  	  	  <sink type="int">10</sink>
+	  	  	  <edges type="list">
+	  	  	  	  <edges_e0 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">9</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">153</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">154</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">155</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">156</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">157</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">158</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">159</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">160</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">161</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">162</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">163</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">164</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">165</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">166</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">167</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">168</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">169</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">170</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">171</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">LEU</resname>
+	  	  	  	  	  	  <resid type="int64">9</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_LEU_9_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">31</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">488</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">489</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">490</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">491</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">492</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">493</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">494</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">495</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">496</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">497</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">498</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">499</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">500</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">501</atom_indices_e13>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">PRO</resname>
+	  	  	  	  	  	  <resid type="int64">31</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_PRO_31_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e0>
+	  	  	  	  <edges_e1 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">31</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">488</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">489</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">490</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">491</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">492</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">493</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">494</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">495</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">496</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">497</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">498</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">499</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">500</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">501</atom_indices_e13>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">PRO</resname>
+	  	  	  	  	  	  <resid type="int64">31</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_PRO_31_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">15</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">241</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">242</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">243</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">244</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">245</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">246</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">247</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">248</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">249</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">250</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">251</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">252</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">253</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">254</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">255</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">256</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">257</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">258</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">259</atom_indices_e18>
+	  	  	  	  	  	  	  <atom_indices_e19 type="int">260</atom_indices_e19>
+	  	  	  	  	  	  	  <atom_indices_e20 type="int">261</atom_indices_e20>
+	  	  	  	  	  	  	  <atom_indices_e21 type="int">262</atom_indices_e21>
+	  	  	  	  	  	  	  <atom_indices_e22 type="int">263</atom_indices_e22>
+	  	  	  	  	  	  	  <atom_indices_e23 type="int">264</atom_indices_e23>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">ARG</resname>
+	  	  	  	  	  	  <resid type="int64">15</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_ARG_15_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e1>
+	  	  	  	  <edges_e2 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">15</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">241</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">242</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">243</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">244</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">245</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">246</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">247</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">248</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">249</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">250</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">251</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">252</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">253</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">254</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">255</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">256</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">257</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">258</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">259</atom_indices_e18>
+	  	  	  	  	  	  	  <atom_indices_e19 type="int">260</atom_indices_e19>
+	  	  	  	  	  	  	  <atom_indices_e20 type="int">261</atom_indices_e20>
+	  	  	  	  	  	  	  <atom_indices_e21 type="int">262</atom_indices_e21>
+	  	  	  	  	  	  	  <atom_indices_e22 type="int">263</atom_indices_e22>
+	  	  	  	  	  	  	  <atom_indices_e23 type="int">264</atom_indices_e23>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">ARG</resname>
+	  	  	  	  	  	  <resid type="int64">15</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_ARG_15_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">10</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">172</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">173</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">174</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">175</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">176</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">177</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">178</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">179</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">180</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">181</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">182</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">183</atom_indices_e11>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">ASP</resname>
+	  	  	  	  	  	  <resid type="int64">10</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_ASP_10_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e2>
+	  	  	  </edges>
+	  	  	  <length type="float64">2.637071669193354</length>
+	  	  </paths_e8>
+	  	  <paths_e9 type="instance" class_name="Path" module="cuwisp.paths">
+	  	  	  <index type="int">9</index>
+	  	  	  <num_nodes type="int">4</num_nodes>
+	  	  	  <num_edges type="int">3</num_edges>
+	  	  	  <src type="int">9</src>
+	  	  	  <sink type="int">10</sink>
+	  	  	  <edges type="list">
+	  	  	  	  <edges_e0 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">9</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">153</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">154</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">155</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">156</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">157</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">158</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">159</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">160</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">161</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">162</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">163</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">164</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">165</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">166</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">167</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">168</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">169</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">170</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">171</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">LEU</resname>
+	  	  	  	  	  	  <resid type="int64">9</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_LEU_9_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">31</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">488</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">489</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">490</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">491</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">492</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">493</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">494</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">495</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">496</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">497</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">498</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">499</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">500</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">501</atom_indices_e13>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">PRO</resname>
+	  	  	  	  	  	  <resid type="int64">31</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_PRO_31_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e0>
+	  	  	  	  <edges_e1 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">31</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">488</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">489</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">490</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">491</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">492</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">493</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">494</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">495</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">496</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">497</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">498</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">499</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">500</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">501</atom_indices_e13>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">PRO</resname>
+	  	  	  	  	  	  <resid type="int64">31</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_PRO_31_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">16</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">265</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">266</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">267</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">268</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">269</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">270</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">271</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">272</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">273</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">274</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">275</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">276</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">277</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">278</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">279</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">280</atom_indices_e15>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">VAL</resname>
+	  	  	  	  	  	  <resid type="int64">16</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_VAL_16_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e1>
+	  	  	  	  <edges_e2 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">16</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">265</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">266</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">267</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">268</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">269</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">270</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">271</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">272</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">273</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">274</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">275</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">276</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">277</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">278</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">279</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">280</atom_indices_e15>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">VAL</resname>
+	  	  	  	  	  	  <resid type="int64">16</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_VAL_16_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">10</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">172</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">173</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">174</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">175</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">176</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">177</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">178</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">179</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">180</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">181</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">182</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">183</atom_indices_e11>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">ASP</resname>
+	  	  	  	  	  	  <resid type="int64">10</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_ASP_10_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e2>
+	  	  	  </edges>
+	  	  	  <length type="float64">3.0311372244725527</length>
+	  	  </paths_e9>
+	  	  <paths_e10 type="instance" class_name="Path" module="cuwisp.paths">
+	  	  	  <index type="int">10</index>
+	  	  	  <num_nodes type="int">5</num_nodes>
+	  	  	  <num_edges type="int">4</num_edges>
+	  	  	  <src type="int">9</src>
+	  	  	  <sink type="int">10</sink>
+	  	  	  <edges type="list">
+	  	  	  	  <edges_e0 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">9</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">153</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">154</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">155</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">156</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">157</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">158</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">159</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">160</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">161</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">162</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">163</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">164</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">165</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">166</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">167</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">168</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">169</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">170</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">171</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">LEU</resname>
+	  	  	  	  	  	  <resid type="int64">9</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_LEU_9_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">34</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">533</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">534</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">535</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">536</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">537</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">538</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">539</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">540</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">541</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">542</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">543</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">544</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">545</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">546</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">547</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">548</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">549</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">550</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">551</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">LEU</resname>
+	  	  	  	  	  	  <resid type="int64">34</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_LEU_34_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e0>
+	  	  	  	  <edges_e1 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">34</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">533</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">534</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">535</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">536</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">537</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">538</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">539</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">540</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">541</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">542</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">543</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">544</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">545</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">546</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">547</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">548</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">549</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">550</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">551</atom_indices_e18>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">LEU</resname>
+	  	  	  	  	  	  <resid type="int64">34</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_LEU_34_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">31</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">488</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">489</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">490</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">491</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">492</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">493</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">494</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">495</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">496</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">497</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">498</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">499</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">500</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">501</atom_indices_e13>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">PRO</resname>
+	  	  	  	  	  	  <resid type="int64">31</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_PRO_31_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e1>
+	  	  	  	  <edges_e2 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">31</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">488</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">489</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">490</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">491</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">492</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">493</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">494</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">495</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">496</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">497</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">498</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">499</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">500</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">501</atom_indices_e13>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">PRO</resname>
+	  	  	  	  	  	  <resid type="int64">31</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_PRO_31_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">15</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">241</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">242</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">243</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">244</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">245</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">246</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">247</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">248</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">249</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">250</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">251</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">252</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">253</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">254</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">255</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">256</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">257</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">258</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">259</atom_indices_e18>
+	  	  	  	  	  	  	  <atom_indices_e19 type="int">260</atom_indices_e19>
+	  	  	  	  	  	  	  <atom_indices_e20 type="int">261</atom_indices_e20>
+	  	  	  	  	  	  	  <atom_indices_e21 type="int">262</atom_indices_e21>
+	  	  	  	  	  	  	  <atom_indices_e22 type="int">263</atom_indices_e22>
+	  	  	  	  	  	  	  <atom_indices_e23 type="int">264</atom_indices_e23>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">ARG</resname>
+	  	  	  	  	  	  <resid type="int64">15</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_ARG_15_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e2>
+	  	  	  	  <edges_e3 type="instance" class_name="Edge" module="cuwisp.paths">
+	  	  	  	  	  <node1 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">15</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">241</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">242</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">243</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">244</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">245</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">246</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">247</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">248</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">249</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">250</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">251</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">252</atom_indices_e11>
+	  	  	  	  	  	  	  <atom_indices_e12 type="int">253</atom_indices_e12>
+	  	  	  	  	  	  	  <atom_indices_e13 type="int">254</atom_indices_e13>
+	  	  	  	  	  	  	  <atom_indices_e14 type="int">255</atom_indices_e14>
+	  	  	  	  	  	  	  <atom_indices_e15 type="int">256</atom_indices_e15>
+	  	  	  	  	  	  	  <atom_indices_e16 type="int">257</atom_indices_e16>
+	  	  	  	  	  	  	  <atom_indices_e17 type="int">258</atom_indices_e17>
+	  	  	  	  	  	  	  <atom_indices_e18 type="int">259</atom_indices_e18>
+	  	  	  	  	  	  	  <atom_indices_e19 type="int">260</atom_indices_e19>
+	  	  	  	  	  	  	  <atom_indices_e20 type="int">261</atom_indices_e20>
+	  	  	  	  	  	  	  <atom_indices_e21 type="int">262</atom_indices_e21>
+	  	  	  	  	  	  	  <atom_indices_e22 type="int">263</atom_indices_e22>
+	  	  	  	  	  	  	  <atom_indices_e23 type="int">264</atom_indices_e23>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">ARG</resname>
+	  	  	  	  	  	  <resid type="int64">15</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_ARG_15_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node1>
+	  	  	  	  	  <node2 type="instance" class_name="Node" module="cuwisp.nodes">
+	  	  	  	  	  	  <index type="int">10</index>
+	  	  	  	  	  	  <atom_indices type="list">
+	  	  	  	  	  	  	  <atom_indices_e0 type="int">172</atom_indices_e0>
+	  	  	  	  	  	  	  <atom_indices_e1 type="int">173</atom_indices_e1>
+	  	  	  	  	  	  	  <atom_indices_e2 type="int">174</atom_indices_e2>
+	  	  	  	  	  	  	  <atom_indices_e3 type="int">175</atom_indices_e3>
+	  	  	  	  	  	  	  <atom_indices_e4 type="int">176</atom_indices_e4>
+	  	  	  	  	  	  	  <atom_indices_e5 type="int">177</atom_indices_e5>
+	  	  	  	  	  	  	  <atom_indices_e6 type="int">178</atom_indices_e6>
+	  	  	  	  	  	  	  <atom_indices_e7 type="int">179</atom_indices_e7>
+	  	  	  	  	  	  	  <atom_indices_e8 type="int">180</atom_indices_e8>
+	  	  	  	  	  	  	  <atom_indices_e9 type="int">181</atom_indices_e9>
+	  	  	  	  	  	  	  <atom_indices_e10 type="int">182</atom_indices_e10>
+	  	  	  	  	  	  	  <atom_indices_e11 type="int">183</atom_indices_e11>
+	  	  	  	  	  	  </atom_indices>
+	  	  	  	  	  	  <resname type="str">ASP</resname>
+	  	  	  	  	  	  <resid type="int64">10</resid>
+	  	  	  	  	  	  <chain_index type="int64">0</chain_index>
+	  	  	  	  	  	  <tag type="str">0_ASP_10_CHA</tag>
+	  	  	  	  	  	  <coordinates_directory type="str">example_output/node_coordinates</coordinates_directory>
+	  	  	  	  	  	  <segment_id type="str">CHA</segment_id>
+	  	  	  	  	  	  <xml_directory type="bool">False</xml_directory>
+	  	  	  	  	  	  <coordinate_frames type="list">
+	  	  	  	  	  	  	  <coordinate_frames_e0 type="int">17</coordinate_frames_e0>
+	  	  	  	  	  	  </coordinate_frames>
+	  	  	  	  	  </node2>
+	  	  	  	  </edges_e3>
+	  	  	  </edges>
+	  	  	  <length type="float64">3.120848725216152</length>
+	  	  </paths_e10>
+	  </paths>
+	  <src type="int">9</src>
+	  <sink type="int">10</sink>
+	  <num_paths type="int">11</num_paths>
+</SuboptimalPaths>
