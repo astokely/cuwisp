@@ -21,23 +21,12 @@ calculate_suboptimal_paths(
 	10, #sink node
 	threads_per_block=1024, #You shouldn't have to change this, but if you get a cuda error change it to 256 
 	#use_contact_map_correlation_matrix=False, #Probably don't change this
-	simulation_rounds=[0, 1, 2],
+	simulation_rounds=[0, 1, 2, 3, 4],
 	#serialization_filename='test',
 	#serialization_frequency=0.5,
 	cutoff=3.2,
 )
 
-calculate_suboptimal_paths(
-	"example_output", #same as above 
-	9, #src node 
-	10, #sink node
-	threads_per_block=1024, #You shouldn't have to change this, but if you get a cuda error change it to 256 
-	#use_contact_map_correlation_matrix=False, #Probably don't change this
-	simulation_rounds=[3, 4],
-	#serialization_filename='test',
-	#serialization_frequency=0.5,
-	cutoff=3.2,
-)
 
 merge_suboptimal_paths_xmls(
 	'example_output', 
