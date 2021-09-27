@@ -9,8 +9,8 @@ import matplotlib.pyplot as plt
 
 sp = SuboptimalPaths()
 sp.deserialize('example_output/suboptimal_paths.xml')
-splines =  sp_splines(sp, 17)
 '''
+splines =  sp_splines(sp, 17, output_directory='splines')
 fdm = sp_frechet_distance_matrix(
 	0,
 	splines,
@@ -28,18 +28,17 @@ for j in fdm:
 	print(sort(j).keys())
 
 '''
-for i in range(len(sp.paths)):
-	md = mdm(
-		i,
-		splines,
-		num_partitions=10,
-	) 
-	fd = sp_frechet_distance_matrix(
-		i,
-		splines,
-		num_partitions=10,
-	) 
-	for j in md:
-		print(sort(j))
-	for j in fd:
-		print(sort(j))
+md = mdm(
+	0,
+	'splines',
+	num_partitions=10,
+) 
+fd = sp_frechet_distance_matrix(
+	0,
+	'splines',
+	num_partitions=10,
+) 
+for d in md:
+	print(sort(d))
+for d in fd:
+	print(sort(d))

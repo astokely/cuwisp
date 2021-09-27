@@ -31,7 +31,7 @@ setup(
     platforms=['Linux',
                 'Unix',],
     python_requires=">=3.8",          
-    ext_modules = cythonize("cuwisp/calccom.pyx"),
+    ext_modules = cythonize(["cuwisp/*.pyx"]),
 	py_modules = ["cuwisp/cparse/cparse"],
     packages=find_packages() + [''],
 	package_data={'': ['cuwisp/cparse/_cparse.cpython-38-x86_64-linux-gnu.so']},

@@ -3,27 +3,16 @@ from __future__ import absolute_import
 __author__ = "Andy Stokely"
 __version__ = "1.0"
 
+import os
 from .paths import SuboptimalPaths
 import numpy as np
-from typing import Optional, Dict, List, Tuple
+from typing import Optional, Dict, List, \
+	Tuple, Union
 from scipy import interpolate
 from scipy.spatial import distance
 from math import floor
 from multiprocessing import Pool
 import numba
-
-def get_frame_index_dict(
-		suboptimal_paths: SuboptimalPaths,
-) -> Dict:
-	frame_index_dict = {
-		suboptimal_paths[0][0][0].coordinate_frames[
-			frame_index
-		] : frame_index for frame_index in
-		range(len(
-			suboptimal_paths[0][0][0].coordinate_frames
-		))	
-	}
-	return frame_index_dict
 
 def sort_distances(
 		distance_vector: np.ndarray,
@@ -64,6 +53,19 @@ def get_partitions(
 		i += 1
 	return partitions
 
+def get_frame_index_dict(
+		suboptimal_paths: SuboptimalPaths,
+) -> Dict:
+	frame_index_dict = {
+		suboptimal_paths[0][0][0].coordinate_frames[
+			frame_index
+		] : frame_index for frame_index in
+		range(len(
+			suboptimal_paths[0][0][0].coordinate_frames
+		))	
+	}
+	return frame_index_dict
+
 def generate_spline(
 		nodes: np.ndarray,
 		spline_input_points_incr: Optional[float] = 0.001,
@@ -88,9 +90,11 @@ def generate_spline(
 	)
 	return interpolate.splev(u_new, tck)
 
+
 def sp_splines(
 		suboptimal_paths: SuboptimalPaths,
 		frame: int,
+		output_directory: Optional[str] = False,
 		spline_input_points_incr: Optional[float] = 0.01,
 		smoothing_factor: Optional[float] = 0.0,
 ) -> np.ndarray:
@@ -98,6 +102,10 @@ def sp_splines(
 		suboptimal_paths
 	)[frame]
 	splines = []	
+	if output_directory:
+		if os.path.exists(output_directory):
+			shutil.rmtree(output_directory)
+		os.makedirs(output_directory)
 	for path in suboptimal_paths.paths:
 		spline = np.zeros(
 			(path.num_nodes, 3), 
@@ -129,6 +137,11 @@ def sp_splines(
 				smoothing_factor=smoothing_factor,
 			)).T
 		)
+		if output_directory:
+			np.save(
+				f'{output_directory}/{path.index}.npy', 
+				splines[-1]
+			)
 	return splines
 
 @numba.jit(nopython=True)
@@ -222,12 +235,24 @@ def _sp_frechet_distance_vector(
 		)
 	return frechet_distance_vector
 
+def load_splines(
+		directory: str,
+) -> List[np.ndarray]:
+	return [
+		np.load(os.path.abspath(os.path.join(directory, f))) 
+		for f in os.listdir(directory) if 'npy' in f
+	]
+	
+		
+
 def sp_frechet_distance_matrix(
 		reference_path_index: int,
-		splines: np.ndarray,
+		splines: Union[np.ndarray, str],
 		num_partitions: Optional[int] = 1,
 		num_multiprocessing_processes: Optional[int] = False,
 ) -> np.ndarray:
+	if isinstance(splines, str):
+		splines = load_splines(splines)
 	if not num_multiprocessing_processes:
 		num_multiprocessing_processes = num_partitions
 	partitions = get_partitions(
@@ -294,15 +319,16 @@ def _sp_manhattan_distance_vector(
 		manhattan_distance_vector[index] = ( 
 			np.mean(manhattan_distances)
 		)
-			
 	return manhattan_distance_vector	
 
 def sp_manhattan_distance_matrix(
 		reference_path_index: int,
-		splines: np.ndarray,
+		splines: Union[np.ndarray, str],
 		num_partitions: Optional[int] = 1,
 		num_multiprocessing_processes: Optional[int] = False,
 ) -> np.ndarray:
+	if isinstance(splines, str):
+		splines = load_splines(splines)
 	if not num_multiprocessing_processes:
 		num_multiprocessing_processes = num_partitions
 	partitions = get_partitions(
