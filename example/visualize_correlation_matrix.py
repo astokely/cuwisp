@@ -2,7 +2,7 @@ from cuwisp.vmdtcl import save_tcl
 from cuwisp.visualize import VisualizeCorrelationMatrix, visualize_correlation_matrix
 
 params = VisualizeCorrelationMatrix(
-	node_index=44, 
+	node_index=9, 
 	nodes_xml_filename='example_output/nodes.xml', 
 	correlation_matrix_filename='example_output/correlation_matrix.txt', 
 	color=('red', 'green'),

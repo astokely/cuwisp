@@ -117,13 +117,16 @@ class Molecule:
 
 def parse_pdb(
 		args: Tuple[Union[int, int, str]],
-) -> Molecule:
+) -> Tuple[Union[int, Molecule]]:
 	path, pdb_file, num_frames = args
 	frame = int(pdb_file[:-4])
 	traj = md.load(path+pdb_file)
 	pdb = Molecule()
 	pdb.parse(traj, num_frames, frame)
-	return pdb
+	return (
+		frame, 
+		pdb
+	)
 
 def prepare_trajectory_for_analysis(
 		temp_file_directory: str,
@@ -207,6 +210,11 @@ def multiprocessing_pdb_parser(
 				num_frames
 			)
 		))
+	pdbs = list(dict(sorted(
+		{
+			pdb[0] : pdb[1] for pdb in pdbs
+		}.items()
+	)).values())
 	coordinates = np.ctypeslib.as_array(scmat)
 	del scmat
 	c = average_pdb.coordinates

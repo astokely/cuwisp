@@ -198,7 +198,6 @@ def all_pair_hedetniemit(
 def hedetniemi_distance(
 		a: np.ndarray,
 		num_nodes: int,
-		max_edges_in_ssp: int,
 		threads_per_block: int,
 ) -> np.ndarray:
 	threads_per_block = int(np.sqrt(threads_per_block))
@@ -215,7 +214,7 @@ def hedetniemi_distance(
 		h_device, 
 		num_nodes
 	)
-	for i in range(max_edges_in_ssp):
+	for i in range(n):
 		found_ssp = cuda.to_device([True])
 		dimGrid, dimBlock = (
 			cuda_grid_and_block_dims(n, threads_per_block)
@@ -283,14 +282,13 @@ def get_ssp(
 def serialize_correlation_matrix(
 		a: np.ndarray,
 		serialization_filename: str,
-		serialization_index: int,
 		round_index: int,
 		correlation_matrix_serialization_path: str,
 ) -> None:
 	numpy_txt_filename = (
 		f'{correlation_matrix_serialization_path}/'
 		+ f'{serialization_filename}_correlation_matrix'
-		+ f'_{round_index}_{serialization_index}.txt'
+		+ f'_{round_index}.txt'
 	)
 	np.savetxt(
 		numpy_txt_filename,
@@ -301,7 +299,6 @@ def serialize_suboptimal_paths(
 		src: int,
 		sink: int,
 		serialization_filename: str,
-		serialization_index: int,
 		ssp: np.ndarray,
 		nodes: Nodes,
 		s: Set,		
@@ -338,7 +335,7 @@ def serialize_suboptimal_paths(
 	xml_filename = (
 		f'{suboptimal_paths_serialization_path}/'
 		+ f'{serialization_filename}_suboptimal_paths'
-		+ f'_{round_index}_{serialization_index}.xml'
+		+ f'_{round_index}.xml'
 	)
 	suboptimal_paths.serialize(xml_filename)
 
@@ -358,22 +355,18 @@ def explore_paths(
 		round_index: int,
 		correlation_matrix_serialization_path: str,
 		suboptimal_paths_serialization_path: str,
-		serialization_index: int,
-		max_edges_in_ssp: int,
+		max_num_paths: int,
 ) -> Set:
 	if serialization_filename != '':
 		serialize_correlation_matrix(
 			a,	
 			serialization_filename,
-			serialization_index,
 			round_index,
 			correlation_matrix_serialization_path,
 		)
-		serialization_index += 1
 	h = np.array(hedetniemi_distance(
 		a, 
 		n, 
-		max_edges_in_ssp,
 		threads_per_block
 	))
 	q = deque([])
@@ -384,7 +377,7 @@ def explore_paths(
 		n_p.add(i)
 	start = time.time()
 	while q:
-		if len(s) > 25:
+		if len(s) > max_num_paths:
 			break
 		for i in nodes:
 			n_p.add(i)
@@ -400,7 +393,7 @@ def explore_paths(
 			i, j = q.pop()
 		a[i][j] = np.inf
 		a[j][i] = np.inf
-		h = np.array(hedetniemi_distance(a, n, max_edges_in_ssp, threads_per_block))
+		h = np.array(hedetniemi_distance(a, n, threads_per_block))
 		if get_ssp(src, sink, h, a) is not None:
 			path, nodes = get_ssp(src, sink, h, a)
 		else:
@@ -418,7 +411,6 @@ def explore_paths(
 					serialize_correlation_matrix(
 						a,
 						serialization_filename,
-						serialization_index,
 						round_index,
 						correlation_matrix_serialization_path,
 					)
@@ -426,7 +418,6 @@ def explore_paths(
 						src,
 						sink,
 						serialization_filename,
-						serialization_index,
 						ssp,
 						nodes_obj,
 						s,	
@@ -434,7 +425,6 @@ def explore_paths(
 						suboptimal_paths_serialization_path,
 					)	
 					start = time.time()
-					serialization_index += 1
 		nodes = [
 			(nodes[i], nodes[i+1]) 
 			for i in range(len(nodes)-1)
@@ -469,9 +459,8 @@ def get_suboptimal_paths(
 		correlation_matrix_serialization_path: str,
 		suboptimal_paths_serialization_path: str,
 		simulation_rounds: int,
-		serialization_index: int,
-		max_edges: int,
 		gpu_index: int,
+		max_num_paths: int,
 ) -> None:
 	cuda.select_device(gpu_index)
 	suboptimal_paths_dict = {}	
@@ -490,9 +479,7 @@ def get_suboptimal_paths(
 			correlation_matrix_file
 		))
 		n = len(a)
-		if max_edges == 0:
-			max_edges = n
-		h = np.array(hedetniemi_distance(a, n, max_edges, threads_per_block))
+		h = np.array(hedetniemi_distance(a, n, threads_per_block))
 		if get_ssp(src, sink, h, a) is None:
 			raise Exception(
 				"Sink node is unreachable from source node.".upper() + '\n'
@@ -521,8 +508,7 @@ def get_suboptimal_paths(
 			simulation_round,
 			correlation_matrix_serialization_path,
 			suboptimal_paths_serialization_path,
-			serialization_index,
-			max_edges,
+			max_num_paths,
 		))
 		for path in paths:
 			suboptimal_paths_dict[path[-1]] = path[:-1]	

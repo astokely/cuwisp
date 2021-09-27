@@ -257,6 +257,7 @@ def visualize_correlation_matrix(
 		*parameters.color,
 		len(coordinates)
 	)
+	tcl += f'proc draw_suboptimal_paths {{}} {{\n'
 	tcl = vmdtcl.create_color_gradient(
 		'color_gradient',
 		color_gradient,
@@ -288,6 +289,7 @@ def visualize_correlation_matrix(
 			resolution=sphere_resolution,
 			
 		).tcl(tcl=tcl)	
+	tcl += '}\n'
 	if new_line:
 		return tcl
 	return tcl[:-1]

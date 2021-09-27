@@ -11,6 +11,7 @@ calculate_correlation_matrix(
 	'/home/astokely/rep1.pdb', #input pdb
 	cuda_parameters = (64, 10, 256, 100), #Probably don't change these
     num_multiprocessing_processes = 16,
+	node_coordinate_frames = [0, 500, 1000, 1500],
 )
 '''
 calculate_suboptimal_paths(
