@@ -1,3 +1,8 @@
+from __future__ import absolute_import
+
+__author__ = "Andy Stokely"
+__version__ = "1.0"
+
 import shutil
 import mdtraj as md
 import os
@@ -8,15 +13,15 @@ from .calccom import calc_com as calc_com
 from .cparse import parsePdb as parse
 from typing import Any, Optional, Tuple, \
 	Union, List, Dict, Mapping
-from .sum_coordinates import sumCoords
 from abserdes import Serializer as serializer
 from multiprocessing import Pool
 from collections import defaultdict
 from multiprocessing import sharedctypes
 from .nodes import Nodes, Node
-from .hollow_matrix import hollowMatrix
-from .cuda_correlation_matrix import cuda_correlation_matrix
-from .cuda_contact_map import cuda_contact_map 
+from .numba_cuda.sum_coordinates import sumCoords
+from .numba_cuda.hollow_matrix import hollowMatrix
+from .numba_cuda.cuda_correlation_matrix import cuda_correlation_matrix
+from .numba_cuda.cuda_contact_map import cuda_contact_map 
 
 def ctypes_matrix(
 		n: int,

@@ -1,5 +1,10 @@
+from __future__ import absolute_import
+
+__author__ = "Andy Stokely"
+__version__ = "1.0"
+
 import numpy as np
-from .cuComReduction import centerOfMassReduction
+from .numba_cuda.cuComReduction import centerOfMassReduction
 
 def calc_com(
 		all_indices: np.ndarray, 

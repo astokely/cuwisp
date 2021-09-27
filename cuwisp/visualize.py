@@ -1,3 +1,8 @@
+from __future__ import absolute_import
+
+__author__ = "Andy Stokely"
+__version__ = "1.0"
+
 from colour import Color
 from typing import Optional, Tuple, Union, NamedTuple, Dict, List
 from cuwisp.paths import SuboptimalPaths
