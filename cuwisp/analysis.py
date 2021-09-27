@@ -9,7 +9,60 @@ from typing import Optional, Dict, List, Tuple
 from scipy import interpolate
 from scipy.spatial import distance
 from math import floor
+from multiprocessing import Pool
 import numba
+
+def get_frame_index_dict(
+		suboptimal_paths: SuboptimalPaths,
+) -> Dict:
+	frame_index_dict = {
+		suboptimal_paths[0][0][0].coordinate_frames[
+			frame_index
+		] : frame_index for frame_index in
+		range(len(
+			suboptimal_paths[0][0][0].coordinate_frames
+		))	
+	}
+	return frame_index_dict
+
+def sort_distances(
+		distance_vector: np.ndarray,
+) -> Dict[int, np.float64]:
+	distance_dict = {
+		path_index : distance_vector[path_index] 
+		for path_index in range(len(distance_vector))
+	}
+	return {
+		path_index : distance 
+		for path_index, distance
+		in sorted(
+			distance_dict.items(), 
+			key=lambda distance: distance[1]
+		)				
+	}
+
+def get_partitions(
+		spline: np.ndarray,
+		num_partitions: int
+) -> Tuple[int]:
+	partitions = []
+	i = 1
+	partition_size = floor(
+		len(spline) / num_partitions
+	)
+	while i <= num_partitions:
+		if i == num_partitions:
+			partitions.append((
+				(i-1) * partition_size,
+				len(spline),
+			))
+		else:
+			partitions.append((
+				(i-1) * partition_size,
+				i * partition_size,
+			))
+		i += 1
+	return partitions
 
 def generate_spline(
 		nodes: np.ndarray,
@@ -34,19 +87,6 @@ def generate_spline(
 		spline_input_points_incr
 	)
 	return interpolate.splev(u_new, tck)
-
-def get_frame_index_dict(
-		suboptimal_paths: SuboptimalPaths,
-) -> Dict:
-	frame_index_dict = {
-		suboptimal_paths[0][0][0].coordinate_frames[
-			frame_index
-		] : frame_index for frame_index in
-		range(len(
-			suboptimal_paths[0][0][0].coordinate_frames
-		))	
-	}
-	return frame_index_dict
 
 def sp_splines(
 		suboptimal_paths: SuboptimalPaths,
@@ -90,37 +130,6 @@ def sp_splines(
 			)).T
 		)
 	return splines
-
-def sp_average_manhattan_distances(
-		splines: np.ndarray,
-) -> Dict[int, np.float64]:	
-	ssp = splines[0]
-	average_manhattan_distances = {}
-	for	index, spline in enumerate(splines):
-		manhattan_distances = np.zeros(
-			len(splines), 
-			dtype=np.float64
-		) 
-		for point_index in range(len(splines)):
-			manhattan_distances[point_index] = (
-				distance.cityblock(
-					ssp[point_index], 
-					spline[point_index]
-				)
-			)
-		average_manhattan_distances[index] = ( 
-			np.mean(manhattan_distances)
-		)
-		average_manhattan_distances = {
-			path_index : average_manhattan_distance 
-			for path_index, average_manhattan_distance 
-			in sorted(
-				average_manhattan_distances.items(), 
-				key=lambda item: item[1]
-			)
-		}
-	return average_manhattan_distances	
-
 
 @numba.jit(nopython=True)
 def _frechet_distance(
@@ -184,108 +193,144 @@ def frechet_distance(
 		)
 	)
 
-def get_partitions(
-		spline: np.ndarray,
-		num_partitions: int
-) -> Tuple[int]:
-	partitions = []
-	i = 1
-	partition_size = floor(
-		len(spline) / num_partitions
+def _sp_frechet_distance_vector(
+	args: Tuple
+) -> np.ndarray:
+	(
+		reference_path_index,
+		splines,
+		partition
+	) = args
+	
+	reference_path_spline = splines[
+		reference_path_index
+	]
+	frechet_distance_vector = np.zeros(
+		len(splines),
+		dtype=np.float64,
 	)
-	while i <= num_partitions:
-		if i == num_partitions:
-			partitions.append((
-				(i-1) * partition_size,
-				len(spline),
-			))
-		else:
-			partitions.append((
-				(i-1) * partition_size,
-				i * partition_size,
-			))
-		i += 1
-	return partitions
-
-def sp_frechet_distances(
-		splines: np.ndarray,
-		path_index: Optional[int] = 0,
-		num_partitions: Optional[int] = 1,
-) -> Dict[int, np.float64]:
-	path = splines[path_index]
-	partitions = get_partitions(
-		path,
-		num_partitions
-	)
-	frechet_distances = {}
-	for index, partition in enumerate(partitions):
-		_frechet_distances = {}
-		for path_index in range(len(splines)):
-			_frechet_distances[path_index] = (
-				frechet_distance(
-					path[
-						partition[0]:partition[1]
-					],
-					splines[path_index][
-						partition[0]:partition[1]
-					]
-				)
-			)	
-		_frechet_distances = {
-			path_index : frechet_distance_ 
-			for path_index, frechet_distance_ 
-			in sorted(
-				_frechet_distances.items(), 
-				key=lambda item: item[1]
+	for i in range(len(splines)):
+		frechet_distance_vector[i] = (
+			frechet_distance(
+				reference_path_spline[
+					partition[0]:partition[1]
+				],
+				splines[i][
+					partition[0]:partition[1],
+				]
 			)
-		}
-		frechet_distances[(partition)] = (
-			_frechet_distances
 		)
-	return frechet_distances
+	return frechet_distance_vector
 
-
-def sp_frechet_distance_matrices(
+def sp_frechet_distance_matrix(
+		reference_path_index: int,
 		splines: np.ndarray,
 		num_partitions: Optional[int] = 1,
-) -> Dict[Tuple, np.ndarray]:
+		num_multiprocessing_processes: Optional[int] = False,
+) -> np.ndarray:
+	if not num_multiprocessing_processes:
+		num_multiprocessing_processes = num_partitions
 	partitions = get_partitions(
 		splines[0],
 		num_partitions
 	)
-	frechet_distance_matrices = {}
-	for partition in partitions:
-		frechet_distance_matrix = np.zeros(
-			(len(splines), len(splines)),
-			dtype=np.float64,
+	reference_path_spline = splines[
+		reference_path_index
+	]
+	frechet_distance_matrix = np.zeros(
+		(len(partitions), len(splines)),
+		dtype=np.float64,
+	)
+	parameters = [
+		(
+			reference_path_index,
+			splines,
+			partitions[i]
 		)
-		for i in range(len(splines)):
-			path = splines[i]
-			for j in range(len(splines)):
-				frechet_distance_matrix[i][j] = (
-					frechet_distance(
-						splines[i][
-							partition[0]:partition[1]
-						],
-						splines[j][
-							partition[0]:partition[1],
-						]
-					)
+		for i in range(num_partitions)
+	]
+	with Pool(num_partitions) as pool:
+		frechet_distance_vectors = list(pool.map(
+			_sp_frechet_distance_vector,
+			parameters
+		))
+	m, n = frechet_distance_matrix.shape
+	for i in range(m):
+		for j in range(n):
+			frechet_distance_matrix[i][j] = (
+				frechet_distance_vectors[i][j]
+			)
+	return frechet_distance_matrix
+
+def _sp_manhattan_distance_vector(
+	args: Tuple
+) -> np.ndarray:
+	(
+		reference_path_index,
+		splines,
+		partition
+	) = args
+	reference_path_spline = splines[
+		reference_path_index
+	]
+	manhattan_distance_vector = np.zeros(
+		len(splines), 
+		dtype=np.float64
+	) 
+	for	index, spline in enumerate(splines):
+		manhattan_distances = np.zeros(
+			len(reference_path_spline), 
+			dtype=np.float64
+		) 
+		point_index = 0
+		for i in range(*partition):
+			manhattan_distances[point_index] = (
+				distance.cityblock(
+					reference_path_spline[i],
+					spline[i]	
 				)
-		frechet_distance_matrices[partition] = (
-			frechet_distance_matrix
+			)
+			point_index += 1
+		manhattan_distance_vector[index] = ( 
+			np.mean(manhattan_distances)
 		)
-	return frechet_distance_matrices
-				
+			
+	return manhattan_distance_vector	
 
-
-
-
-
-
-
-
-
-
-
+def sp_manhattan_distance_matrix(
+		reference_path_index: int,
+		splines: np.ndarray,
+		num_partitions: Optional[int] = 1,
+		num_multiprocessing_processes: Optional[int] = False,
+) -> np.ndarray:
+	if not num_multiprocessing_processes:
+		num_multiprocessing_processes = num_partitions
+	partitions = get_partitions(
+		splines[0],
+		num_partitions
+	)
+	manhattan_distance_matrix = np.zeros(
+		(len(partitions), len(splines)),
+		dtype=np.float64,
+	)
+	parameters = [
+		(
+			reference_path_index,
+			splines,
+			partitions[i]
+		)
+		for i in range(num_partitions)
+	]
+	with Pool(num_partitions) as pool:
+		manhattan_distance_vectors = list(pool.map(
+			_sp_manhattan_distance_vector,
+			parameters
+		))
+	m, n = manhattan_distance_matrix.shape
+	for i in range(m):
+		for j in range(n):
+			manhattan_distance_matrix[i][j] = (
+				manhattan_distance_vectors[i][j]
+			)
+	return manhattan_distance_matrix
 
