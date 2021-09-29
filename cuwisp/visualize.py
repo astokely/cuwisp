@@ -25,6 +25,7 @@ class VisualizeSuboptimalPaths(serializer):
 			src_node_sphere: Optional[Dict] = False,	
 			sink_node_sphere: Optional[Dict] = False,	
 			node_atoms_representations: Optional[Dict] = False,
+			path_indices: Optional[List[int]] = False,
 	) -> None:
 		self.suboptimal_paths = suboptimal_paths
 		self.frame = frame
@@ -34,6 +35,7 @@ class VisualizeSuboptimalPaths(serializer):
 		self.node_atoms_representations = node_atoms_representations
 		self.radii = radii
 		self.color = color 
+		self.path_indices = path_indices
 
 class VisualizeCorrelationMatrix(serializer):
 
@@ -49,7 +51,6 @@ class VisualizeCorrelationMatrix(serializer):
 			node_sphere_radius: Optional[float] = 1.0,
 			num_nodes: Optional[int] = 1000,
 			frame: Optional[int] = 0
-			
 	) -> None:
 		self.nodes_xml_filename = nodes_xml_filename
 		self.correlation_matrix_filename = (
@@ -262,7 +263,7 @@ def visualize_correlation_matrix(
 		*parameters.color,
 		len(coordinates)
 	)
-	tcl += f'proc draw_suboptimal_paths {{}} {{\n'
+	tcl += f'proc draw_correlation_matrix {{}} {{\n'
 	tcl = vmdtcl.create_color_gradient(
 		'color_gradient',
 		color_gradient,
@@ -330,6 +331,12 @@ def draw_suboptimal_paths(
 	}
 	frame = frame_index_dict[frame]
 	num_paths = len(suboptimal_paths)
+	if parameters.path_indices:
+		num_paths = len(parameters.path_indices)
+	else:
+		parameters.path_indices = [
+			i for i in range(num_paths)
+		]
 	src_node_coordinates, sink_node_coordinates = (
 		get_src_and_sink_node_coordinates(
 			suboptimal_paths,
@@ -406,7 +413,8 @@ def draw_suboptimal_paths(
 		node_spheres_color = (
 			parameters.node_spheres.pop('color')
 		)
-	for path in suboptimal_paths:
+	for path_index in parameters.path_indices:
+		path = suboptimal_paths[path_index]
 		node_coordinates = get_node_coordinates(path, frame)
 		node_index = 0
 		for node_coordinate in node_coordinates[1:-1]:

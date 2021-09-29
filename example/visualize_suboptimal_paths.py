@@ -26,12 +26,13 @@ sink_node_sphere = {'radius' : 2.0, 'color':'purple', 'resolution':250}
 visualize_suboptimal_paths = VisualizeSuboptimalPaths(
 	suboptimal_paths,
 	('red', 'green'),
-	(0.35, .8),
+	(0.1, .35),
 	node_spheres = node_spheres,
 	src_node_sphere = src_node_sphere,
 	sink_node_sphere = sink_node_sphere,
 	node_atoms_representations = node_reps,
 	frame = 17,
+	path_indices = [5, 35, 20, 23, 24, 11]
 )
 tcl = draw_suboptimal_paths(
 	visualize_suboptimal_paths,

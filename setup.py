@@ -1,3 +1,4 @@
+import numpy as np
 from setuptools import setup
 from setuptools import setup, find_packages, Extension
 import sys
@@ -32,9 +33,13 @@ setup(
                 'Unix',],
     python_requires=">=3.8",          
     ext_modules = cythonize(["cuwisp/*.pyx"]),
-	py_modules = ["cuwisp/cparse/cparse"],
+    include_dirs=[np.get_include()],
+	py_modules = ["cuwisp/cparse/cparse", "cuwisp/cfrechet/cfrechet"],
     packages=find_packages() + [''],
-	package_data={'': ['cuwisp/cparse/_cparse.cpython-38-x86_64-linux-gnu.so']},
+	package_data={'': [
+		'cuwisp/cparse/_cparse.cpython-38-x86_64-linux-gnu.so',
+		'cuwisp/cfrechet/_cfrechet.cpython-38-x86_64-linux-gnu.so'
+	]},
 )
 
 if 'install' in sys.argv:

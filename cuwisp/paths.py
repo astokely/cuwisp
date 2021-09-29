@@ -12,7 +12,7 @@ from numba import cuda, njit, float32
 import numpy as np
 import math
 import heapq
-from typing import Any, Tuple, Optional, List, Union, Set
+from typing import Any, Tuple, Optional, List, Union, Set 
 from math import ceil
 from math import floor
 from abserdes import Serializer as serializer
@@ -54,6 +54,23 @@ class SuboptimalPaths(serializer):
 	def reverse(self):
 		for path in reversed(self.paths):
 			yield path
+
+	def factory(
+			self,
+			path_indices: List,
+	) -> Any:
+		path_indices = sorted(path_indices)
+		suboptimal_paths = SuboptimalPaths()
+		for index in path_indices:
+			suboptimal_paths.paths.append(
+				self.paths[index]
+			)
+		suboptimal_paths.src = self.src 
+		suboptimal_paths.sink = self.sink 
+		suboptimal_paths.num_paths = len(
+			suboptimal_paths.paths
+		) 
+		return suboptimal_paths
 
 class Path(serializer):
 
