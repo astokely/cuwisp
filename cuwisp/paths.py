@@ -59,7 +59,7 @@ class SuboptimalPaths(serializer):
 			self,
 			path_indices: List,
 	) -> Any:
-		path_indices = sorted(path_indices)
+		path_indices = path_indices
 		suboptimal_paths = SuboptimalPaths()
 		for index in path_indices:
 			suboptimal_paths.paths.append(

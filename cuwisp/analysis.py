@@ -60,6 +60,31 @@ class FrechetDistanceMatrix(serializer):
 			self.matrix[partition_index]
 		)
 
+	def save_clustered_suboptimal_paths(
+			self,
+			suboptimal_paths: SuboptimalPaths,
+			clustered_suboptimal_paths_filename: str,
+			partition_index: Optional[int] = 0,
+			num_paths: Optional[int] = 10,
+			similar: Optional[int] = 1,
+	) -> None:
+		if similar == 1:
+			clustered_paths = list(self.ordered(
+				partition_index
+			))[:num_paths+1]
+		else:
+			clustered_paths = [0] + list(reversed(list(
+				self.ordered(partition_index)
+			)[-1*num_paths:]))
+		clustered_suboptimal_paths = (
+			suboptimal_paths.factory(
+				clustered_paths
+			)
+		) 
+		clustered_suboptimal_paths.serialize(
+			clustered_suboptimal_paths_filename
+		)	
+
 class DistanceMatrix(serializer):
 
 	def __init__(
@@ -90,8 +115,8 @@ class Analysis(serializer):
 	
 	def __init__(
 			self,
-			analysis_directory: str,
-			frame: int,
+			analysis_directory: Optional[str] = '',
+			frame: Optional[int] = 0,
 			frechet_distance_matrices: \
 				Optional[Dict[int, Dict]] = {}, 
 			distance_matrices: \
@@ -110,6 +135,7 @@ class Analysis(serializer):
 		self.splines_directory = (
 			splines_directory
 		)
+		self.frame = frame
 		if analysis_directory:
 			if not os.path.exists(analysis_directory):
 				os.makedirs(analysis_directory)
@@ -120,6 +146,10 @@ class Analysis(serializer):
 			spline_input_points_incr: Optional[float] = 0.001,
 			smoothing_factor: Optional[float] = 0.0,
 	) -> None:
+		if os.path.exists(
+			f'{self.analysis_directory}/splines'
+		):
+			return
 		sp_splines(
 			suboptimal_paths,
 			self.frame,
@@ -159,6 +189,8 @@ class Analysis(serializer):
             path_index,
             num_partitions
 		)
+		if not self.distance_matrices: 
+			self.distance_matrices = {}
 		self.distance_matrices[path_index] = (
 			distance_matrix_obj
 		)
@@ -195,6 +227,8 @@ class Analysis(serializer):
             path_index,
             num_partitions
 		)
+		if not self.frechet_distance_matrices: 
+			self.frechet_distance_matrices = {}
 		self.frechet_distance_matrices[path_index] = (
 			frechet_distance_matrix_obj
 		)
