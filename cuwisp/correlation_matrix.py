@@ -121,15 +121,56 @@ class Molecule:
 			self.nodes_array[index][1] = coms[index][1]
 			self.nodes_array[index][2] = coms[index][2]
 
+def create_symbolic_link(
+		src_file_path: str,
+		symbolic_link_path: str,
+) -> None:
+	process = subprocess.Popen(
+		[
+			f'ln', f'-s' , 
+			f'{src_file_path}',
+			f'{symbolic_link_path}',
+		], 
+		shell=False,
+		stdout=subprocess.DEVNULL, 
+		stderr=subprocess.STDOUT
+	)
+	out, err = process.communicate()
+	errcode = process.returncode
+	process.kill() 
+	process.terminate()
+
+def remove_symbolic_link(
+		src_file_path: str,
+		symbolic_link_path: str,
+) -> None:
+	process = subprocess.Popen(
+		[
+			f'unlink', 
+			f'{symbolic_link_path}',
+		], 
+		shell=False,
+		stdout=subprocess.DEVNULL, 
+		stderr=subprocess.STDOUT
+	)
+	out, err = process.communicate()
+	errcode = process.returncode
+	process.kill() 
+	process.terminate()
+
 def catdcd(
-		catdcd_exe: str,
+		catdcd_exe_dir: str,
 		input_dcd_filename: str,
 		topology_filename: str,
 		output_pdb_filename: str,
 ) -> None:
+	create_symbolic_link(
+		f'{catdcd_exe_dir}/libexpat.so.0', 
+		f'libexpat.so.0', 
+	)
 	process = subprocess.Popen(
 		[
-			catdcd_exe, 
+			f'{catdcd_exe_dir}/catdcd', 
 			'-o', f'{output_pdb_filename}', 
 			'-otype', 'pdb', 
 			'-s', f'{topology_filename}', 
@@ -143,6 +184,10 @@ def catdcd(
 	errcode = process.returncode
 	process.kill() 
 	process.terminate()
+	remove_symbolic_link(
+		f'{catdcd_exe_dir}/libexpat.so.0', 
+		f'libexpat.so.0', 
+	)
 
 def parse_pdb(
 		args: Tuple[Union[int, int, str]],
@@ -163,10 +208,10 @@ def parse_dcd(
 		output_pdb_filename: str,
 		output_tmp_pdbs_directory: str,
 ) -> None:
-	catdcd_exe = (
+	catdcd_exe_dir = (
 		os.path.dirname(os.path.abspath(
 			f'{sys.modules[Nodes.__module__].__file__}'
-		)) + f'/bin/catdcd'
+		)) + f'/bin'
 	)
 	if os.path.exists(output_pdb_filename):
 		os.remove(output_pdb_filename)
@@ -174,7 +219,7 @@ def parse_dcd(
 		shutil.rmtree(output_tmp_pdbs_directory)
 	os.makedirs(output_tmp_pdbs_directory)
 	catdcd(
-		catdcd_exe,
+		catdcd_exe_dir,
 		input_dcd_filename,
 		topology_filename,
 		output_pdb_filename,

@@ -10,9 +10,10 @@ start = time.time()
 calculate_correlation_matrix(
 	"example_output", #output directory
 	4.5, #contact map cutoff limit
-	'test.pdb', #input pdb
+	'test.dcd', #input pdb
 	cuda_parameters = (64, 10, 256, 100), #Probably don't change these
 	node_coordinate_frames = [0],
+	topology_filename='top.pdb',
 )
 calculate_suboptimal_paths(
 	"example_output", #same as above 
