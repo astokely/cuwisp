@@ -36,9 +36,11 @@ setup(
     include_dirs=[np.get_include()],
 	py_modules = ["cuwisp/cparse/cparse", "cuwisp/cfrechet/cfrechet"],
     packages=find_packages() + [''],
+	zip_safe=False,
 	package_data={'': [
 		'cuwisp/cparse/_cparse.cpython-38-x86_64-linux-gnu.so',
-		'cuwisp/cfrechet/_cfrechet.cpython-38-x86_64-linux-gnu.so'
+		'cuwisp/cfrechet/_cfrechet.cpython-38-x86_64-linux-gnu.so',
+		'cuwisp/bin/catdcd',
 	]},
 )
 

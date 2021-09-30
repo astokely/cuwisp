@@ -307,13 +307,13 @@ def serialize_correlation_matrix(
 		round_index: int,
 		correlation_matrix_serialization_path: str,
 ) -> None:
-	numpy_txt_filename = (
+	numpy_filename = (
 		f'{correlation_matrix_serialization_path}/'
 		+ f'{serialization_filename}_correlation_matrix'
-		+ f'_{round_index}.txt'
+		+ f'_{round_index}.npy'
 	)
-	np.savetxt(
-		numpy_txt_filename,
+	np.save(
+		numpy_filename,
 		a
 	)
 
@@ -497,7 +497,7 @@ def get_suboptimal_paths(
 			f'{input_files_path}/{correlation_matrix_file}'
 		)
 	for simulation_round in simulation_rounds:
-		a = np.array(np.loadtxt(
+		a = np.array(np.load(
 			correlation_matrix_file
 		))
 		n = len(a)

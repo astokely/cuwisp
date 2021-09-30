@@ -86,10 +86,10 @@ def calculate_suboptimal_paths(
 		if correlation_matrix_filename == '':
 			if use_contact_map_correlation_matrix: 
 				correlation_matrix_file = (
-					"correlation_matrix_after_contact_map.txt" 
+					"correlation_matrix_after_contact_map.npy" 
 				)
 			else:
-				correlation_matrix_file = "correlation_matrix.txt" 
+				correlation_matrix_file = "correlation_matrix.npy" 
 		suffix = ''
 		for simulation_round in simulation_rounds:
 			suffix += f'{simulation_round}_'

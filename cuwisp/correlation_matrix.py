@@ -7,6 +7,7 @@ import shutil
 import mdtraj as md
 import os
 import sys
+import subprocess
 import numpy as np
 from scipy.spatial.distance import cdist
 from .calccom import calc_com as calc_com
@@ -120,6 +121,29 @@ class Molecule:
 			self.nodes_array[index][1] = coms[index][1]
 			self.nodes_array[index][2] = coms[index][2]
 
+def catdcd(
+		catdcd_exe: str,
+		input_dcd_filename: str,
+		topology_filename: str,
+		output_pdb_filename: str,
+) -> None:
+	process = subprocess.Popen(
+		[
+			catdcd_exe, 
+			'-o', f'{output_pdb_filename}', 
+			'-otype', 'pdb', 
+			'-s', f'{topology_filename}', 
+			f'{input_dcd_filename}'	
+		], 
+		shell=False,
+		stdout=subprocess.DEVNULL, 
+		stderr=subprocess.STDOUT
+	)
+	out, err = process.communicate()
+	errcode = process.returncode
+	process.kill() 
+	process.terminate()
+
 def parse_pdb(
 		args: Tuple[Union[int, int, str]],
 ) -> Tuple[Union[int, Molecule]]:
@@ -132,6 +156,34 @@ def parse_pdb(
 		frame, 
 		pdb
 	)
+
+def parse_dcd(
+		input_dcd_filename: str,
+		topology_filename: str,
+		output_pdb_filename: str,
+		output_tmp_pdbs_directory: str,
+) -> None:
+	catdcd_exe = (
+		os.path.dirname(os.path.abspath(
+			f'{sys.modules[Nodes.__module__].__file__}'
+		)) + f'/bin/catdcd'
+	)
+	if os.path.exists(output_pdb_filename):
+		os.remove(output_pdb_filename)
+	if os.path.exists(output_tmp_pdbs_directory):
+		shutil.rmtree(output_tmp_pdbs_directory)
+	os.makedirs(output_tmp_pdbs_directory)
+	catdcd(
+		catdcd_exe,
+		input_dcd_filename,
+		topology_filename,
+		output_pdb_filename,
+	)
+	parse(
+		output_pdb_filename, 
+		f'{output_tmp_pdbs_directory}/',
+	)
+	os.remove(output_pdb_filename)
 
 def prepare_trajectory_for_analysis(
 		temp_file_directory: str,
@@ -148,16 +200,12 @@ def prepare_trajectory_for_analysis(
 			temp_file_directory + "/"
 		)
 	else:
-		index = 0
-		for frame in md.iterload(
+		parse_dcd(
 			dcd_trajectory_filename,
-			top=topology_filename,
-			chunk = 1,
-		):
-			frame.save_pdb(
-				f'{temp_file_directory}/{index}.pdb'
-			)
-			index += 1
+			topology_filename,
+			f'{temp_file_directory}/tmp.pdb',
+			temp_file_directory,
+		)
 	pdb_single_frame_files = [
 		pdb_file for pdb_file 
 		in os.listdir(temp_file_directory + "/")
@@ -273,10 +321,10 @@ def serialize_nodes(
 		nodes[node_index] = node
 		node_index += 1
 		for frame in node_coordinate_frames:
-			np.savetxt(
+			np.save(
 				(
 					f'{node_coordinates_directory}/'
-					+ f'frame_{frame}_node_coordinates.txt'
+					+ f'frame_{frame}_node_coordinates.npy'
 				)
 				, coms[frame]
 			)
@@ -333,7 +381,7 @@ def save_matrix(
 		matrix_filename = (
 			f'{output_directory}/{matrix_filename}'
 		)
-	np.savetxt(
+	np.save(
 		matrix_filename,
 		numpy_array,
 	)
@@ -506,7 +554,7 @@ def get_correlation_matrix(
 	save_matrix(
 		output_directory,
 		correlation_matrix_filename,
-		'correlation_matrix.txt',
+		'correlation_matrix.npy',
 		correlation_matrix,
 	)
 
@@ -521,14 +569,14 @@ def get_correlation_matrix(
 	save_matrix(
 		output_directory,
 		correlation_matrix_after_contact_map_filename,
-		'correlation_matrix_after_contact_map.txt',
+		'correlation_matrix_after_contact_map.npy',
 		correlation_matrix,
 	)
 
 	save_matrix(
 		output_directory,
 		'',
-		'contact_map.txt',
+		'contact_map.npy',
 		contact_map,
 	)
 

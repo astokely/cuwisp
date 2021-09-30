@@ -10,23 +10,21 @@ start = time.time()
 calculate_correlation_matrix(
 	"example_output", #output directory
 	4.5, #contact map cutoff limit
-	#'spike_example.pdb', #input pdb
 	'test.pdb', #input pdb
 	cuda_parameters = (64, 10, 256, 100), #Probably don't change these
-	node_coordinate_frames = [17],
+	node_coordinate_frames = [0],
 )
 calculate_suboptimal_paths(
 	"example_output", #same as above 
 	9, #src node 
-	26, #sink node
+	10, #sink node
 	threads_per_block=1024, #You shouldn't have to change this, but if you get a cuda error change it to 256 
-	use_contact_map_correlation_matrix=False, #Probably don't change this
+	#use_contact_map_correlation_matrix=False, #Probably don't change this
 	simulation_rounds=[0, 1, 2, 3, 4],
 	#serialization_filename='test',
 	#serialization_frequency=0.5,
-	cutoff=6.0,
+	cutoff=3.2,
 )
-
 
 merge_suboptimal_paths_xmls(
 	'example_output', 
