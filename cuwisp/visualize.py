@@ -231,7 +231,7 @@ def visualize_correlation_matrix(
 		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
 ) -> str:
-	correlation_matrix = np.loadtxt(
+	correlation_matrix = np.load(
 		parameters.correlation_matrix_filename
 	)
 	nodes = Nodes()
