@@ -41,6 +41,7 @@ setup(
 		'cuwisp/cparse/_cparse.cpython-38-x86_64-linux-gnu.so',
 		'cuwisp/cfrechet/_cfrechet.cpython-38-x86_64-linux-gnu.so',
 		'cuwisp/bin/catdcd',
+		'cuwisp/bin/libexpat.so.0',
 	]},
 )
 
