@@ -49,4 +49,10 @@ setup(
 
 if 'install' in sys.argv:
 	subprocess.call(['conda', 'install', '-c', 'anaconda', 'cudatoolkit'])
+print(
+	f'\nMake sure to add '.upper()
+	+ f'"<path_to_cuwisp>/bin" '
+	+ f'to your LD_LIBRARY_PATH if you plan on '.upper()
+	+ f'using dcd trajectories with cuwisp.'.upper()
+)
 	
