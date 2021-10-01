@@ -1,4 +1,3 @@
-import numpy as np
 from setuptools import setup
 from setuptools import setup, find_packages, Extension
 import sys
@@ -8,10 +7,13 @@ import re
 
 try: 
 	import Cython
+	import numpy
 except ModuleNotFoundError:
 	subprocess.call(['pip', 'install', 'Cython'])
+	subprocess.call(['pip', 'install', 'numpy==1.19.5'])
 
 from Cython.Build import cythonize 
+import numpy as np
 
 
 setup(
