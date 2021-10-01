@@ -3,20 +3,16 @@ from __future__ import absolute_import
 __author__ = "Andy Stokely"
 __version__ = "1.0"
 
-from time import time
 import numpy as np
 from math import fabs, sqrt, log, ceil
-from numba import float32, int32, \
-	int64, float64, cuda
+from numba import float64, cuda
 
 def cuda_correlation_matrix(
 		nodes: np.ndarray,
 		average_nodes: np.ndarray,
 		correlation_matrix: np.ndarray
 ):
-
 	tpb = 32	
-
 	@cuda.jit
 	def cuda_node_coordinate_deviations(
 			nodes, 
@@ -35,10 +31,8 @@ def cuda_correlation_matrix(
 				nodes[i][j][2] - average_nodes[i][2]
 			)
 		return
-
 	num_nodes = nodes.shape[0]
 	num_pdbs = nodes.shape[1]
-
 	h_node_coordinate_deviations = np.zeros(
 		(num_nodes, num_pdbs, 3),
 		dtype=np.float64
@@ -63,7 +57,6 @@ def cuda_correlation_matrix(
 		ceil(nodes.shape[0] / threadsperblock[0]),
 		ceil(nodes.shape[1] / threadsperblock[1]),
 	)
-
 	cuda_node_coordinate_deviations[blockspergrid, threadsperblock](
 		d_nodes, 
 		d_average_nodes,
@@ -75,9 +68,7 @@ def cuda_correlation_matrix(
 	d_ensemble_average_delta_square_magnitudes.copy_to_host(
 		h_ensemble_average_delta_square_magnitudes
 	)
-
 	tpb = 256 
-
 	@cuda.jit
 	def cuSqMag(
 			a,
@@ -134,9 +125,7 @@ def cuda_correlation_matrix(
 	d_ensemble_average_delta_square_magnitudes.copy_to_host(
 		h_ensemble_average_delta_square_magnitudes
 	)
-
 	tpb=32
-
 	@cuda.jit
 	def correlation_matrix_kernel(
 			node_coordinate_deviations,			
@@ -195,5 +184,3 @@ def cuda_correlation_matrix(
 	)
 	d_correlation_matrix.copy_to_host(correlation_matrix)
 	return correlation_matrix 
-
-

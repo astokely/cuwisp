@@ -3,16 +3,10 @@ from __future__ import absolute_import
 __author__ = "Andy Stokely"
 __version__ = "1.0"
 
-
-from scipy.spatial.distance import cdist as cdist
 import numpy as np
-import math
-from numba import cuda, float32, float64, int32, int64
-from time import time
+from numba import cuda
 from math import sqrt
 from math import ceil 
-from cuwisp.nodes import Nodes
-import mdtraj as md
 from typing import Tuple
 
 

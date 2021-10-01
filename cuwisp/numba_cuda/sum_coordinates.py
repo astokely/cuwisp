@@ -3,7 +3,7 @@ from __future__ import absolute_import
 __author__ = "Andy Stokely"
 __version__ = "1.0"
 
-from numba import cuda, float64, int32, float64, int64
+from numba import cuda, float64, int32
 import numpy as np
 
 def sumCoords(

@@ -3,11 +3,9 @@ from __future__ import absolute_import
 __author__ = "Andy Stokely"
 __version__ = "1.0"
 
-from numba import cuda, float64, int32, float32, int64
+from numba import cuda, float64, int32
 import math
 import numpy as np
-import mdtraj as md
-import time
 
 def centerOfMassReduction(
 		coordinates: np.ndarray,

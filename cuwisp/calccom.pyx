@@ -4,7 +4,7 @@ __author__ = "Andy Stokely"
 __version__ = "1.0"
 
 import numpy as np
-from .numba_cuda.cuComReduction import centerOfMassReduction
+from .numba_cuda.cuda_reduction import centerOfMassReduction
 
 def calc_com(
 		all_indices: np.ndarray, 

@@ -1291,7 +1291,7 @@ static const char __pyx_k_threads_per_block[] = "threads_per_block";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
 static const char __pyx_k_cuwisp_calccom_pyx[] = "cuwisp/calccom.pyx";
 static const char __pyx_k_centerOfMassReduction[] = "centerOfMassReduction";
-static const char __pyx_k_numba_cuda_cuComReduction[] = "numba_cuda.cuComReduction";
+static const char __pyx_k_numba_cuda_cuda_reduction[] = "numba_cuda.cuda_reduction";
 static PyObject *__pyx_kp_s_1_0;
 static PyObject *__pyx_kp_s_Andy_Stokely;
 static PyObject *__pyx_n_s_C;
@@ -1333,7 +1333,7 @@ static PyObject *__pyx_n_s_max;
 static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_n_s_np;
 static PyObject *__pyx_n_s_num_blocks;
-static PyObject *__pyx_n_s_numba_cuda_cuComReduction;
+static PyObject *__pyx_n_s_numba_cuda_cuda_reduction;
 static PyObject *__pyx_n_s_numpy;
 static PyObject *__pyx_n_s_range;
 static PyObject *__pyx_n_s_shape;
@@ -1351,7 +1351,7 @@ static PyObject *__pyx_codeobj__2;
 /* Late includes */
 
 /* "cuwisp/calccom.pyx":9
- * from .numba_cuda.cuComReduction import centerOfMassReduction
+ * from .numba_cuda.cuda_reduction import centerOfMassReduction
  * 
  * def calc_com(             # <<<<<<<<<<<<<<
  * 		all_indices: np.ndarray,
@@ -2830,7 +2830,7 @@ static PyObject *__pyx_pf_6cuwisp_7calccom_calc_com(CYTHON_UNUSED PyObject *__py
   goto __pyx_L0;
 
   /* "cuwisp/calccom.pyx":9
- * from .numba_cuda.cuComReduction import centerOfMassReduction
+ * from .numba_cuda.cuda_reduction import centerOfMassReduction
  * 
  * def calc_com(             # <<<<<<<<<<<<<<
  * 		all_indices: np.ndarray,
@@ -2962,7 +2962,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_name, __pyx_k_name, sizeof(__pyx_k_name), 0, 0, 1, 1},
   {&__pyx_n_s_np, __pyx_k_np, sizeof(__pyx_k_np), 0, 0, 1, 1},
   {&__pyx_n_s_num_blocks, __pyx_k_num_blocks, sizeof(__pyx_k_num_blocks), 0, 0, 1, 1},
-  {&__pyx_n_s_numba_cuda_cuComReduction, __pyx_k_numba_cuda_cuComReduction, sizeof(__pyx_k_numba_cuda_cuComReduction), 0, 0, 1, 1},
+  {&__pyx_n_s_numba_cuda_cuda_reduction, __pyx_k_numba_cuda_cuda_reduction, sizeof(__pyx_k_numba_cuda_cuda_reduction), 0, 0, 1, 1},
   {&__pyx_n_s_numpy, __pyx_k_numpy, sizeof(__pyx_k_numpy), 0, 0, 1, 1},
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
   {&__pyx_n_s_shape, __pyx_k_shape, sizeof(__pyx_k_shape), 0, 0, 1, 1},
@@ -2988,7 +2988,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
   /* "cuwisp/calccom.pyx":9
- * from .numba_cuda.cuComReduction import centerOfMassReduction
+ * from .numba_cuda.cuda_reduction import centerOfMassReduction
  * 
  * def calc_com(             # <<<<<<<<<<<<<<
  * 		all_indices: np.ndarray,
@@ -3301,7 +3301,7 @@ if (!__Pyx_RefNanny) {
  * __version__ = "1.0"
  * 
  * import numpy as np             # <<<<<<<<<<<<<<
- * from .numba_cuda.cuComReduction import centerOfMassReduction
+ * from .numba_cuda.cuda_reduction import centerOfMassReduction
  * 
  */
   __pyx_t_1 = __Pyx_Import(__pyx_n_s_numpy, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 6, __pyx_L1_error)
@@ -3312,7 +3312,7 @@ if (!__Pyx_RefNanny) {
   /* "cuwisp/calccom.pyx":7
  * 
  * import numpy as np
- * from .numba_cuda.cuComReduction import centerOfMassReduction             # <<<<<<<<<<<<<<
+ * from .numba_cuda.cuda_reduction import centerOfMassReduction             # <<<<<<<<<<<<<<
  * 
  * def calc_com(
  */
@@ -3321,7 +3321,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_INCREF(__pyx_n_s_centerOfMassReduction);
   __Pyx_GIVEREF(__pyx_n_s_centerOfMassReduction);
   PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_centerOfMassReduction);
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_numba_cuda_cuComReduction, __pyx_t_1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 7, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_numba_cuda_cuda_reduction, __pyx_t_1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 7, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_centerOfMassReduction); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 7, __pyx_L1_error)
@@ -3331,7 +3331,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "cuwisp/calccom.pyx":9
- * from .numba_cuda.cuComReduction import centerOfMassReduction
+ * from .numba_cuda.cuda_reduction import centerOfMassReduction
  * 
  * def calc_com(             # <<<<<<<<<<<<<<
  * 		all_indices: np.ndarray,
