@@ -12,11 +12,43 @@ from numba import cuda, njit, float32
 import numpy as np
 import math
 import heapq
-from typing import Any, Tuple, Optional, List, Union, Set 
+import inspect
+from typing import Any, Tuple, Optional, \
+	List, Union, Set, Deque, Callable, \
+	Dict 
 from math import ceil
 from math import floor
 from abserdes import Serializer as serializer
 from .nodes import Nodes, Node
+
+class Rule(object):
+
+	def __init__(
+			self, 
+			append: Callable,
+			pop: Callable, 
+	) -> None:
+		self._pop = pop
+		self._append = append 
+
+	def __repr__(self):
+		return (
+			f'{inspect.getsource(self._append)}\n'
+			+ f'{inspect.getsource(self._pop)}'
+		)
+
+	def pop(
+			self,
+			dq: Deque,
+	) -> Any:
+		return self._pop(dq)
+
+	def append(
+			self,
+			dq: Deque,
+			val
+	) -> None:
+		return self._append(dq, val)
 
 class SuboptimalPaths(serializer):
 
@@ -156,22 +188,53 @@ def ordered_paths(
 				paths.remove(i)
 	return ordered_paths
 
-def deque_append_middle(
+def append_middle(
 		dq: deque, 
-		val: Any,
-) -> Any:
+		val: Tuple,
+) -> None:
 	middle_index = floor(len(dq)/2)
 	dq.insert(middle_index, val)
 
-def deque_pop_middle(
+def pop_middle(
 		dq: deque,
-) -> Any:
+) -> Tuple:
 	middle_index = floor(len(dq)/2)
 	middle_val = dq[middle_index]
 	del dq[middle_index]
 	return middle_val
 
+def append(
+		dq: deque, 
+		val: Tuple,
+) -> None:
+	dq.append(val)
+	return
 
+def pop(
+		dq: deque,
+) -> Tuple:
+	return dq.pop()
+
+def append_left(
+		dq: deque, 
+		val: Tuple,
+) -> None:
+	dq.appendleft(val)
+	return
+
+def pop_left(
+		dq: deque,
+) -> Tuple:
+	return dq.popleft()
+
+def built_in_rules() -> Dict[int, Rule]:
+	return {
+		0 : Rule(append, pop),
+		1 : Rule(append_middle, pop_middle),
+		2 : Rule(append, pop_left),
+		3 : Rule(append_middle, pop_left),
+		4 : Rule(append_middle, pop),
+	}
 
 def cuda_grid_and_block_dims(
 		num_nodes: int, 
@@ -367,7 +430,6 @@ def explore_paths(
 		a: np.ndarray, 
 		nodes: List, 
 		n: int, 
-		pop: int,
 		cutoff: Union[float, None], 
 		threads_per_block: int,
 		serialization_filename: str,
@@ -378,6 +440,7 @@ def explore_paths(
 		correlation_matrix_serialization_path: str,
 		suboptimal_paths_serialization_path: str,
 		max_num_paths: int,
+		rule: Rule,
 ) -> Set:
 	if serialization_filename != '':
 		serialize_correlation_matrix(
@@ -399,20 +462,12 @@ def explore_paths(
 		n_p.add(i)
 	start = time.time()
 	while q:
+		print(round_index)
 		if len(s) > max_num_paths:
 			break
 		for i in nodes:
 			n_p.add(i)
-		if pop == 0:
-			i, j = q.pop()
-		elif pop == 1:
-			i, j = deque_pop_middle(q)
-		elif pop == 2:
-			i, j = q.popleft()
-		elif pop == 3:
-			i, j = q.popleft()
-		elif pop == 4:
-			i, j = q.pop()
+		i, j = rule.pop(q)
 		a[i][j] = np.inf
 		a[j][i] = np.inf
 		h = np.array(hedetniemi_distance(a, n, threads_per_block))
@@ -453,16 +508,7 @@ def explore_paths(
 		]
 		for i in nodes:
 			if i not in n_p:
-				if pop == 0:
-					q.append(i)
-				elif pop == 1:
-					deque_append_middle(q, i)
-				elif pop == 2:
-					q.append(i)
-				elif pop == 3:
-					deque_append_middle(q, i)
-				elif pop == 4:
-					deque_append_middle(q, i)
+				rule.append(q, i)
 		if not q:
 			break
 	return s
@@ -483,6 +529,7 @@ def get_suboptimal_paths(
 		simulation_rounds: int,
 		gpu_index: int,
 		max_num_paths: int,
+		rules: Dict,
 ) -> None:
 	cuda.select_device(gpu_index)
 	suboptimal_paths_dict = {}	
@@ -520,7 +567,6 @@ def get_suboptimal_paths(
 			a,
 			nodes,
 			n,
-			simulation_round,
 			cutoff,
 			threads_per_block,
 			serialization_filename,
@@ -531,6 +577,7 @@ def get_suboptimal_paths(
 			correlation_matrix_serialization_path,
 			suboptimal_paths_serialization_path,
 			max_num_paths,
+			rules[simulation_round],
 		))
 		for path in paths:
 			suboptimal_paths_dict[path[-1]] = path[:-1]	

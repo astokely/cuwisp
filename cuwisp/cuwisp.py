@@ -12,7 +12,7 @@ import numpy as np
 from typing import Optional, Tuple, Union, List, Dict
 from .correlation_matrix import get_correlation_matrix 
 from .paths import get_suboptimal_paths, SuboptimalPaths,\
-	Path, Edge, Nodes
+	Path, Edge, Nodes, built_in_rules, Rule
 
 def calculate_correlation_matrix(
 		output_directory: str,
@@ -82,7 +82,12 @@ def calculate_suboptimal_paths(
 		simulation_rounds: Optional[List[int]] = [0, 1, 2, 3, 4],
 		gpu: Optional[int] = 0,
 		max_num_paths: Optional[int] = 25,
+		path_finding_rules: Optional[Dict] = {}
 ) -> None:
+		rules = built_in_rules()
+		if path_finding_rules:
+			for index, rule in path_finding_rules.items():
+				rules[index] = Rule(*rule)
 		if correlation_matrix_filename == '':
 			if use_contact_map_correlation_matrix: 
 				correlation_matrix_file = (
@@ -159,6 +164,7 @@ def calculate_suboptimal_paths(
 			'simulation_rounds' : simulation_rounds,
 			'gpu_index' : gpu,
 			'max_num_paths' : max_num_paths,
+			'rules' : rules,
 		}
 		launch_get_suboptimal_paths(parameters)
 
