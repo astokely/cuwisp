@@ -1,0 +1,10 @@
+numpy==1.19.5
+numba
+pytest
+mdtraj
+cython
+data-science-types
+abserdes
+matplotlib
+colour
+cupy

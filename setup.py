@@ -1,3 +1,4 @@
+import os
 from setuptools import setup
 from setuptools import setup, find_packages, Extension
 import sys
@@ -30,6 +31,7 @@ setup(
 		"abserdes",
 		"matplotlib",
 		"colour",
+		"cupy",
 	],              
     platforms=['Linux',
                 'Unix',],
@@ -49,10 +51,14 @@ setup(
 
 if 'install' in sys.argv:
 	subprocess.call(['conda', 'install', '-c', 'anaconda', 'cudatoolkit'])
-print(
-	f'\nMake sure to add '.upper()
-	+ f'"<path_to_cuwisp>/bin" '
-	+ f'to your LD_LIBRARY_PATH if you plan on '.upper()
-	+ f'using dcd trajectories with cuwisp.'.upper()
-)
-	
+	from cuwisp.nodes import Nodes
+	module_path = (
+		lambda mod_cls_fn_import : ( 
+			os.path.dirname(
+				sys.modules[
+					Nodes.__module__
+				].__file__
+			)
+		)
+	)
+	print(f'Add {module_path(Nodes)}/bin to LD_LIBRARY_PATH for DCD support.')
