@@ -116,15 +116,26 @@ class SuboptimalPaths(serializer):
 	def update(
 			self,
 			paths: List,
+			cutoff: Optional[np.float64] = np.inf,
+			remove: Optional[bool] = False,
 	) -> None:
-		self.paths = self.paths + paths
+		if remove:
+			for path in paths:
+				self.paths.remove(path)
+		else:
+			self.paths = self.paths + paths
 		paths_dict = {
 			path.length : path for path in self.paths 
+			if path.length <= cutoff
 		}
 		self.paths = list(dict(sorted(
 			paths_dict.items()
 		)).values())
 		self.num_paths = len(self.paths)
+		path_index = 0
+		for path in self.paths:
+			path.index = path_index
+			path_index += 1
 
 	def factory(
 			self,

@@ -196,7 +196,7 @@ class Sphere(serializer):
 
 	def tcl(
 			self,
-            tcl: Optional[str] = '',
+			tcl: Optional[str] = '',
 			new_line: Optional = True,
 	) -> str:
 		if new_line:
@@ -410,16 +410,6 @@ def set_depth_cueing(
 		return tcl
 	return tcl[:-1] 
 
-def delete_molecule(
-		molid: Optional[int] = 'top',
-		tcl: Optional[str] = '',
-		new_line: Optional[bool] = True,
-) -> str:
-	tcl += f'mol delete {molid}'
-	if new_line:
-		return tcl
-	return tcl[:-1] 
-
 def load_pdb(
 		pdb: str,
 		tcl: Optional[str] = '',
@@ -478,7 +468,7 @@ def delete_material(
 	tcl += f'set avail_materials [material list]\n' 
 	tcl += (
 		f'if {{[lsearch -exact $avail_materials "{material_name}"] >= 0}} {{\n'
-		f'    material delete {material_name}\n'
+		f'	  material delete {material_name}\n'
 		f'}}\n'
 	)
 	if new_line:
@@ -660,9 +650,9 @@ def delete_all_representations(
 	tcl += get_last_repid(molid=molid)	
 	tcl += (
 		f'while {{$last_repid >= 0}} {{\n'
-		+ f'    mol delrep $last_repid {molid}\n' 
-		+ f'    set update_last_repid [expr $last_repid - 1]\n' 
-		+ f'    set last_repid  $update_last_repid\n'
+		+ f'	mol delrep $last_repid {molid}\n' 
+		+ f'	set update_last_repid [expr $last_repid - 1]\n' 
+		+ f'	set last_repid	$update_last_repid\n'
 		+ f'}}\n'
 	)
 	if new_line:
@@ -855,6 +845,24 @@ def create_color_gradient(
 	if new_line:
 		return tcl
 	return tcl[:-1]
+
+def tcl_proc(
+		proc_name: str,
+		tcl: str,
+		new_line: Optional[bool] = True,
+) -> str:
+	proc = f'proc {proc_name} {{}} {{\n'
+	proc += f'{tcl}'
+	if proc[-1] != '\n':
+		proc += f'\n'
+	proc += '}\n'
+	tcl = proc
+	if new_line:
+		return tcl
+	return tcl[:-1]
+
+	
+	
 
 def save_tcl(
 		tcl: str,

@@ -5,6 +5,8 @@ __version__ = "1.0"
 
 import os
 from .paths import SuboptimalPaths
+from .paths import Path 
+from .paths import Edge 
 import numpy as np
 from typing import Optional, Dict, List, \
 	Tuple, Union
@@ -48,6 +50,11 @@ class FrechetDistanceMatrix(serializer):
 		self.fname = fname
 		self.reference_path_index = reference_path_index
 		self.num_partitions = num_partitions
+
+	def __iter__(self):
+		matrix = self.matrix
+		for partition_frechet_distance_vector in matrix:
+			yield partition_frechet_distance_vector
 
 	@property
 	def	matrix(self):
@@ -121,7 +128,6 @@ class FrechetDistanceMatrix(serializer):
 				self.delta[path_index][i+1]
 				+ compounded_similarity[i] 
 			)
-			print(compounded_similarity[i])
 		return np.argmax(compounded_similarity)
 		
 		
@@ -194,6 +200,46 @@ class DistanceMatrix(serializer):
 			self.matrix[partition_index],
 			reverse,
 		)
+
+	def average(
+			self,
+			reverse: Optional[bool] = False,
+	) -> Dict:
+		average_frechet_distance_dict = (
+			defaultdict(np.float64)
+		)
+		for i in range(self.num_partitions):
+			for path_index, frechet_distance in \
+			self.ordered(i).items():
+				average_frechet_distance_dict[path_index] += (
+					frechet_distance
+				)
+		for path_index in average_frechet_distance_dict:
+			average_frechet_distance_dict[path_index] = (
+				average_frechet_distance_dict[path_index]
+				/ self.num_partitions
+			)
+		return dict(sorted(
+			average_frechet_distance_dict.items(),
+			key=lambda item : item[1],
+			reverse=reverse
+		)) 
+
+	def min_similar(
+			self,
+			path_index: int,
+	) -> int:
+		compounded_similarity = np.zeros(
+			self.num_partitions, 
+			dtype=np.float64
+		)	
+		compounded_similarity[0] = self.delta[path_index][0]
+		for i in range(self.num_partitions-1):
+			compounded_similarity[i+1] = (
+				self.delta[path_index][i+1]
+				+ compounded_similarity[i] 
+			)
+		return np.argmax(compounded_similarity)
 
 	def save_clustered_suboptimal_paths(
 			self,
@@ -342,6 +388,68 @@ class Analysis(serializer):
 			frechet_distance_matrix_obj
 		)
 		return frechet_distance_matrix
+
+def get_least_similar_paths(
+		suboptimal_paths: SuboptimalPaths,
+		frechet_distance_matrix: FrechetDistanceMatrix,
+		reference_path_index: int,
+		num_paths: Optional[int] = 1,
+) -> List:
+	least_similar_paths = []
+	for i in range(num_paths):
+		average_frechet_distances = (
+			frechet_distance_matrix.average(
+				reverse=True
+			)
+		)
+		least_similar_path_index = list(
+			average_frechet_distances
+		)[i]
+		least_similar_path_frechet_distance = (
+			average_frechet_distances[
+				least_similar_path_index
+			]
+		)
+		least_similar_paths.append((
+			least_similar_path_frechet_distance,
+			suboptimal_paths.paths[
+				least_similar_path_index
+			]
+		))
+	return least_similar_paths
+
+def get_least_similar_edges(
+		suboptimal_paths: SuboptimalPaths,
+		frechet_distance_matrix: FrechetDistanceMatrix,
+		reference_path_index: int,
+		num_paths: Optional[int] = 1,
+) -> Edge:
+	least_similar_paths = get_least_similar_paths(
+		suboptimal_paths,
+		frechet_distance_matrix,
+		reference_path_index,
+		num_paths=num_paths,
+	)
+	least_similar_edges = []
+	for path in least_similar_paths:
+		path = path[1]
+		least_similar_region = (
+			frechet_distance_matrix.min_similar(
+				path.index
+			) 
+			/ frechet_distance_matrix.num_partitions 
+		)
+		least_similar_edges.append(
+			suboptimal_paths[
+				path.index
+			].edges[
+				floor(
+					least_similar_region
+					* path.num_edges
+				)
+			]
+		)
+	return least_similar_edges
 
 def get_partitions(
 		spline: np.ndarray,

@@ -8,7 +8,7 @@ from typing import Optional, Tuple, Union, NamedTuple, Dict, List
 from cuwisp.paths import SuboptimalPaths
 from cuwisp.paths import Path
 from cuwisp.nodes import Nodes 
-from .vmdtcl import QuickSurf 
+from cuwisp.vmdtcl import QuickSurf 
 import numpy as np
 import cuwisp.vmdtcl as vmdtcl
 from abserdes import Serializer as serializer
@@ -33,38 +33,13 @@ class VisualizeSuboptimalPaths(serializer):
 		self.node_spheres = node_spheres
 		self.src_node_sphere = src_node_sphere
 		self.sink_node_sphere = sink_node_sphere
-		self.node_atom_representations = node_atom_representations
+		self.node_atom_representations = (
+			node_atom_representations
+		)
 		self.radii = radii
 		self.color = color 
 		self.path_indices = path_indices
 
-class VisualizeCorrelationMatrix(serializer):
-
-	def __init__(
-			self,
-			node_index: int,
-			correlation_matrix_filename: str,
-			nodes_xml_filename: str,
-			color: Union[Tuple[str]],
-			sphere_radius: Optional[float] = 1.0,
-			sphere_resolution: Optional[int] = 25 ,
-			node_color: Optional[Union[str, int]] = False,
-			node_sphere_radius: Optional[float] = 1.0,
-			num_nodes: Optional[int] = 1000,
-			frame: Optional[int] = 0
-	) -> None:
-		self.nodes_xml_filename = nodes_xml_filename
-		self.correlation_matrix_filename = (
-			correlation_matrix_filename
-		)
-		self.color = color 
-		self.sphere_radius = sphere_radius
-		self.sphere_resolution = sphere_resolution 
-		self.node_index = node_index
-		self.node_color = node_color
-		self.node_sphere_radius = node_sphere_radius
-		self.num_nodes = num_nodes
-		self.frame = frame 
 
 class VmdRepresentation(serializer):
 
@@ -117,6 +92,34 @@ class VmdRepresentation(serializer):
 		if new_line:
 			return tcl
 		return tcl[:-1]	
+
+class VisualizeCorrelationMatrix(serializer):
+
+	def __init__(
+			self,
+			correlation_matrix: Union[str, np.ndarray],
+			nodes: Nodes,
+			reference_node_index: int,
+			color: Optional[Tuple[str]] = (
+				'red', 
+				'yellow', 
+				'green'
+			),
+			reference_node_representation: Optional[
+				VmdRepresentation
+			] = False,
+			reference_node_sphere: Optional[
+				vmdtcl.Sphere
+			] = False,
+			node_indices: Optional[List[int]] = False,
+	) -> None:
+		self.correlation_matrix = correlation_matrix
+		self.nodes = nodes
+		self.reference_node_index = reference_node_index
+		self.color = color
+		self.reference_node_representation = reference_node_representation
+		self.reference_node_sphere = reference_node_sphere
+		self.node_indices = node_indices
 
 		
 def get_src_and_sink_node_coordinates(
@@ -228,75 +231,108 @@ def get_radii(
 
 def visualize_correlation_matrix(
 		parameters: VisualizeCorrelationMatrix,
-		molid: Optional[int] = 'top',
 		proc_name: Optional[str] = 'draw_correlation_matrix',
 		tcl: Optional[str] = '',
 		new_line: Optional[bool] = True,
-) -> str:
-	correlation_matrix = np.load(
-		parameters.correlation_matrix_filename
+) -> str: 
+	correlation_matrix = parameters.correlation_matrix
+	reference_node_index = parameters.reference_node_index
+	nodes = parameters.nodes
+	gradient_colors_matrix = np.array([
+		Color(parameters.color[0]).rgb,
+		Color(parameters.color[1]).rgb,
+		Color(parameters.color[2]).rgb,
+	], dtype=np.float64)
+	c0x, c0y, c0z = gradient_colors_matrix[0]
+	c1x, c1y, c1z = gradient_colors_matrix[1]
+	c2x, c2y, c2z = gradient_colors_matrix[2]
+	reference_node_representation = (
+		parameters.reference_node_representation
 	)
-	nodes = Nodes()
-	nodes.deserialize(
-		parameters.nodes_xml_filename
+	reference_node_sphere = (
+		parameters.reference_node_sphere
 	)
-	frame_index_dict = {
-		nodes.nodes[0].coordinate_frames[
-			frame_index
-		] : frame_index for frame_index in
-		range(len(
-			nodes.nodes[0].coordinate_frames
-		))	
-	}
-	frame = frame_index_dict[parameters.frame]
-	num_nodes = parameters.num_nodes 
-	sphere_resolution = parameters.sphere_resolution
-	sphere_radius = parameters.sphere_radius
-	node_index = parameters.node_index
-	coordinates = get_sorted_correlation_node_coordinates(
-		correlation_matrix,
-		nodes,
-		node_index,
-		frame,
-	)	
-	if len(coordinates) > num_nodes:
-		coordinates = coordinates[:num_nodes]
-	color_gradient = get_color_gradient(
-		*parameters.color,
-		len(coordinates)
+	node_indices = parameters.node_indices
+
+	if isinstance(correlation_matrix, str):
+		correlation_matrix = np.load(correlation_matrix)
+		
+	tcl += f'proc {proc_name} {{}} {{\n'
+	tcl += (
+		f'proc lerpcolor {{ col1 col2 alpha }} {{\n'
+		+ f'	set dc [vecsub $col2 $col1]\n'
+		+ f'	set nc [vecadd $col1 [vecscale $dc $alpha]]\n'
+		+ f'	return $nc'
+		+ f'}}\n'
+		+ f'proc coltogs {{ col }} {{\n'
+		+ f'	foreach {{r g b}} $col {{}}\n'
+		+ f'		set gray [expr ($r + $g + $b) / 3.0]\n'
+		+ f'	return [list $gray $gray $gray]\n'
+		+ f'}}\n'
+		+ f'proc tricolor_scale {{}} {{\n'
+		+ f'	display update off\n'
+		+ f'	set mincolorid [expr [colorinfo num] - 1]\n'
+		+ f'	set maxcolorid [expr [colorinfo max]]\n'
+		+ f'	set colrange [expr $maxcolorid - $mincolorid]\n'
+		+ f'	set colhalf [expr $colrange / 2]\n'
+		+ f'	for {{set i $mincolorid}} {{$i < $maxcolorid}} '
+		+ f'	{{incr i}} {{\n'
+		+ f'		set colpcnt [expr ($i - $mincolorid) '
+		+ f'/ double($colrange)]\n'
+		+ f'		set firstColor {{{c0x} {c0y} {c0z}}}\n'
+		+ f'		set middleColor {{{c1x} {c1y} {c1z}}}\n'
+		+ f'		set lastColor {{{c2x} {c2y} {c2z}}}\n'
+		+ f'		if {{ $colpcnt < 0.5 }} {{\n'
+		+ f'			set nc [lerpcolor $firstColor $middleColor '
+		+ f'[expr $colpcnt * 2.0]]\n'
+		+ f'		}}'
+		+ f'		else {{\n'
+		+ f'			set nc [lerpcolor $middleColor $lastColor '
+		+ f'[expr ($colpcnt-0.5) * 2.0]]\n'
+		+ f'		}}\n'
+		+ f'		foreach {{r g b}} $nc {{}}\n'
+		+ f'		display update ui\n'
+		+ f'		color change rgb $i $r $g $b\n'
+		+ f'	}}\n'
+		+ f'	display update on\n'
+		+ f'}}\n'
 	)
-	tcl += f'proc {{{proc_name}}} {{}} {{\n'
-	tcl = vmdtcl.create_color_gradient(
-		'color_gradient',
-		color_gradient,
-		tcl=tcl
+	if not node_indices:
+		node_indices = [
+			node.index for node in nodes.nodes
+		]
+	tcl += (
+		f'set sel [atomselect top "all"]\n'
+		+ f'$sel set beta 0.0\n'
+		+ f'$sel delete\n'
 	)
-	color_index = 0
-	for node_coordinates in coordinates:
+	for node in nodes:
+		if node.index not in node_indices:
+			continue
+		tcl = vmdtcl.atomselect(
+			f'sel', (
+				"index", 
+				node.atom_indices
+			), tcl=tcl
+		)
+		correlation_value = correlation_matrix[
+			reference_node_index,
+			node.index
+		]
+		if correlation_value == np.inf:
+			correlation_value = 99999999.999
 		tcl += (
-			f'set color_index [lindex '
-			+ f'$color_gradient {color_index}]\n'
-			+ f'graphics {molid} color '
-			+ f'$color_index]\n'
+			f'$sel set beta '
+			+ f'{correlation_value}\n'
 		)
-		tcl = vmdtcl.Sphere(
-			node_coordinates,
-			radius=sphere_radius,
-			resolution=sphere_resolution,
-			
-		).tcl(tcl=tcl)	
-		color_index += 1
-	if parameters.node_color:
-		tcl = vmdtcl.set_draw_color(
-			parameters.node_color, 
-			tcl=tcl
+		tcl += f'$sel delete \n'
+	tcl += f'tricolor_scale\n'
+	if reference_node_representation:
+		reference_node_representation.selection = (
+			'index',
+			nodes[node_index].atom_indices,
 		)
-		tcl = vmdtcl.Sphere(
-			nodes[node_index].coordinates[frame],
-			radius=parameters.node_sphere_radius,
-			resolution=sphere_resolution,
-			
-		).tcl(tcl=tcl)	
+		tcl = reference_node_representation.to_tcl(tcl=tcl)
 	tcl += '}\n'
 	if new_line:
 		return tcl
@@ -347,7 +383,7 @@ def draw_suboptimal_paths(
 			frame,
 		)
 	)	
-	tcl += f'proc {{{proc_name}}} {{}} {{\n'
+	tcl += f'proc {proc_name} {{}} {{\n'
 	if parameters.src_node_sphere:
 		src_node_sphere_color = (
 			parameters.src_node_sphere.pop('color')
