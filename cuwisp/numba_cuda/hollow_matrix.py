@@ -7,12 +7,23 @@ import numpy as np
 from numba import cuda
 
 def hollowMatrix(
-        m,
-        h
-        ):
+        m: np.ndarray,
+        h: np.ndarray,
+) -> np.ndarray:
+    """
+    @param m:
+    @type m: numpy.ndarray
+
+    @param h:
+    @type h: numpy.ndarray
+
+    @return:
+    @rtype: numpy.ndarray
+
+    """
     num_blocks = 100
 
-    @cuda.jit('void(float64[:,:], float64[:,:], int32, int32, float64)')
+    @cuda.jit
     def cuHollowMatrix(
             cu_m,
             cu_h,
@@ -20,6 +31,26 @@ def hollowMatrix(
             cu_num_cols,
             inf,
     ):
+        """
+        @param cu_m:
+        @type cu_m: numpy.ndarray
+
+        @param cu_h:
+        @type cu_h: numpy.ndarray
+
+        @param cu_num_rows:
+        @type cu_num_rows: int
+
+        @param cu_num_cols:
+        @type cu_num_cols: int
+
+        @param inf:
+        @type inf: float
+
+        @return:
+        @rtype: None
+
+        """
         bid = cuda.blockIdx.x
         while bid < cu_num_rows:
             row_min = inf

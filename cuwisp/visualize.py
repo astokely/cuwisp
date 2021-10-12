@@ -237,6 +237,18 @@ def get_radii(
         num_radii
     )
 
+def get_max_correlation(
+        correlation_matrix: np.ndarray,
+        node_index: int
+) -> np.float64:
+    max_correlation = 0.0
+    for i in range(len(correlation_matrix[node_index])):
+        if correlation_matrix[node_index, i] > 1e15:
+            continue
+        max_correlation = max(max_correlation, correlation_matrix[
+            node_index, i])
+    return max_correlation
+
 def visualize_correlation_matrix(
         parameters: VisualizeCorrelationMatrix,
         proc_name: Optional[str] = 'draw_correlation_matrix',
@@ -263,6 +275,9 @@ def visualize_correlation_matrix(
 
     if isinstance(correlation_matrix, str):
         correlation_matrix = np.load(correlation_matrix)
+    max_correlation = get_max_correlation(
+        correlation_matrix, reference_node_index
+        )
 
     tcl += f'proc {proc_name} {{}} {{\n'
     tcl += (
@@ -328,7 +343,7 @@ def visualize_correlation_matrix(
             node.index
         ]
         if correlation_value == np.inf:
-            correlation_value = 99999999.999
+            correlation_value = max_correlation
         tcl += (
                 f'$sel set beta '
                 + f'{correlation_value}\n'

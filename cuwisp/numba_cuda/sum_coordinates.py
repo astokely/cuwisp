@@ -13,10 +13,50 @@ def sumCoords(
 		numblocks: int, 
 		threadsperblock: int,
 ) -> np.ndarray:
+	"""
+	@param coords:
+	@type coords: numpy.ndarray
 
+	@param num_traj_frames:
+	@type num_traj_frames: int
 
-	@cuda.jit('void(float64[:,:], float64[:,:], int32, int32)')
-	def cuSumCoords(v, c, nf, na):
+	@param num_atoms:
+	@type num_atoms: int
+
+	@param numblocks:
+	@type numblocks: int
+
+	@param threadsperblock:
+	@type threadsperblock: int
+
+	@return:
+	@rtype: numpy.ndarray
+
+	"""
+	@cuda.jit
+	def cuSumCoords(
+			v,
+			c,
+			nf,
+			na
+	):
+		"""
+		@param v:
+		@type v: numpy.ndarray
+
+		@param c:
+		@type c: numpy.ndarray
+
+		@param nf:
+		@type nf: int
+
+		@param na:
+		@type na: int
+
+		@return:
+		@rtype: None
+
+		"""
 		b = cuda.blockIdx.x
 		atomIndex = b
 		while atomIndex < na:

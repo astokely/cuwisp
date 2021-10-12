@@ -28,6 +28,40 @@ class Node(serializer):
             xml_directory: Optional[str] = False,
             coordinate_frames: Optional[List[int]] = None,
     ):
+        """
+        @param index:
+        @type index: int
+
+        @param atom_indices:
+        @type atom_indices: list, optional
+
+        @param resname:
+        @type resname: str, optional
+
+        @param chain_index:
+        @type chain_index: int
+
+        @param resid:
+        @type resid: int, optional
+
+        @param segment_id:
+        @type segment_id: str, optional
+
+        @param tag:
+        @type tag: str, optional
+
+        @param coordinates_directory:
+        @type coordinates_directory: str, optional
+
+        @param xml_directory:
+        @type xml_directory str, optional
+
+        @param coordinate_frames:
+        @type coordinate_frames: list, optional
+
+        @return:
+        @rtype: None
+        """
         self.index = index
         self.atom_indices = atom_indices
         self.resname = resname
@@ -61,6 +95,11 @@ class Node(serializer):
     def coordinates(
             self,
     ) -> np.ndarray:
+        """
+        @return:
+        @rtype: np.ndarray
+
+        """
         if self.xml_directory:
             self.coordinates_directory = (
                 f'{self.xml_directory}/node_coordinates'
@@ -96,10 +135,25 @@ class Node(serializer):
 class Nodes(serializer):
 
     def __init__(
-            self
-    ):
-        self.num_nodes = 0
-        self.nodes = []
+            self,
+            num_nodes: Optional[int] = 0,
+            nodes: Optional[list] = False,
+    ) -> None:
+        """
+        @param num_nodes:
+        @type num_nodes: int, optional
+
+        @param nodes:
+        @type nodes: list, optional
+
+        @return:
+        @rtype: None
+
+        """
+        self.num_nodes = num_nodes
+        if not nodes:
+            nodes = []
+        self.nodes = nodes
         return
 
     def __iter__(
@@ -142,6 +196,14 @@ class Nodes(serializer):
             self,
             index: int,
     ) -> Node:
+        """
+
+        @param index:
+        @type index: int
+
+        @return:
+        @rtype: Node
+        """
         for node in self.nodes:
             if index in node.atom_indices:
                 return node
@@ -153,6 +215,23 @@ class Nodes(serializer):
             segment_id: Optional[str] = None,
             resname: Optional[str] = None
     ) -> List:
+        """
+        @param chain_index:
+        @type chain_index: int, optional
+
+        @param resid:
+        @type resid: int, optional
+
+        @param segment_id:
+        @type segment_id: str, optional
+
+        @param resname:
+        @type resname: str, optional
+
+        @return:
+        @rtype: list
+
+        """
         tag = ''
         if chain_index is not None:
             tag += f'{chain_index}_'

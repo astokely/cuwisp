@@ -39,6 +39,17 @@ class Rule(object):
             append_method: Callable,
             pop_method: Callable,
     ) -> None:
+        """
+        @param append_method:
+        @type append_method: callable
+
+        @param pop_method:
+        @type pop_method: callable
+
+        @return:
+        @rtype: None
+
+        """
         self._pop = pop_method
         self._append = append_method
 
@@ -54,24 +65,66 @@ class Rule(object):
             self,
             dq: Deque,
     ) -> Any:
+        """
+        @param dq:
+        @type dq: deque
+
+        @return:
+        @rtype: object
+
+        """
         return self._pop(dq)
 
     def append(
             self,
             dq: Deque,
-            val
+            val: Any,
     ) -> None:
+        """
+        @param dq:
+        @type dq: deque
+
+        @param val:
+        @type val: object
+
+        @return:
+        @rtype: object
+
+        """
         return self._append(dq, val)
 
 class SuboptimalPaths(serializer):
 
     def __init__(
-            self
+            self,
+            paths: Optional[list] = False,
+            src: Optional[int] = None,
+            sink: Optional[int] = None,
+            num_paths: Optional[int] = None
     ) -> None:
-        self.paths = []
-        self.src = None
-        self.sink = None
-        self.num_paths = None
+        """
+        @param paths:
+        @type paths: list, optional
+
+        @param src:
+        @type src: int, optional
+
+        @param sink:
+        @type sink: int, optional
+
+        @param num_paths:
+        @type num_paths: int, optional
+
+        @return:
+        @rtype: None
+
+        """
+        if not paths:
+            paths = []
+        self.paths = paths
+        self.src = src
+        self.sink = sink
+        self.num_paths = num_paths
         return
 
     def __iter__(
@@ -114,6 +167,11 @@ class SuboptimalPaths(serializer):
     def reverse(
             self
     ):
+        """
+        @return:
+        @rtype: Path
+
+        """
         for path in reversed(self.paths):
             yield path
 
@@ -121,6 +179,14 @@ class SuboptimalPaths(serializer):
             self,
             node_index: int
     ) -> List:
+        """
+        @param node_index:
+        @type node_index: int
+
+        @return:
+        @rtype: list
+
+        """
         path_indices_with_node = []
         for path in self.paths:
             path_node_indices = [
@@ -144,6 +210,20 @@ class SuboptimalPaths(serializer):
             cutoff: Optional[np.float64] = np.inf,
             remove: Optional[bool] = False,
     ) -> None:
+        """
+        @param paths:
+        @type paths: list
+
+        @param cutoff:
+        @type cutoff: numpy.float64, optional
+
+        @param remove:
+        @type remove: bool, optional
+
+        @return:
+        @rtype: None
+
+        """
         if remove:
             for path in paths:
                 self.paths.remove(path)
@@ -170,6 +250,14 @@ class SuboptimalPaths(serializer):
             self,
             path_indices: List,
     ) -> Any:
+        """
+        @param path_indices:
+        @type path_indices: list
+
+        @return:
+        @rtype: object
+
+        """
         path_indices = path_indices
         suboptimal_paths = SuboptimalPaths()
         for index in path_indices:
@@ -186,15 +274,50 @@ class SuboptimalPaths(serializer):
 class Path(serializer):
 
     def __init__(
-            self
+            self,
+            index: Optional[int] = None,
+            num_nodes: Optional[int] = None,
+            num_edges: Optional[int] = None,
+            src: Optional[int] = None,
+            sink: Optional[int] = None,
+            edges: Optional[list] = None,
+            length: Optional[float] = None,
     ) -> None:
-        self.index = None
-        self.num_nodes = None
-        self.num_edges = None
-        self.src = None
-        self.sink = None
-        self.edges = []
-        self.length = None
+        """
+        @param index:
+        @type index: int, optional
+
+        @param num_nodes:
+        @type num_edges: int, optional
+
+        @param num_edges:
+        @type num_nodes: int, optional
+
+        @param src:
+        @type src: int, optional
+
+        @param sink:
+        @type sink: int, optional
+
+        @param edges:
+        @type edges: list, optional
+
+        @param length:
+        @type length: float, optional
+
+        @return:
+        @rtype: None
+
+        """
+        if edges is None:
+            edges = []
+        self.index = index
+        self.num_nodes = num_nodes
+        self.num_edges = num_edges
+        self.src = src
+        self.sink = sink
+        self.edges = edges
+        self.length = length
 
     def __repr__(
             self
@@ -235,6 +358,14 @@ class Path(serializer):
             self,
             reverse: Optional[bool] = True,
     ) -> Dict:
+        """
+        @param reverse:
+        @type reverse: bool, optional
+
+        @return:
+        @rtype: dict
+
+        """
         resname_count_dict = defaultdict(int)
         for edge in self.edges:
             resname_count_dict[
@@ -256,6 +387,11 @@ class Path(serializer):
     def swap_src_sink(
             self
     ) -> Any:
+        """
+        @return:
+        @rtype: object
+
+        """
         rev_edges = []
         src = self.sink
         sink = self.src
@@ -274,6 +410,17 @@ class Path(serializer):
             node_index: int,
             node_edge_pos: int,
     ) -> int:
+        """
+        @param node_index:
+        @type node_index: int
+
+        @param node_edge_pos:
+        @type node_edge_pos: int
+
+        @return:
+        @rtype: int
+
+        """
         edge_index = 0
         edge_index_dict = {}
         for edge in self.edges:
@@ -292,6 +439,14 @@ class Path(serializer):
             self,
             path: Any,
     ) -> int:
+        """
+        @param path:
+        @type path: Path
+
+        @return:
+        @rtype: int
+
+        """
         if self.src == path.src:
             return 0
         elif self.sink == path.sink:
@@ -303,6 +458,17 @@ class Path(serializer):
             path: Any,
             correlation_matrix: np.ndarray,
     ) -> Any:
+        """
+        @param path:
+        @type path: Path
+
+        @param correlation_matrix:
+        @type correlation_matrix: numpy.ndarray
+
+        @return:
+        @rtype: Path
+
+        """
         new_path = Path()
         new_path.src = self.src
         new_path.sink = self.sink
@@ -353,10 +519,27 @@ class Path(serializer):
 class Edge(serializer):
 
     def __init__(
-            self
+            self,
+            node1: Optional[Node] = False,
+            node2: Optional[Node] = False,
     ) -> None:
-        self.node1 = Node()
-        self.node2 = Node()
+        """
+        @param node1:
+        @type node1: Node, optional
+
+        @param node2:
+        @type node2: Node, optional
+
+        @return:
+        @rtype: None
+
+        """
+        if not node1:
+            node1 = Node()
+        if not node2:
+            node2 = Node()
+        self.node1 = node1
+        self.node2 = node2
 
     def __repr__(
             self
@@ -403,6 +586,17 @@ def ordered_paths(
         paths: List,
         src: int,
 ) -> List:
+    """
+    @param paths:
+    @type paths: list
+
+    @param src:
+    @type src: int
+
+    @return:
+    @rtype: list
+
+    """
     ordered_paths_list = []
     paths = list(paths)
     pos = None
@@ -422,12 +616,31 @@ def append_middle(
         dq: deque,
         val: Tuple,
 ) -> None:
+    """
+    @param dq:
+    @type dq: deque
+
+    @param val:
+    @type val: tuple
+
+    @return:
+    @rtype: None
+
+    """
     middle_index = floor(len(dq) / 2)
     dq.insert(middle_index, val)
 
 def pop_middle(
         dq: deque,
 ) -> Tuple:
+    """
+    @param dq:
+    @type dq: deque
+
+    @return:
+    @rtype: tuple
+
+    """
     middle_index = floor(len(dq) / 2)
     middle_val = dq[middle_index]
     del dq[middle_index]
@@ -437,6 +650,18 @@ def append(
         dq: deque,
         val: Tuple,
 ) -> None:
+    """
+
+    @param dq:
+    @type dq: deque
+
+    @param val:
+    @type val: tuple
+
+    @return:
+    @rtype: None
+
+    """
     dq.append(val)
     return
 

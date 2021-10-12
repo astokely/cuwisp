@@ -20,6 +20,20 @@ def cuda_correlation_matrix(
         average_nodes: np.ndarray,
         correlation_matrix: np.ndarray
 ):
+    """
+    @param nodes:
+    @type nodes: numpy.ndarray
+
+    @param average_nodes:
+    @type average_nodes: numpy.ndarray
+
+    @param correlation_matrix:
+    @type correlation_matrix: numpy.ndarray
+
+    @return:
+    @rtype: numpy.ndarray
+
+    """
     tpb = 32
 
     @cuda.jit
@@ -28,6 +42,20 @@ def cuda_correlation_matrix(
             cu_average_node,
             node_coordinate_deviations
     ):
+        """
+        @param cu_nodes:
+        @type cu_nodes: numpy.ndarray
+
+        @param cu_average_node:
+        @type cu_average_node: numpy.ndarray
+
+        @param node_coordinate_deviations:
+        @type node_coordinate_deviations: numpy.ndarray
+
+        @return:
+        @rtype: None
+
+        """
         # noinspection PyArgumentList
         i, j = cuda.grid(2)
         if i < cu_nodes.shape[0] and j < cu_nodes.shape[1]:
@@ -87,6 +115,20 @@ def cuda_correlation_matrix(
             b,
             c,
     ):
+        """
+        @param a:
+        @type a: numpy.ndarray
+
+        @param b:
+        @type b: numpy.ndarray
+
+        @param c:
+        @type c: numpy.ndarray
+
+        @return:
+        @rtype: None
+
+        """
         bid = cuda.blockIdx.x
         y = bid
         while y < a.shape[0]:
@@ -145,6 +187,20 @@ def cuda_correlation_matrix(
             ensemble_average_delta_square_magnitudes,
             cu_correlation_matrix,
     ):
+        """
+        @param node_coordinate_deviations:
+        @type node_coordinate_deviations: numpy.ndarray
+
+        @param ensemble_average_delta_square_magnitudes:
+        @type ensemble_average_delta_square_magnitudes: numpy.ndarray
+
+        @param cu_correlation_matrix:
+        @type cu_correlation_matrix: numpy.ndarray
+
+        @return:
+        @rtype: None
+
+        """
         # noinspection PyArgumentList
         i, j = cuda.grid(2)
         if (

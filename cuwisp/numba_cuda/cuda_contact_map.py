@@ -17,6 +17,29 @@ def cuda_contact_map(
         average_pdb_coordinates: np.ndarray,
         node_atom_indices: np.ndarray,
 ) -> Tuple[np.ndarray, np.ndarray]:
+    """
+    @param correlation_matrix:
+    @type correlation_matrix: numpy.ndarray
+
+    @param correlation_matrix_after_contact_map:
+    @type correlation_matrix_after_contact_map: numpy.ndarray
+
+    @param contact_map:
+    @type contact_map: numpy.ndarray
+
+    @param distance_cutoff:
+    @type distance_cutoff: float
+
+    @param average_pdb_coordinates:
+    @type average_pdb_coordinates: numpy.ndarray
+
+    @param node_atom_indices:
+    @type node_atom_indices: numpy.ndarray
+
+    @return:
+    @rtype: tuple
+
+    """
     tpb = 32
 
     @cuda.jit
@@ -29,6 +52,32 @@ def cuda_contact_map(
             node_atom_indices_offsets,
             cu_inf,
     ) -> None:
+        """
+        @param cu_correlation_matrix:
+        @type cu_correlation_matrix: numpy.ndarray
+
+        @param cu_contact_map:
+        @type cu_contact_map: numpy.ndarray
+
+        @param cu_distance_cutoff:
+        @type cu_distance_cutoff: float
+
+        @param cu_average_pdb_coordinates:
+        @type cu_average_pdb_coordinates: numpy.ndarray
+
+        @param cu_node_atom_indices:
+        @type cu_node_atom_indices: numpy.ndarray
+
+        @param node_atom_indices_offsets:
+        @type node_atom_indices_offsets: numpy.ndarray
+
+        @param cu_inf:
+        @type cu_inf: float
+
+        @return:
+        @rtype: None
+
+        """
         # noinspection PyArgumentList
         i, j = cuda.grid(2)
         if (

@@ -20,6 +20,35 @@ def centerOfMassReduction(
         num_nodes: int,
         num_frames: int,
 ) -> np.ndarray:
+    """
+    @param coordinates:
+    @type coordinates: numpy.ndarray
+
+    @param masses:
+    @type masses: numpy.ndarray
+
+    @param total_masses:
+    @type total_masses: numpy.ndarray
+
+    @param threads_per_block:
+    @type threads_per_block: int
+
+    @param num_blocks:
+    @type num_blocks: int
+
+    @param node_size:
+    @type node_size: int
+
+    @param num_nodes:
+    @type num_nodes: int
+
+    @param num_frames:
+    @type num_frames: int
+
+    @return:
+    @rtype: numpy.ndarray
+
+    """
     @cuda.jit
     def cudaCenterOfMassReduction(
             cu_coordinates,
@@ -28,6 +57,26 @@ def centerOfMassReduction(
             cu_total_masses,
             cu_num_iters,
     ):
+        """
+        @param cu_coordinates:
+        @type cu_coordinates: numpy.ndarray
+
+        @param cu_masses:
+        @type cu_masses: numpy.ndarray
+
+        @param center_of_masses:
+        @type center_of_masses: numpy.ndarray
+
+        @param cu_total_masses:
+        @type cu_total_masses: numpy.ndarray
+
+        @param cu_num_iters:
+        @type cu_num_iters: int
+
+        @return:
+        @rtype: None
+
+        """
         for node_index in range(num_nodes):
             i = 0
             while i < cu_num_iters:

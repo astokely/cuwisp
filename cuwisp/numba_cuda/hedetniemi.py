@@ -12,6 +12,17 @@ def cuda_grid_and_block_dims(
         num_nodes: int,
         threads_per_block: int,
 ) -> Tuple:
+    """
+    @param num_nodes:
+    @type num_nodes: int
+
+    @param threads_per_block:
+    @type threads_per_block: int
+
+    @return:
+    @rtype: tuple
+
+    """
     dimBlock = (threads_per_block, threads_per_block)
     dimGrid = (
         math.ceil(num_nodes / threads_per_block),
@@ -26,6 +37,23 @@ def init_matrix(
         h,
         num_nodes,
 ):
+    """
+    @param a:
+    @type a: numpy.ndarray
+
+    @param b:
+    @type b: numpy.ndarray
+
+    @param h:
+    @type h: numpy.ndarray
+
+    @param num_nodes:
+    @type num_nodes: int
+
+    @return:
+    @rtype: None
+
+    """
     i, j = cuda.grid(2)
     if i < num_nodes and j < num_nodes:
         h[i, j] = np.inf
@@ -40,6 +68,29 @@ def all_pair_hedetniemit(
         found_ssp,
         cutoff,
 ):
+    """
+    @param a:
+    @type a: numpy.ndarray
+
+    @param b:
+    @type b: numpy.ndarray
+
+    @param h:
+    @type h: numpy.ndarray
+
+    @param num_nodes:
+    @type num_nodes: int
+
+    @param found_ssp:
+    @type: found_ssp: numpy.ndarray
+
+    @param cutoff:
+    @type cutoff: float
+
+    @return:
+    @rtype: None
+
+    """
     i, j = cuda.grid(2)
     if i < num_nodes and j < num_nodes:
         hedetniemit_sum = np.inf
@@ -61,6 +112,23 @@ def hedetniemi_distance(
         threads_per_block: int,
         cutoff: np.float64,
 ) -> np.ndarray:
+    """
+    @param a:
+    @type a: numpy.ndarray
+
+    @param num_nodes:
+    @type num_nodes: int
+
+    @param threads_per_block:
+    @type threads_per_block: int
+
+    @param cutoff:
+    @type cutoff: float
+
+    @return:
+    @rtype: numpy.ndarray
+
+    """
     threads_per_block = int(np.sqrt(threads_per_block))
     n = num_nodes
     a_device = cuda.to_device(a)

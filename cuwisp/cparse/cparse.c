@@ -62,6 +62,5 @@ void parsePdb(
 		}
 	}
 	fclose(initPdb);
-//	fclose(outputPdb);
 }
 

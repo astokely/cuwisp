@@ -37,6 +37,17 @@ def ctypes_matrix(
         n: int,
         m: int,
 ) -> Any:
+    """
+    @param n:
+    @type n: int
+
+    @param m:
+    @type m: int
+
+    @return:
+    @rtype: object
+
+    """
     return np.ctypeslib.as_ctypes(
         np.array(
             [
@@ -50,6 +61,14 @@ def ctypes_matrix(
 def shared_ctypes_multiprocessing_array(
         ctypes_array: Any,
 ) -> Any:
+    """
+    @param ctypes_array:
+    @type ctypes_array: object
+
+    @return:
+    @rtype: object
+
+    """
     return sharedctypes.RawArray(
         ctypes_array._type_,
         ctypes_array
@@ -72,6 +91,47 @@ class Molecule:
             node_tags_in_order: Optional[np.ndarray] = False,
             nodes_array: Optional[np.ndarray] = False,
     ) -> None:
+        """
+        @param trajectory:
+        @type trajectory: mdtraj.Trajectory, optional
+
+        @param atomnames:
+        @type atomnames: numpy.ndarray, optional
+
+        @param chains:
+        @type chains: numpy.ndarray, optional
+
+        @param masses:
+        @type masses: numpy.ndarray, optional
+
+        @param resids:
+        @type resids: numpy.ndarray, optional
+
+        @param resnames:
+        @type resnames: numpy.ndarray, optional
+
+        @param segment_ids:
+        @type segment_ids: numpy.ndarray, optional
+
+        @param elements:
+        @type elements:
+
+        @param coordinates:
+        @type coordinates: numpy.ndarray, optional
+
+        @param node_tag_to_atom_indices:
+        @type node_tag_to_atom_indices: defaultdict
+
+        @param node_tags_in_order:
+        @type node_tags_in_order: numpy.ndarray, optional
+
+        @param nodes_array:
+        @type nodes_array: numpy.ndarray, optional
+
+        @return
+        @rtype: None
+
+        """
         self.trajectory = trajectory
         self.atomnames = atomnames
         self.chains = chains
@@ -92,6 +152,20 @@ class Molecule:
             num_frames: Optional[bool] = False,
             frame: Optional[bool] = False,
     ) -> None:
+        """
+        @param traj:
+        @type traj: mdtraj.Trajectory
+
+        @param num_frames:
+        @type num_frames: bool, optional
+
+        @param frame:
+        @type frame: bool, optional
+
+        @return:
+        @rtype: None
+
+        """
         self.trajectory = traj
         top = self.trajectory.topology
         atoms = [atom for atom in top.atoms]
@@ -142,6 +216,11 @@ class Molecule:
     def map_atoms_to_node_tags(
             self
     ) -> None:
+        """
+        @return
+        @rtype: None
+
+        """
         indices_tags_dict = {
             index: (
                     f'{self.chains[index]}_'
@@ -175,6 +254,14 @@ class Molecule:
             self,
             coms: np.ndarray,
     ) -> None:
+        """
+        @param coms:
+        @type coms: numpy.ndarray
+
+        @return:
+        @rtype: None
+
+        """
         self.nodes_array = np.empty(
             (
                 len(self.node_tags_in_order),
@@ -192,6 +279,20 @@ def catdcd(
         topology_filename: str,
         output_pdb_filename: str,
 ) -> None:
+    """
+    @param catdcd_exe_dir:
+    @type catdcd_exe_dir: str
+
+    @param input_dcd_filename:
+    @type input_dcd_filename: str
+
+    @param topology_filename:
+    @type topology_filename: str
+
+    @param output_pdb_filename:
+    @type output_pdb_filename: str
+
+    """
     process = subprocess.Popen(
         [
             f'{catdcd_exe_dir}/catdcd',
@@ -210,6 +311,14 @@ def catdcd(
 def parse_pdb(
         args: Tuple[Union[int, int, str]],
 ) -> Tuple[Union[int, Molecule]]:
+    """
+    @param args:
+    @type args: tuple
+
+    @return:
+    @rtype: tuple
+
+    """
     path, pdb_file, num_frames = args
     frame = int(pdb_file[:-4])
     traj = md.load(path + pdb_file)
@@ -226,6 +335,23 @@ def parse_dcd(
         output_pdb_filename: str,
         output_tmp_pdbs_directory: str,
 ) -> None:
+    """
+    @param input_dcd_filename:
+    @type input_dcd_filename: str
+
+    @param topology_filename:
+    @type topology_filename: str
+
+    @param output_pdb_filename:
+    @type output_pdb_filename: str
+
+    @param output_tmp_pdbs_directory:
+    @type output_tmp_pdbs_directory: str
+
+    @return:
+    @rtype: None
+
+    """
     catdcd_exe_dir = (
             os.path.dirname(
                 os.path.abspath(
@@ -256,6 +382,23 @@ def prepare_trajectory_for_analysis(
         dcd_trajectory_filename: Optional[str] = '',
         topology_filename: Optional[str] = '',
 ) -> List[str]:
+    """
+    @param temp_file_directory:
+    @type temp_file_directory: str
+
+    @param pdb_trajectory_filename:
+    @type pdb_trajectory_filename: str, optional
+
+    @param dcd_trajectory_filename:
+    @type dcd_trajectory_filename: str, optional
+
+    @param topology_filename:
+    @type topology_filename: str, optional
+
+    @return:
+    @rtype: list
+
+    """
     if os.path.exists(temp_file_directory):
         shutil.rmtree(temp_file_directory)
     os.makedirs(temp_file_directory)
@@ -281,6 +424,17 @@ def get_parameters_for_multiprocessing_pdb_parser(
         temp_file_directory: str,
         pdb_from_trajectory: Molecule,
 ) -> Tuple[Union[int, int, List[str], int]]:
+    """
+    @param temp_file_directory:
+    @type temp_file_directory: str
+
+    @param pdb_from_trajectory:
+    @type pdb_from_trajectory: Molecule
+
+    @return:
+    @rtype: tuple
+
+    """
     num_traj_frames = len(
         os.listdir(temp_file_directory + "/")
     )
@@ -313,6 +467,38 @@ def multiprocessing_pdb_parser(
         num_blocks_sum_coordinates_calc: int,
         threads_per_block_sum_coordinates_calc: int,
 ) -> List[Molecule]:
+    """
+    @param num_traj_frames:
+    @type num_traj_frames: int
+
+    @param num_atoms:
+    @type num_atoms: int
+
+    @param num_multiprocessing_processes:
+    @type num_multiprocessing_processes: int
+
+    @param paths:
+    @type paths: list
+
+    @param pdb_single_frame_files:
+    @type pdb_single_frame_files: list
+
+    @param num_frames:
+    @type num_frames: int
+
+    @param average_pdb:
+    @type average_pdb: Molecule
+
+    @param num_blocks_sum_coordinates_calc:
+    @type num_blocks_sum_coordinates_calc: int
+
+    @param threads_per_block_sum_coordinates_calc:
+    @type threads_per_block_sum_coordinates_calc: int
+
+    @return:
+    @rtype: list
+
+    """
     # noinspection PyGlobalUndefined
     global scmat
     cmat = ctypes_matrix(
@@ -362,6 +548,26 @@ def serialize_nodes(
         calculation_name: str,
         node_coordinate_frames: List[int],
 ) -> None:
+    """
+    @param average_pdb:
+    @type average_pdb: Molecule
+
+    @param coms:
+    @type coms: numpy.ndarray
+
+    @param output_directory:
+    @type output_directory: str
+
+    @param calculation_name:
+    @type calculation_name: str
+
+    @param node_coordinate_frames:
+    @type node_coordinate_frames: list
+
+    @return:
+    @rtype: None
+
+    """
     nodes = Nodes()
     node_index = 0
     atom_indices_list = []
@@ -415,6 +621,20 @@ def calculate_center_of_masses(
         threads_per_block_com_calc: int,
         num_blocks_com_calc: int,
 ) -> np.ndarray:
+    """
+    @param pdbs:
+    @type pdbs: list
+
+    @param threads_per_block_com_calc:
+    @type threads_per_block_com_calc: int
+
+    @param num_blocks_com_calc:
+    @type num_blocks_com_calc: int
+
+    @return:
+    @rtype: numpy.ndarray
+
+    """
     all_indices = []
     for pdb in pdbs:
         all_indices.append(
@@ -443,14 +663,28 @@ def calculate_center_of_masses(
 def save_matrix(
         output_directory: str,
         matrix_filename: str,
-        numpy_array: np.ndarray,
+        a: np.ndarray,
 ) -> None:
+    """
+    @param output_directory:
+    @type output_directory: str
+
+    @param matrix_filename:
+    @type matrix_filename: str
+
+    @param a:
+    @type a: numpy.ndarray
+
+    @return:
+    @rtype: None
+
+    """
     matrix_filename = (
         f'{output_directory}/{matrix_filename}'
     )
     np.save(
         matrix_filename,
-        numpy_array,
+        a,
     )
 
 def get_node_com_coordinates_array(
@@ -458,6 +692,20 @@ def get_node_com_coordinates_array(
         num_pdbs: int,
         pdbs: List[Molecule],
 ) -> np.ndarray:
+    """
+    @param num_nodes:
+    @type num_nodes: int
+
+    @param num_pdbs:
+    @type num_pdbs: int
+
+    @param pdbs:
+    @type pdbs: list
+
+    @return:
+    @rtype: numpy.ndarray
+
+    """
     nodes = np.array(
         [
             np.zeros((num_pdbs, 3), dtype=np.float64)
@@ -484,6 +732,23 @@ def get_contact_map(
         contact_map_distance_limit: float,
         node_atom_indices: List,
 ) -> np.ndarray:
+    """
+    @param correlation_matrix:
+    @type correlation_matrix: numpy.ndarray
+
+    @param average_pdb:
+    @type average_pdb: Molecule
+
+    @param contact_map_distance_limit:
+    @type contact_map_distance_limit: float
+
+    @param node_atom_indices:
+    @type node_atom_indices: list
+
+    @return:
+    @rtype: numpy.ndarray
+
+    """
     contact_map = np.ones(correlation_matrix.shape)
     avg_coords = average_pdb.coordinates
     correlation_matrix_after_contact_map = np.zeros(
@@ -504,9 +769,23 @@ def get_contact_map(
 
 def _get_correlation_matrix(
         num_nodes: int,
-        nodes,
-        average_pdb
+        nodes: np.ndarray,
+        average_pdb: Molecule,
 ) -> np.ndarray:
+    """
+    @param num_nodes:
+    @type num_nodes: int
+
+    @param nodes:
+    @type nodes: numpy.ndarray
+
+    @param average_pdb:
+    @type average_pdb: Molecule
+
+    @return:
+    @rtype: numpy.ndarray
+
+    """
     correlation_matrix = np.zeros(
         (
             num_nodes,
@@ -534,8 +813,8 @@ def get_correlation_matrix(
         calculation_name: str,
         output_directory: str,
         contact_map_distance_limit: float,
-        trajectory_filename: str,
-        topology_filename: str,
+        trajectory_fname: str,
+        topology_fname: str,
         temp_file_directory: str,
         threads_per_block_com_calc: int,
         num_blocks_com_calc: int,
@@ -544,16 +823,57 @@ def get_correlation_matrix(
         num_multiprocessing_processes: int,
         node_coordinate_frames: List[int],
 ) -> None:
-    if trajectory_filename[-3:] == 'pdb':
+    """
+    @param calculation_name:
+    @type calculation_name: str
+
+    @param output_directory:
+    @type output_directory: str
+
+    @param contact_map_distance_limit:
+    @type contact_map_distance_limit: float
+
+    @param trajectory_fname:
+    @type trajectory_fname: str
+
+    @param topology_fname:
+    @type
+
+    @param temp_file_directory:
+    @type temp_file_directory: str
+
+    @param threads_per_block_com_calc:
+    @type threads_per_block_com_calc: int
+
+    @param num_blocks_com_calc:
+    @type num_blocks_com_calc: int
+
+    @param threads_per_block_sum_coordinates_calc:
+    @type threads_per_block_sum_coordinates_calc: int
+
+    @param num_blocks_sum_coordinates_calc:
+    @type num_blocks_sum_coordinates_calc: int
+
+    @param num_multiprocessing_processes:
+    @type num_multiprocessing_processes: int
+
+    @param node_coordinate_frames:
+    @type node_coordinate_frames: list
+
+    @return:
+    @rtype: None
+
+    """
+    if trajectory_fname[-3:] == 'pdb':
         pdb_single_frame_files = prepare_trajectory_for_analysis(
             temp_file_directory,
-            pdb_trajectory_filename=trajectory_filename
+            pdb_trajectory_filename=trajectory_fname
         )
-    elif trajectory_filename[-3:] == 'dcd':
+    elif trajectory_fname[-3:] == 'dcd':
         pdb_single_frame_files = prepare_trajectory_for_analysis(
             temp_file_directory,
-            dcd_trajectory_filename=trajectory_filename,
-            topology_filename=topology_filename
+            dcd_trajectory_filename=trajectory_fname,
+            topology_filename=topology_fname
         )
     else:
         raise Exception

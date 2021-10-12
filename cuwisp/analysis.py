@@ -29,6 +29,17 @@ def sort_distances(
         distance_vector: np.ndarray,
         reverse: Optional[bool] = False
 ) -> Dict[int, np.float64]:
+    """
+    @param distance_vector:
+    @type distance_vector: numpy.ndarray
+
+    @param reverse:
+    @type reverse: bool, optional
+
+    @return:
+    @rtype: dict
+
+    """
     distance_dict = {
         path_index: distance_vector[path_index]
         for path_index in range(len(distance_vector))
@@ -52,6 +63,19 @@ class FrechetDistanceMatrix(serializer):
             reference_path_index: int,
             num_partitions: int,
     ) -> None:
+        """
+        @param fname:
+        @type fname: str
+
+        @param reference_path_index:
+        @type reference_path_index: int
+
+        @param num_partitions:
+        @type num_partitions: int
+
+        @return
+        @rtype: None
+        """
         self.fname = fname
         self.reference_path_index = reference_path_index
         self.num_partitions = num_partitions
@@ -67,6 +91,11 @@ class FrechetDistanceMatrix(serializer):
     def matrix(
             self
     ) -> np.ndarray:
+        """
+        @return:
+        @rtype: numpy.ndarray
+
+        """
         return np.load(
             f'{self.fname}'
         )
@@ -76,6 +105,17 @@ class FrechetDistanceMatrix(serializer):
             partition_index: int,
             reverse: Optional[bool] = False,
     ) -> Dict[int, np.float64]:
+        """
+        @param partition_index:
+        @type partition_index: int
+
+        @param reverse:
+        @type reverse: bool, optional
+
+        @return:
+        @rtype: dict
+
+        """
         return sort_distances(
             self.matrix[partition_index],
             reverse=reverse,
@@ -85,6 +125,11 @@ class FrechetDistanceMatrix(serializer):
     def delta(
             self
     ) -> Dict:
+        """
+
+        @return:
+        @rtype: dit
+        """
         delta = defaultdict(list)
         matrix = self.matrix
         num_paths = matrix.shape[1]
@@ -105,6 +150,14 @@ class FrechetDistanceMatrix(serializer):
             self,
             reverse: Optional[bool] = False,
     ) -> Dict:
+        """
+        @param reverse:
+        @type reverse: bool, optional
+
+        @return:
+        @rtype: dict
+
+        """
         average_frechet_distance_dict = (
             defaultdict(np.float64)
         )
@@ -132,6 +185,14 @@ class FrechetDistanceMatrix(serializer):
             self,
             path_index: int,
     ) -> int:
+        """
+        @param path_index:
+        @type path_index: int
+
+        @return:
+        @rtype: int
+
+        """
         compounded_similarity = np.zeros(
             self.num_partitions,
             dtype=np.float64
@@ -152,6 +213,23 @@ class FrechetDistanceMatrix(serializer):
             num_paths: Optional[int] = 10,
             similar: Optional[int] = 1,
     ) -> None:
+        """
+        @param suboptimal_paths:
+        @type suboptimal_paths: SuboptimalPaths
+
+        @param clustered_suboptimal_paths_fname:
+        @type clustered_suboptimal_paths_fname: str
+
+        @param partition_index:
+        @type partition_index: int, optional
+
+        @param num_paths:
+        @type num_paths: int, optional
+
+        @param similar:
+        @type similar: int, optional
+
+        """
         if similar == 1:
             clustered_paths = list(
                 self.ordered(
@@ -183,6 +261,20 @@ class DistanceMatrix(serializer):
             reference_path_index: int,
             num_partitions: int,
     ) -> None:
+        """
+        @param fname:
+        @type fname: str
+
+        @param reference_path_index:
+        @type reference_path_index: int
+
+        @param num_partitions:
+        @type num_partitions: int
+
+        @return:
+        @rtype: None
+
+        """
         self.fname = fname
         self.reference_path_index = reference_path_index
         self.num_partitions = num_partitions
@@ -190,7 +282,12 @@ class DistanceMatrix(serializer):
     @property
     def matrix(
             self
-    ):
+    ) -> np.ndarray:
+        """
+        @return:
+        @rtype: numpy.ndarray
+
+        """
         return np.load(
             f'{self.fname}'
         )
@@ -199,6 +296,11 @@ class DistanceMatrix(serializer):
     def delta(
             self
     ) -> Dict:
+        """
+        @return:
+        @rtype: dict
+
+        """
         delta = defaultdict(list)
         matrix = self.matrix
         num_paths = matrix.shape[1]
@@ -217,6 +319,17 @@ class DistanceMatrix(serializer):
             partition_index: int,
             reverse: Optional[bool] = False,
     ) -> Dict[int, np.float64]:
+        """
+        @param partition_index:
+        @type partition_index: int
+
+        @param reverse:
+        @type reverse: bool, optional
+
+        @return:
+        @rtype: dict
+
+        """
         return sort_distances(
             self.matrix[partition_index],
             reverse,
@@ -226,6 +339,14 @@ class DistanceMatrix(serializer):
             self,
             reverse: Optional[bool] = False,
     ) -> Dict:
+        """
+        @param reverse:
+        @type reverse: bool, optional
+
+        @return:
+        @rtype: dict
+
+        """
         average_frechet_distance_dict = (
             defaultdict(np.float64)
         )
@@ -253,6 +374,14 @@ class DistanceMatrix(serializer):
             self,
             path_index: int,
     ) -> int:
+        """
+        @param path_index:
+        @type path_index: int
+
+        @return:
+        @rtype: int
+
+        """
         compounded_similarity = np.zeros(
             self.num_partitions,
             dtype=np.float64
@@ -273,6 +402,26 @@ class DistanceMatrix(serializer):
             num_paths: Optional[int] = 10,
             similar: Optional[int] = 1,
     ) -> None:
+        """
+        @param suboptimal_paths:
+        @type suboptimal_paths: SuboptimalPaths
+
+        @param clustered_suboptimal_paths_fname:
+        @type clustered_suboptimal_paths_fname: str
+
+        @param partition_index:
+        @type partition_index: int, optional
+
+        @param num_paths:
+        @type num_paths: int, optional
+
+        @param similar:
+        @type similar: int, optional
+
+        @return:
+        @rtype: None
+
+        """
         if similar == 1:
             clustered_paths = list(
                 self.ordered(
@@ -302,12 +451,30 @@ class Analysis(serializer):
             self,
             analysis_directory: Optional[str] = '',
             frame: Optional[int] = 0,
-            frechet_distance_matrices:
-            Optional[Dict[int, Dict]] = False,
-            distance_matrices:
-            Optional[Dict[int, Dict]] = False,
+            frechet_distance_matrices: Optional[dict] = False,
+            distance_matrices: Optional[Dict[int, Dict]] = False,
             splines_directory: Optional[str] = '',
     ) -> None:
+        """
+        @param analysis_directory:
+        @type analysis_directory: str, optional
+ 
+        @param frame:
+        @type frame: int, optional
+ 
+        @param frechet_distance_matrices:
+        @type frechet_distance_matrices: dict, optional
+ 
+        @param distance_matrices:
+        @type distance_matrices: dict, optional
+ 
+        @param splines_directory:
+        @type splines_directory: str, optional
+
+        @return:
+        @rtype: None
+ 
+        """
         self.analysis_directory = (
             analysis_directory
         )
@@ -335,6 +502,20 @@ class Analysis(serializer):
             spline_input_points_incr: Optional[float] = 0.001,
             smoothing_factor: Optional[float] = 0.0,
     ) -> None:
+        """
+        @param suboptimal_paths:
+        @type suboptimal_paths: SuboptimalPaths
+
+        @param spline_input_points_incr:
+        @type spline_input_points_incr: float, optional
+
+        @param smoothing_factor:
+        @type smoothing_factor: float, optional
+
+        @return:
+        @rtype: None
+
+        """
         if os.path.exists(
                 f'{self.analysis_directory}/splines'
         ):
@@ -354,6 +535,17 @@ class Analysis(serializer):
             path_index: Optional[int] = 0,
             num_partitions: Optional[int] = 1,
     ) -> np.ndarray:
+        """
+        @param path_index:
+        @type path_index: int, optional
+
+        @param num_partitions:
+        @type num_partitions: int, optional
+
+        @return:
+        @rtype: numpy.ndarray
+
+        """
         if not os.path.exists(
                 f'{self.analysis_directory}'
                 + f'/distance_matrices'
@@ -390,6 +582,17 @@ class Analysis(serializer):
             path_index: Optional[int] = 0,
             num_partitions: Optional[int] = 1,
     ) -> np.ndarray:
+        """
+        @param path_index:
+        @type path_index: int, optional
+
+        @param num_partitions:
+        @type num_partitions: int, optional
+
+        @return:
+        @rtype: numpy.ndarray
+
+        """
         if not os.path.exists(
                 f'{self.analysis_directory}'
                 + f'/frechet_distance_matrices'
@@ -428,6 +631,20 @@ def get_least_similar_paths(
         frechet_distance_matrix: FrechetDistanceMatrix,
         num_paths: Optional[int] = 1,
 ) -> List:
+    """
+    @param suboptimal_paths:
+    @type suboptimal_paths: SuboptimalPaths
+
+    @param frechet_distance_matrix:
+    @type frechet_distance_matrix: FrechetDistanceMatrix
+
+    @param num_paths:
+    @type num_paths: int, optional
+
+    @return:
+    @rtype: list
+
+    """
     least_similar_paths = []
     for i in range(num_paths):
         average_frechet_distances = (
@@ -458,6 +675,20 @@ def get_least_similar_edges(
         frechet_distance_matrix: FrechetDistanceMatrix,
         reference_path_index: int,
 ) -> Edge:
+    """
+    @param suboptimal_paths:
+    @type suboptimal_paths: SuboptimalPaths
+
+    @param frechet_distance_matrix:
+    @type frechet_distance_matrix: FrechetDistanceMatrix
+
+    @param reference_path_index:
+    @type reference_path_index: int
+
+    @return:
+    @rtype: Edge
+
+    """
     least_similar_paths = get_least_similar_paths(
         suboptimal_paths,
         frechet_distance_matrix,
@@ -488,6 +719,17 @@ def get_partitions(
         spline: np.ndarray,
         num_partitions: int
 ) -> Tuple[int]:
+    """
+    @param spline:
+    @type spline: numpy.ndarray
+
+    @param num_partitions:
+    @type num_partitions: int
+
+    @return:
+    @rtype: tuple
+
+    """
     partitions = []
     i = 1
     partition_size = floor(
@@ -514,6 +756,14 @@ def get_partitions(
 def get_frame_index_dict(
         suboptimal_paths: SuboptimalPaths,
 ) -> Dict:
+    """
+    @param suboptimal_paths:
+    @type suboptimal_paths: SuboptimalPaths
+
+    @return:
+    @rtype: dict
+
+    """
     frame_index_dict = {
         suboptimal_paths[0][0][0].coordinate_frames[
             frame_index
@@ -528,9 +778,23 @@ def get_frame_index_dict(
 
 def generate_spline(
         nodes: np.ndarray,
-        spline_input_points_incr,
-        smoothing_factor,
+        spline_input_points_incr: float,
+        smoothing_factor: float,
 ) -> np.ndarray:
+    """
+    @param nodes:
+    @type nodes: numpy.ndarray
+
+    @param spline_input_points_incr:
+    @type spline_input_points_incr: float
+
+    @param smoothing_factor:
+    @type smoothing_factor: float
+
+    @return:
+    @rtype: numpy.ndarray
+
+    """
     num_edges = (
             max(nodes.shape) - 1
     )
@@ -557,6 +821,26 @@ def sp_splines(
         spline_input_points_incr: Optional[float] = 0.001,
         smoothing_factor: Optional[float] = 0.0,
 ) -> np.ndarray:
+    """
+    @param suboptimal_paths:
+    @type suboptimal_paths: SuboptimalPaths
+
+    @param frame:
+    @type frame: int
+
+    @param output_directory:
+    @type output_directory: str, optional
+
+    @param spline_input_points_incr:
+    @type spline_input_points_incr: float, optional
+
+    @param smoothing_factor:
+    @type smoothing_factor: float, optional
+
+    @return:
+    @rtype: numpy.ndarray
+
+    """
     frame = get_frame_index_dict(
         suboptimal_paths
     )[frame]
@@ -609,6 +893,17 @@ def frechet_distance(
         p: np.ndarray,
         q: np.ndarray,
 ) -> np.float64:
+    """
+    @param p:
+    @type p: numpy.ndarray
+
+    @param q:
+    @type q: numpy.ndarray
+
+    @return:
+    @rtype: numpy.float64
+
+    """
     p_size = p.shape[0]
     q_size = q.shape[0]
     P = p.T.reshape(3 * p_size)
@@ -630,6 +925,14 @@ def frechet_distance(
 def _sp_frechet_distance_vector(
         args: Tuple
 ) -> np.ndarray:
+    """
+    @param args:
+    @type args: tuple
+
+    @return:
+    @rtype: numpy.ndarray
+
+    """
     (
         reference_path_index,
         splines,
@@ -659,6 +962,14 @@ def _sp_frechet_distance_vector(
 def load_splines(
         directory: str,
 ) -> List[np.ndarray]:
+    """
+    @param directory:
+    @type directory: str
+
+    @return:
+    @rtype: list
+
+    """
     numpy_matrix_files = [
         os.path.abspath(os.path.join(directory, f))
         for f in os.listdir(directory) if 'npy' in f
@@ -684,6 +995,26 @@ def sp_frechet_distance_matrix(
         num_multiprocessing_processes: Optional[int] = False,
         output_fname: Optional[str] = False,
 ) -> np.ndarray:
+    """
+    @param reference_path_index:
+    @type reference_path_index: int
+
+    @param splines:
+    @type splines: numpy.ndarray, str
+
+    @param num_partitions:
+    @type num_partitions: int, optional
+
+    @param num_multiprocessing_processes:
+    @type num_multiprocessing_processes: int, optional
+
+    @param output_fname:
+    @type output_fname: str
+
+    @return:
+    @rtype: numpy.ndarray
+
+    """
     if isinstance(splines, str):
         splines = load_splines(splines)
     if not num_multiprocessing_processes:
@@ -727,6 +1058,14 @@ def sp_frechet_distance_matrix(
 def _sp_distance_vector(
         args: Tuple
 ) -> np.ndarray:
+    """
+    @param args:
+    @type args: tuple
+
+    @return:
+    @rtype: numpy.ndarray
+
+    """
     (
         reference_path_index,
         splines,
@@ -767,6 +1106,23 @@ def sp_distance_matrix(
         num_partitions: Optional[int] = 1,
         output_fname: Optional[str] = False,
 ) -> np.ndarray:
+    """
+    @param reference_path_index:
+    @type reference_path_index: int
+
+    @param splines:
+    @type splines: numpy.ndarray, str
+
+    @param num_partitions:
+    @type num_partitions: int, optional
+
+    @param output_fname:
+    @type output_fname: str, optional
+
+    @return:
+    @rtype: numpy.ndarray
+
+    """
     if isinstance(splines, str):
         splines = load_splines(splines)
     partitions = get_partitions(
