@@ -3,7 +3,7 @@ from __future__ import absolute_import
 __author__ = "Andy Stokely"
 __version__ = "1.0"
 
-from numba import cuda, float64, int32
+from numba import cuda, float64
 import numpy as np
 
 def sumCoords(
@@ -20,7 +20,6 @@ def sumCoords(
 		b = cuda.blockIdx.x
 		atomIndex = b
 		while atomIndex < na:
-			bid = cuda.blockIdx.x
 			sm = cuda.shared.array((threadsperblock, 3), float64)
 			tid = cuda.threadIdx.x
 			bdim = cuda.blockDim.x
@@ -61,5 +60,3 @@ def sumCoords(
 	)
 	d_coords_sum.copy_to_host(coords_sum)
 	return coords_sum
-
-

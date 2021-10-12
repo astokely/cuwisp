@@ -3,16 +3,26 @@ from __future__ import absolute_import
 __author__ = "Andy Stokely"
 __version__ = "1.0"
 
-import gc
-import shutil
-import mdtraj as md
 import os
+import shutil
 import sys
-import numpy as np
-from typing import Optional, Tuple, Union, List, Dict
-from .correlation_matrix import get_correlation_matrix 
-from .paths import get_suboptimal_paths, SuboptimalPaths,\
-	Path, Edge, Nodes, built_in_rules, Rule
+from typing import (
+	Optional,
+	Tuple,
+	List,
+	Dict,
+)
+
+from .correlation_matrix import get_correlation_matrix
+from .paths import (
+	get_suboptimal_paths,
+	SuboptimalPaths,
+	Path,
+	Edge,
+	Nodes,
+	built_in_rules,
+	Rule,
+)
 
 def calculate_correlation_matrix(
 		calculation_name: str,
@@ -25,32 +35,6 @@ def calculate_correlation_matrix(
 		topology_fname: Optional[str] = '',
 		node_coordinate_frames: Optional[List[int]] = False,
 ) -> None:
-	'''
-	Parameters
-	----------
-	calculation_name : str
-
-	output_directory : str
-
-	contanct_map_distance_limit : float
-
-	trajectory_fname : str
-
-	cuda_parameters : tuple, optional
-
-	num_multiprocessing_processes : int, optional
-
-	temp_file_directory: str, optional
-
-	topology_fname : str, optional
-
-	node_coordinate_frames : list, optional
-
-	Returns
-	-------
-	: None
-
-	'''
 	if temp_file_directory == '':
 		temp_file_directory = (
 			os.path.dirname(os.path.abspath(
@@ -85,16 +69,6 @@ def calculate_correlation_matrix(
 def launch_get_suboptimal_paths(
 		parameters: Dict,
 ) -> None:
-	'''
-	Parameters
-	----------
-	parameters : dict
-
-	Returns
-	-------
-	: None
-
-	'''
 	get_suboptimal_paths(**parameters)
 
 def calculate_suboptimal_paths(
@@ -106,58 +80,30 @@ def calculate_suboptimal_paths(
 		threads_per_block: Optional[int] = 256,
 		use_contact_map_correlation_matrix: Optional[bool] = True,
 		serialization_frequency: Optional[float] = False,
-		simulation_rounds: Optional[List[int]] = [0, 1, 2, 3, 4],
+		simulation_rounds: Optional[List[int]] = False,
 		gpu: Optional[int] = 0,
 		max_num_paths: Optional[int] = 25,
-		path_finding_rules: Optional[Dict] = {},
+		path_finding_rules: Optional[Dict] = False,
 ) -> None:
-	'''
-	Parameters
-	----------
-	calculation_name : str
-
-	input_directory : str
-
-	src : int
-
-	sink : int
-
-	cutoff : float, optional
-
-	threads_per_block : int, optional
-
-	use_contact_map_correlation_matrix : bool, optional
-
-	serialization_frequency : float, optional
-
-	simulation_rounds : list, optional
-
-	gpu : int, optional
-
-	max_num_paths : int, optional
-
-	path_finding_rules : dict, optional
-
-	Returns
-	-------
-	: None
-
-	'''
+	if not simulation_rounds:
+		simulation_rounds = [0, 1, 2, 3, 4]
+	if not path_finding_rules:
+		path_finding_rules = {}
 	rules = built_in_rules()
 	if path_finding_rules:
 		for index, rule in path_finding_rules.items():
 			rules[index] = Rule(*rule)
-	if use_contact_map_correlation_matrix: 
+	if use_contact_map_correlation_matrix:
 		correlation_matrix_fname = (
 			f'{input_directory}/'
 			f'{calculation_name}_'
-			+ f'correlation_matrix_after_contact_map.npy' 
+			+ f'correlation_matrix_after_contact_map.npy'
 		)
 	else:
 		correlation_matrix_fname = (
 			f'{input_directory}/'
 			f'{calculation_name}_'
-			+ f'correlation_matrix.npy' 
+			+ f'correlation_matrix.npy'
 		)
 	suffix = ''
 	for simulation_round in simulation_rounds:
@@ -173,7 +119,7 @@ def calculate_suboptimal_paths(
 		f'{calculation_name}_'
 		+ f'apsp_matrix.npy'
 	)
-	suboptimal_paths_fname = ( 
+	suboptimal_paths_fname = (
 		f'{input_directory}/'
 		f'{calculation_name}_'
 		+ f'suboptimal_paths.xml'
@@ -218,16 +164,14 @@ def calculate_suboptimal_paths(
 				suboptimal_paths_serialization_directory
 			)
 	parameters = {
-		'calculation_name' : calculation_name, 
-		'input_directory' : input_directory, 
 		'correlation_matrix_fname' : (
 			correlation_matrix_fname
 		),
 		'nodes_fname' : nodes_fname,
-		'src' : src, 
+		'src' : src,
 		'sink' : sink,
 		'suboptimal_paths_fname' : (
-			suboptimal_paths_fname 
+			suboptimal_paths_fname
 		),
 		'cutoff' : cutoff,
 		'threads_per_block' : threads_per_block,
@@ -255,27 +199,18 @@ def get_serialized_suboptimal_paths(
 		directory: str,
 		rounds: List[int],
 ) -> List[str]:
-	'''
-	Parameters
-	----------
-
-	Returns
-	-------
-	: list 
-
-	'''
 	xmls = [
-		os.path.abspath(os.path.join(directory, f)) for f 
+		os.path.abspath(os.path.join(directory, f)) for f
 		in os.listdir(directory) if 'xml' in f
 	]
 	rounds = [
-		str(path_finding_round) 
+		str(path_finding_round)
 		for path_finding_round in rounds
 
 	]
 	return list(set([
-		xml for xml in xmls 
-		for path_finding_round in rounds 
+		xml for xml in xmls
+		for path_finding_round in rounds
 		if (
 				path_finding_round in xml and
 				'nodes' not in xml
@@ -285,15 +220,6 @@ def get_serialized_suboptimal_paths(
 def deserialize_suboptimal_paths(
 		suboptimal_path_xmls: List[str],
 ) -> List[SuboptimalPaths]:
-	'''
-	Parameters
-	----------
-
-	Returns
-	-------
-	: list 
-
-	'''
 	suboptimal_paths = []
 	suboptimal_path_xmls = set(suboptimal_path_xmls)
 	for xml in suboptimal_path_xmls:
@@ -305,21 +231,12 @@ def deserialize_suboptimal_paths(
 def get_sorted_suboptimal_paths_dict(
 		suboptimal_paths: SuboptimalPaths,
 ) -> Dict[float, List[Edge]]:
-	'''
-	Parameters
-	----------
-
-	Returns
-	-------
-	: dict 
-
-	'''
 	suboptimal_paths_dict = {
 		path.length : path.edges
 		for suboptimal_paths_obj
 		in suboptimal_paths
 		for path in suboptimal_paths_obj.paths
-	}	
+	}
 	return dict(sorted(
 		suboptimal_paths_dict.items()
 	))
@@ -327,16 +244,7 @@ def get_sorted_suboptimal_paths_dict(
 def get_src_sink(
 	suboptimal_paths: SuboptimalPaths,
 ) -> Tuple[int]:
-	'''
-	Parameters
-	----------
-
-	Returns
-	-------
-	: tuple 
-
-	'''
-	return ( 
+	return (
 		suboptimal_paths.src,
 		suboptimal_paths.sink,
 	)
@@ -347,20 +255,11 @@ def merge_suboptimal_paths(
 		nodes_fname: str,
 		suboptimal_paths_fname: str,
 ) -> None:
-	'''
-	Parameters
-	----------
-
-	Returns
-	-------
-	: None 
-
-	'''
 	suboptimal_paths = (
 		get_serialized_suboptimal_paths(
-			directory, 
+			directory,
 			rounds,
-		)	
+		)
 	)
 	suboptimal_paths_objs = (
 		deserialize_suboptimal_paths(
@@ -382,25 +281,25 @@ def merge_suboptimal_paths(
 	for path_length in suboptimal_paths_dict:
 		path = Path()
 		path.length = path_length
-		path.edges = [] 
+		path.edges = []
 		path_nodes = set([])
 		for path_edge in suboptimal_paths_dict[path_length]:
 			node1_index = path_edge.node1.index
 			node2_index = path_edge.node2.index
 			path_nodes.add(node1_index)
 			path_nodes.add(node2_index)
-			edge = Edge()	
+			edge = Edge()
 			edge.node1 = nodes_obj[node1_index]
 			edge.node2 = nodes_obj[node2_index]
 			path.edges.append(edge)
 		path.src = src
-		path.sink = sink 
+		path.sink = sink
 		path.index = path_index
-		path.num_nodes = len(path_nodes) 
-		path.num_edges = len(path.edges) 
+		path.num_nodes = len(path_nodes)
+		path.num_edges = len(path.edges)
 		suboptimal_paths.paths.append(path)
 		path_index += 1
 	suboptimal_paths.src = src
-	suboptimal_paths.sink = sink 
-	suboptimal_paths.num_paths = len(suboptimal_paths.paths) 
+	suboptimal_paths.sink = sink
+	suboptimal_paths.num_paths = len(suboptimal_paths.paths)
 	suboptimal_paths.serialize(suboptimal_paths_fname)
