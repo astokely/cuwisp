@@ -5,7 +5,6 @@
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 #define MIN3(x,y,z) (MIN(MIN(x,y),z))
 
-
 double l2norm(
 		double *P, 
 		double *Q, 

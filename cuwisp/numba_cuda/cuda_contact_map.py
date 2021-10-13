@@ -3,11 +3,13 @@ from __future__ import absolute_import
 __author__ = "Andy Stokely"
 __version__ = "1.0"
 
+from math import ceil
+from math import sqrt
+from typing import Tuple
+
 import numpy as np
 from numba import cuda
-from math import sqrt
-from math import ceil
-from typing import Tuple
+
 
 def cuda_contact_map(
         correlation_matrix: np.ndarray,
@@ -40,7 +42,7 @@ def cuda_contact_map(
     @rtype: tuple
 
     """
-    tpb = 32
+    tpb = 16
 
     @cuda.jit
     def contact_map_kernel(
@@ -81,8 +83,8 @@ def cuda_contact_map(
         # noinspection PyArgumentList
         i, j = cuda.grid(2)
         if (
-            i < (cu_correlation_matrix.shape[0] - 1)
-            and j < cu_correlation_matrix.shape[0]
+                i < (cu_correlation_matrix.shape[0] - 1)
+                and j < cu_correlation_matrix.shape[0]
         ):
             minn = cu_inf
             for x in range(
@@ -90,8 +92,8 @@ def cuda_contact_map(
                     node_atom_indices_offsets[i + 1]
             ):
                 for y in range(
-                    node_atom_indices_offsets[j],
-                    node_atom_indices_offsets[j + 1]
+                        node_atom_indices_offsets[j],
+                        node_atom_indices_offsets[j + 1]
                 ):
                     i1 = cu_node_atom_indices[x]
                     i2 = cu_node_atom_indices[y]
@@ -151,7 +153,7 @@ def cuda_contact_map(
     )
     inf = np.float64(np.inf)
 
-    threadsperblock = (tpb, tpb)
+    threadsperblock = (16, 16)
     blockspergrid = (
         ceil(correlation_matrix.shape[0] / threadsperblock[0]),
         ceil(correlation_matrix.shape[1] / threadsperblock[1]),

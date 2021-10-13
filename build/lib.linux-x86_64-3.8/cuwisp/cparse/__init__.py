@@ -1,1 +1,0 @@
-from .cparse import parsePdb 
