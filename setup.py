@@ -9,7 +9,7 @@ from setuptools import (
 
 try:
     import Cython
-    import numpy
+    import numpy as np
 except ModuleNotFoundError:
     subprocess.call(['pip', 'install', 'Cython'])
     subprocess.call(['pip', 'install', 'numpy==1.19.5'])
@@ -17,22 +17,26 @@ except ModuleNotFoundError:
 from Cython.Build import cythonize
 import numpy as np
 
+if 'install' in sys.argv:
+    subprocess.call(
+        ['conda', 'install', '-c', 'anaconda', 'cudatoolkit']
+    )
+
 setup(
     author='Andy Stokely',
     email='amstokely@ucsd.edu',
     name='cuwisp',
     install_requires=[
-        "scipy",
         "numpy==1.19.5",
+        "scipy",
         "numba",
+        "sklearn",
         "pytest",
         "mdtraj",
         "cython",
         "data-science-types",
         "abserdes",
-        "matplotlib",
         "colour",
-        "cupy",
     ],
     platforms=['Linux',
         'Unix', ],
@@ -52,19 +56,5 @@ setup(
 
 if 'install' in sys.argv:
     subprocess.call(
-        ['conda', 'install', '-c', 'anaconda', 'cudatoolkit']
-    )
-    from cuwisp.nodes import Nodes
-
-    module_path = (
-        lambda
-            mod_cls_fn_import: (os.path.dirname(
-                sys.modules[
-                    Nodes.__module__
-                ].__file__
-            ))
-    )
-    print(
-        f'Add {module_path(Nodes)}/bin to LD_LIBRARY_PATH for DCD '
-        f'support.'
+        ['pip', 'install', 'cupy']
     )

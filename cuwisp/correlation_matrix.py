@@ -28,6 +28,7 @@ from .nodes import (
     Nodes,
     Node,
 )
+from .cuwispio import IO
 from .numba_cuda.cuda_contact_map import cuda_contact_map
 from .numba_cuda.cuda_correlation_matrix import cuda_correlation_matrix
 from .numba_cuda.hollow_matrix import hollowMatrix
@@ -378,22 +379,14 @@ def parse_dcd(
 
 def prepare_trajectory_for_analysis(
         temp_file_directory: str,
-        pdb_trajectory_filename: Optional[str] = '',
-        dcd_trajectory_filename: Optional[str] = '',
-        topology_filename: Optional[str] = '',
+        cuwisp_io: IO,
 ) -> List[str]:
     """
     @param temp_file_directory:
     @type temp_file_directory: str
 
-    @param pdb_trajectory_filename:
-    @type pdb_trajectory_filename: str, optional
-
-    @param dcd_trajectory_filename:
-    @type dcd_trajectory_filename: str, optional
-
-    @param topology_filename:
-    @type topology_filename: str, optional
+    @param cuwisp_io:
+    @type: IO
 
     @return:
     @rtype: list
@@ -402,15 +395,15 @@ def prepare_trajectory_for_analysis(
     if os.path.exists(temp_file_directory):
         shutil.rmtree(temp_file_directory)
     os.makedirs(temp_file_directory)
-    if pdb_trajectory_filename != '':
+    if not cuwisp_io.topology_fname:
         parse(
-            pdb_trajectory_filename,
+            cuwisp_io.trajectory_fname,
             temp_file_directory + "/"
         )
     else:
         parse_dcd(
-            dcd_trajectory_filename,
-            topology_filename,
+            cuwisp_io.trajectory_fname,
+            cuwisp_io.topology_fname,
             f'{temp_file_directory}/tmp.pdb',
             temp_file_directory,
         )
@@ -544,8 +537,7 @@ def multiprocessing_pdb_parser(
 def serialize_nodes(
         average_pdb: Molecule,
         coms: np.ndarray,
-        output_directory: str,
-        calculation_name: str,
+        cuwisp_io: IO,
         node_coordinate_frames: List[int],
 ) -> None:
     """
@@ -555,11 +547,8 @@ def serialize_nodes(
     @param coms:
     @type coms: numpy.ndarray
 
-    @param output_directory:
-    @type output_directory: str
-
-    @param calculation_name:
-    @type calculation_name: str
+    @param cuwisp_io:
+    @type: IO
 
     @param node_coordinate_frames:
     @type node_coordinate_frames: list
@@ -571,12 +560,6 @@ def serialize_nodes(
     nodes = Nodes()
     node_index = 0
     atom_indices_list = []
-    node_coordinates_directory = (
-        f'{output_directory}/node_coordinates'
-    )
-    if os.path.exists(node_coordinates_directory):
-        shutil.rmtree(node_coordinates_directory)
-    os.makedirs(node_coordinates_directory)
     for node_tag, atom_indices in \
             average_pdb.node_tag_to_atom_indices.items():
         node = Node()
@@ -597,23 +580,21 @@ def serialize_nodes(
         )
         nodes[node_index] = node
         node_index += 1
-        for frame in node_coordinate_frames:
-            np.save(
-                (
-                        f'{node_coordinates_directory}/'
-                        + f'frame_{frame}_node_coordinates.npy'
-                )
-                , coms[frame]
-            )
-        node.coordinates_directory = node_coordinates_directory
+        node.coordinates_directory = (
+            cuwisp_io.node_coordinates_directory
+        )
         atom_indices_list.append(atom_indices)
         node.coordinate_frames = node_coordinate_frames
     nodes.num_nodes = node_index + 1
-    nodes_xml_filename = (
-            f'{output_directory}/'
-            + f'{calculation_name}_nodes.xml'
-    )
-    nodes.serialize(nodes_xml_filename)
+    for frame in node_coordinate_frames:
+        np.save(
+            (
+                f'{cuwisp_io.node_coordinates_directory}/'
+                + f'{frame}.npy'
+            )
+            , coms[frame]
+        )
+    nodes.serialize(cuwisp_io.nodes_fname)
     return atom_indices_list
 
 def calculate_center_of_masses(
@@ -661,16 +642,12 @@ def calculate_center_of_masses(
     return all_coms
 
 def save_matrix(
-        output_directory: str,
-        matrix_filename: str,
+        fname: str,
         a: np.ndarray,
 ) -> None:
     """
-    @param output_directory:
-    @type output_directory: str
-
-    @param matrix_filename:
-    @type matrix_filename: str
+    @param fname:
+    @type fname: str
 
     @param a:
     @type a: numpy.ndarray
@@ -679,11 +656,8 @@ def save_matrix(
     @rtype: None
 
     """
-    matrix_filename = (
-        f'{output_directory}/{matrix_filename}'
-    )
     np.save(
-        matrix_filename,
+        fname,
         a,
     )
 
@@ -729,7 +703,7 @@ def get_node_com_coordinates_array(
 def get_contact_map(
         correlation_matrix: np.ndarray,
         average_pdb: Molecule,
-        contact_map_distance_limit: float,
+        contact_map_distance_cutoff: float,
         node_atom_indices: List,
 ) -> np.ndarray:
     """
@@ -739,8 +713,8 @@ def get_contact_map(
     @param average_pdb:
     @type average_pdb: Molecule
 
-    @param contact_map_distance_limit:
-    @type contact_map_distance_limit: float
+    @param contact_map_distance_cutoff:
+    @type contact_map_distance_cutoff: float
 
     @param node_atom_indices:
     @type node_atom_indices: list
@@ -755,12 +729,12 @@ def get_contact_map(
         correlation_matrix.shape,
         dtype=np.float64
     )
-    if contact_map_distance_limit != np.inf:
+    if contact_map_distance_cutoff != np.inf:
         cuda_contact_map(
             correlation_matrix,
             correlation_matrix_after_contact_map,
             contact_map,
-            contact_map_distance_limit,
+            contact_map_distance_cutoff,
             avg_coords,
             node_atom_indices
         )
@@ -810,11 +784,8 @@ def _get_correlation_matrix(
     return h_correlation_matrix
 
 def get_correlation_matrix(
-        calculation_name: str,
-        output_directory: str,
+        cuwisp_io: IO,
         contact_map_distance_limit: float,
-        trajectory_fname: str,
-        topology_fname: str,
         temp_file_directory: str,
         threads_per_block_com_calc: int,
         num_blocks_com_calc: int,
@@ -824,20 +795,11 @@ def get_correlation_matrix(
         node_coordinate_frames: List[int],
 ) -> None:
     """
-    @param calculation_name:
-    @type calculation_name: str
-
-    @param output_directory:
-    @type output_directory: str
+    @param cuwisp_io:
+    @type cuwisp_io: IO
 
     @param contact_map_distance_limit:
     @type contact_map_distance_limit: float
-
-    @param trajectory_fname:
-    @type trajectory_fname: str
-
-    @param topology_fname:
-    @type
 
     @param temp_file_directory:
     @type temp_file_directory: str
@@ -864,19 +826,10 @@ def get_correlation_matrix(
     @rtype: None
 
     """
-    if trajectory_fname[-3:] == 'pdb':
-        pdb_single_frame_files = prepare_trajectory_for_analysis(
-            temp_file_directory,
-            pdb_trajectory_filename=trajectory_fname
-        )
-    elif trajectory_fname[-3:] == 'dcd':
-        pdb_single_frame_files = prepare_trajectory_for_analysis(
-            temp_file_directory,
-            dcd_trajectory_filename=trajectory_fname,
-            topology_filename=topology_fname
-        )
-    else:
-        raise Exception
+    pdb_single_frame_files = prepare_trajectory_for_analysis(
+        temp_file_directory,
+        cuwisp_io=cuwisp_io
+    )
     average_pdb = Molecule()
     average_pdb_trajectory = (
         md.load(f'{temp_file_directory}/0.pdb')
@@ -916,11 +869,10 @@ def get_correlation_matrix(
         pdb.map_nodes_to_node_tags(coms[i])
     node_atom_indices = (
         serialize_nodes(
-            average_pdb,
-            coms,
-            output_directory,
-            calculation_name,
-            node_coordinate_frames,
+            average_pdb=average_pdb,
+            coms=coms,
+            cuwisp_io=cuwisp_io,
+            node_coordinate_frames=node_coordinate_frames,
         )
     )
 
@@ -939,8 +891,7 @@ def get_correlation_matrix(
         )
     )
     save_matrix(
-        output_directory,
-        f'{calculation_name}_correlation_matrix.npy',
+        cuwisp_io.correlation_matrix_fname,
         correlation_matrix,
     )
 
@@ -952,16 +903,14 @@ def get_correlation_matrix(
     )
 
     save_matrix(
-        output_directory,
-        (
-                f'{calculation_name}_'
-                + f'correlation_matrix_after_contact_map.npy'
-        ),
+        cuwisp_io.contact_map_correlation_matrix_fname,
         correlation_matrix,
     )
 
     save_matrix(
-        output_directory,
-        f'{calculation_name}_contact_map.npy',
+        cuwisp_io.contact_map_matrix_fname,
         contact_map,
+    )
+    cuwisp_io.serialize(
+        xml_filename=cuwisp_io.io_fname
     )

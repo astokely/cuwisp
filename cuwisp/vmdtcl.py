@@ -454,51 +454,6 @@ class Material(serializer):
 		for name, property_ in material_properties.items():
 			yield name, property_
 
-
-def generate_spline(
-		nodes: np.ndarray,
-		spline_input_points_incr: Optional[float] = 0.001,
-		smoothing_factor: Optional[float] = 0.0,
-		column_major: Optional[bool] = False,
-) -> np.ndarray:
-	"""
-	@param nodes:
-	@type nodes: numpy.ndarray
-
-	@param spline_input_points_incr:
-	@type spline_input_points_incr: float, optional
-
-	@param smoothing_factor:
-	@type smoothing_factor: float, optional
-
-	@param column_major:
-	@type column_major: bool, optional
-
-	@return:
-	@rtype: numpy.ndarray
-
-	"""
-	num_edges = (
-		max(nodes.shape) - 1
-	)
-	degree = num_edges - 1
-	if num_edges > 3:
-		degree = 3
-	if not column_major:
-		nodes = nodes.T
-	x, y, z = nodes
-	tck, u = interpolate.splprep(
-		[x, y, z],
-		s=smoothing_factor,
-		k=degree
-	)
-	u_new = np.arange(
-		0,
-		1.0 + spline_input_points_incr,
-		spline_input_points_incr
-	)
-	return interpolate.splev(u_new, tck)
-
 def draw_curve_from_spline(
 		spline: np.ndarray,
 		color: Optional[Union[Tuple, str, int]] = 0,

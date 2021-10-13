@@ -18,6 +18,7 @@ from colour import Color
 import cuwisp.vmdtcl as vmdtcl
 from cuwisp.nodes import Nodes
 from cuwisp.paths import Path
+from .splines import Spline
 from cuwisp.paths import SuboptimalPaths
 
 class VisualizeSuboptimalPaths(serializer):
@@ -25,14 +26,15 @@ class VisualizeSuboptimalPaths(serializer):
     def __init__(
             self,
             suboptimal_paths: SuboptimalPaths,
-            color: Union[str, Tuple[str]],
             radii: Union[float, Tuple[float]],
             frame: Optional[int] = 0,
+            color: Optional[Union[str, Tuple[str]]] = False,
             node_spheres: Optional[Dict] = False,
             src_node_sphere: Optional[Dict] = False,
             sink_node_sphere: Optional[Dict] = False,
             node_atom_representations: Optional[Dict] = False,
             path_indices: Optional[List[int]] = False,
+            path_clusters: Optional[Dict] = False,
     ) -> None:
         self.suboptimal_paths = suboptimal_paths
         self.frame = frame
@@ -45,6 +47,7 @@ class VisualizeSuboptimalPaths(serializer):
         self.radii = radii
         self.color = color
         self.path_indices = path_indices
+        self.path_clusters = path_clusters
 
 class VmdRepresentation(serializer):
 
@@ -104,7 +107,7 @@ class VisualizeCorrelationMatrix(serializer):
 
     def __init__(
             self,
-            correlation_matrix: Union[str, np.ndarray],
+            correlation_matrix_fname: Union[str, np.ndarray],
             nodes: Nodes,
             reference_node_index: int,
             color: Optional[Tuple[str]] = (
@@ -118,16 +121,14 @@ class VisualizeCorrelationMatrix(serializer):
             reference_node_sphere: Optional[
                 vmdtcl.Sphere
             ] = False,
-            node_indices: Optional[List[int]] = False,
     ) -> None:
-        self.correlation_matrix = correlation_matrix
+        self.correlation_matrix = correlation_matrix_fname
         self.nodes = nodes
         self.reference_node_index = reference_node_index
         self.color = color
         self.reference_node_representation = \
             reference_node_representation
         self.reference_node_sphere = reference_node_sphere
-        self.node_indices = node_indices
 
 def get_src_and_sink_node_coordinates(
         path: Union[
@@ -271,8 +272,6 @@ def visualize_correlation_matrix(
     reference_node_representation = (
         parameters.reference_node_representation
     )
-    node_indices = parameters.node_indices
-
     if isinstance(correlation_matrix, str):
         correlation_matrix = np.load(correlation_matrix)
     max_correlation = get_max_correlation(
@@ -320,18 +319,12 @@ def visualize_correlation_matrix(
             + f'	display update on\n'
             + f'}}\n'
     )
-    if not node_indices:
-        node_indices = [
-            node.index for node in nodes.nodes
-        ]
     tcl += (
             f'set sel [atomselect top "all"]\n'
             + f'$sel set beta 0.0\n'
             + f'$sel delete\n'
     )
     for node in nodes:
-        if node.index not in node_indices:
-            continue
         tcl = vmdtcl.atomselect(
             f'sel', (
                 "index",
@@ -399,6 +392,10 @@ def draw_suboptimal_paths(
     num_paths = len(suboptimal_paths)
     if parameters.path_indices:
         num_paths = len(parameters.path_indices)
+    elif parameters.path_clusters:
+        parameters.path_indices = [
+            i for i in parameters.path_clusters.keys()
+        ]
     else:
         parameters.path_indices = [
             i for i in range(num_paths)
@@ -479,22 +476,23 @@ def draw_suboptimal_paths(
             parameters.radii for _
             in range(num_paths)
         ]
-    if isinstance(parameters.color, str):
-        color_gradient = get_color_gradient(
-            parameters.color,
-            parameters.color,
-            num_paths
+    if not parameters.path_clusters:
+        if isinstance(parameters.color, str):
+            color_gradient = get_color_gradient(
+                parameters.color,
+                parameters.color,
+                num_paths
+            )
+        else:
+            color_gradient = get_color_gradient(
+                *parameters.color,
+                num_paths
+            )
+        tcl = vmdtcl.create_color_gradient(
+            'color_gradient',
+            color_gradient,
+            tcl=tcl
         )
-    else:
-        color_gradient = get_color_gradient(
-            *parameters.color,
-            num_paths
-        )
-    tcl = vmdtcl.create_color_gradient(
-        'color_gradient',
-        color_gradient,
-        tcl=tcl
-    )
     color_and_radii_index = 0
     if parameters.node_spheres:
         node_spheres_color = (
@@ -516,12 +514,22 @@ def draw_suboptimal_paths(
                 )
                 tcl = node_sphere.tcl(tcl=tcl)
             node_index += 1
-        spline = vmdtcl.generate_spline(np.array(node_coordinates))
-        tcl = vmdtcl.draw_curve_from_spline(
-            spline, color=(
+        spline_obj = Spline()
+        spline_obj.deserialize(
+            suboptimal_paths.paths[
+                path_index
+            ].serialized_splines[frame]
+        )
+        spline = spline_obj.nd_curve.T
+        if parameters.path_clusters:
+            color = parameters.path_clusters[path_index]
+        else:
+            color = (
                 'color_gradient',
-                color_and_radii_index
-            ),
+                color_and_radii_index,
+            )
+        tcl = vmdtcl.draw_curve_from_spline(
+            spline, color=color,
             radius=radii[color_and_radii_index],
             tcl=tcl
         )

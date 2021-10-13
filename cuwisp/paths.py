@@ -25,6 +25,10 @@ from typing import (
     Dict,
 )
 from math import floor
+from .cuwispio import (
+    IO,
+    naming_conventions
+)
 from abserdes import Serializer as serializer
 from .nodes import (
     Nodes,
@@ -100,7 +104,7 @@ class SuboptimalPaths(serializer):
             paths: Optional[list] = False,
             src: Optional[int] = None,
             sink: Optional[int] = None,
-            num_paths: Optional[int] = None
+            num_paths: Optional[int] = None,
     ) -> None:
         """
         @param paths:
@@ -282,6 +286,7 @@ class Path(serializer):
             sink: Optional[int] = None,
             edges: Optional[list] = None,
             length: Optional[float] = None,
+            serialized_splines: Optional[Dict[int, str]] = False,
     ) -> None:
         """
         @param index:
@@ -305,12 +310,17 @@ class Path(serializer):
         @param length:
         @type length: float, optional
 
+        @param serialized_splines:
+        @type: str, optional
+
         @return:
         @rtype: None
 
         """
         if edges is None:
             edges = []
+        if not serialized_splines:
+            serialized_splines = {}
         self.index = index
         self.num_nodes = num_nodes
         self.num_edges = num_edges
@@ -318,6 +328,7 @@ class Path(serializer):
         self.sink = sink
         self.edges = edges
         self.length = length
+        self.serialized_splines = serialized_splines
 
     def __repr__(
             self
@@ -353,6 +364,34 @@ class Path(serializer):
             self
     ):
         return len(self.edges)
+
+    def node_coordinates(
+            self,
+            frame: Optional[int] = 0,
+    ) -> np.ndarray:
+        node_coordinates = np.zeros(
+            shape=(self.num_nodes, 3),
+            dtype=np.float64,
+        )
+        node_indices = [
+            edge.node2.index for edge in self.edges
+        ]
+        node_indices.insert(0, self.edges[0].node1.index)
+        all_node_coordinates = np.load(
+            f'{self.edges[0].node1.coordinates_directory}'
+            + f'/{frame}.npy'
+        )
+        for i in range(self.num_nodes):
+            node_coordinates[i, 0] = (
+                all_node_coordinates[node_indices[i], 0]
+            )
+            node_coordinates[i, 1] = (
+                all_node_coordinates[node_indices[i], 1]
+            )
+            node_coordinates[i, 2] = (
+                all_node_coordinates[node_indices[i], 2]
+            )
+        return node_coordinates
 
     def resname_count(
             self,
@@ -484,14 +523,16 @@ class Path(serializer):
             for edge in path.edges:
                 new_path.edges.append(edge)
             new_path.edges = (
-                new_path.edges
-                + self.edges[slice(*(
+                    new_path.edges
+                    + self.edges[slice(
+                *(
                     self.get_edge_index_from_node_index(
                         path.sink,
                         common_src_sink,
                     ),
                     self.num_edges
-                ))]
+                )
+            )]
             )
         else:
             new_path.edges = self.edges[slice(
@@ -701,7 +742,7 @@ def pop_left(
 ) -> Tuple:
     """
     @param dq:
-    @type deque
+    @type dq: deque
 
     @return:
     @rtype: tuple
@@ -790,6 +831,7 @@ def serialize_correlation_matrix(
         serialization_fname: str,
         round_index: int,
         correlation_matrix_serialization_directory: str,
+        naming_convention: Callable,
 ) -> None:
     """
     @param a:
@@ -804,19 +846,24 @@ def serialize_correlation_matrix(
     @param correlation_matrix_serialization_directory:
     @type correlation_matrix_serialization_directory: str
 
+    @param naming_convention:
+    @type: callable
+
     @return:
     @rtype: None
 
     """
     numpy_fname = (
-            f'{correlation_matrix_serialization_directory}/'
-            + f'{serialization_fname}_correlation_matrix'
-            + f'_{round_index}.npy'
+        f'{correlation_matrix_serialization_directory}/'
+        + naming_convention(
+            'serialized',
+            serialization_fname,
+            'correlation',
+            'matrix',
+            str(round_index),
+        ) + f'.npy'
     )
-    np.save(
-        numpy_fname,
-        a
-    )
+    np.save(numpy_fname, a)
 
 def serialize_suboptimal_paths(
         src: int,
@@ -827,6 +874,7 @@ def serialize_suboptimal_paths(
         s: Set,
         round_index: int,
         suboptimal_paths_serialization_directory: str,
+        naming_convention: Callable,
 ) -> None:
     """
     @param src:
@@ -852,6 +900,9 @@ def serialize_suboptimal_paths(
 
     @param suboptimal_paths_serialization_directory:
     @type suboptimal_paths_serialization_directory: str
+
+    @param naming_convention:
+    @type: callable
 
     @return:
     @rtype: None
@@ -885,9 +936,14 @@ def serialize_suboptimal_paths(
     suboptimal_paths.sink = sink
     suboptimal_paths.num_paths = len(suboptimal_paths.paths)
     xml_fname = (
-            f'{suboptimal_paths_serialization_directory}/'
-            + f'{serialization_fname}_suboptimal_paths'
-            + f'_{round_index}.xml'
+        f'{suboptimal_paths_serialization_directory}/'
+        + naming_convention(
+            'serialized',
+            serialization_fname,
+            'suboptimal',
+            'paths',
+            str(round_index),
+        ) + f'.xml'
     )
     suboptimal_paths.serialize(xml_fname)
 
@@ -908,6 +964,7 @@ def explore_paths(
         suboptimal_paths_serialization_directory: str,
         max_num_paths: int,
         rule: Rule,
+        naming_convention: Callable,
 ) -> Set:
     """
     @param src:
@@ -958,6 +1015,9 @@ def explore_paths(
     @param rule:
     @type rule: Rule
 
+    @param naming_convention
+    @type: callable
+
     @return:
     @rtype: set
 
@@ -968,6 +1028,7 @@ def explore_paths(
             serialization_fname,
             round_index,
             correlation_matrix_serialization_directory,
+            naming_convention,
         )
     q = deque([])
     s = set([])
@@ -1008,6 +1069,7 @@ def explore_paths(
                         serialization_fname,
                         round_index,
                         correlation_matrix_serialization_directory,
+                        naming_convention,
                     )
                     serialize_suboptimal_paths(
                         src,
@@ -1018,6 +1080,7 @@ def explore_paths(
                         s,
                         round_index,
                         suboptimal_paths_serialization_directory,
+                        naming_convention,
                     )
                     start = time.time()
         nodes = [
@@ -1032,14 +1095,11 @@ def explore_paths(
     return s
 
 def get_suboptimal_paths(
-        correlation_matrix_fname: str,
-        nodes_fname: str,
+        cuwisp_io: IO,
         src: int,
         sink: int,
-        suboptimal_paths_fname: str,
         cutoff: Union[float, None],
         threads_per_block: int,
-        serialization_fname: str,
         serialization_frequency: int,
         correlation_matrix_serialization_directory: str,
         suboptimal_paths_serialization_directory: str,
@@ -1047,14 +1107,11 @@ def get_suboptimal_paths(
         gpu_index: int,
         max_num_paths: int,
         rules: Dict,
-        apsp_matrix_fname: str,
+        correlation_matrix_fname: str,
 ) -> None:
     """
-    @param correlation_matrix_fname:
-    @type correlation_matrix_fname: str
-
-    @param nodes_fname:
-    @type nodes_fname: str
+    @param cuwisp_io
+    @type: IO
 
     @param src:
     @type src: int
@@ -1062,17 +1119,11 @@ def get_suboptimal_paths(
     @param sink:
     @type sink: int
 
-    @param suboptimal_paths_fname:
-    @type suboptimal_paths_fname: str
-
     @param cutoff:
     @type cutoff: float, None
 
     @param threads_per_block:
     @type threads_per_block: int
-
-    @param serialization_fname:
-    @type serialization_fname: str
 
     @param serialization_frequency:
     @type serialization_frequency: int
@@ -1095,18 +1146,21 @@ def get_suboptimal_paths(
     @param rules:
     @type rules: dict
 
-    @param apsp_matrix_fname:
-    @type apsp_matrix_fname: str
+    @param correlation_matrix_fname:
+    @type: str
 
     @return:
     @rtype: None
 
     """
+    naming_convention = naming_conventions()[
+        cuwisp_io.naming_convention
+    ]
     ssp = None
     cuda.select_device(gpu_index)
     suboptimal_paths_dict = {}
     nodes_obj = Nodes()
-    nodes_obj.deserialize(nodes_fname)
+    nodes_obj.deserialize(cuwisp_io.nodes_fname)
     for simulation_round in simulation_rounds:
         a = np.array(
             np.load(
@@ -1136,10 +1190,10 @@ def get_suboptimal_paths(
             )
 
         if not os.path.exists(
-                apsp_matrix_fname
+            cuwisp_io.all_pairs_shortest_paths_matrix_fname
         ):
             np.save(
-                apsp_matrix_fname,
+                cuwisp_io.all_pairs_shortest_paths_matrix_fname,
                 h,
             )
         path, nodes = get_ssp(src, sink, h, a)
@@ -1158,7 +1212,7 @@ def get_suboptimal_paths(
                 n,
                 cutoff,
                 threads_per_block,
-                serialization_fname,
+                cuwisp_io.calc_name,
                 serialization_frequency,
                 nodes_obj,
                 ssp,
@@ -1167,6 +1221,7 @@ def get_suboptimal_paths(
                 suboptimal_paths_serialization_directory,
                 max_num_paths,
                 rules[simulation_round],
+                naming_convention,
             )
         )
         for path in paths:
@@ -1200,5 +1255,5 @@ def get_suboptimal_paths(
     suboptimal_paths.sink = sink
     suboptimal_paths.num_paths = len(suboptimal_paths.paths)
     suboptimal_paths.serialize(
-        suboptimal_paths_fname
+        cuwisp_io.suboptimal_paths_fnames[-1]
     )
