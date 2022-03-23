@@ -10,13 +10,11 @@ import sys
 from collections import defaultdict
 from multiprocessing import Pool
 from multiprocessing import sharedctypes
-from typing import (
-    Any,
-    Optional,
-    Tuple,
-    Union,
-    List,
-)
+from typing import Any
+from typing import List
+from typing import Optional
+from typing import Tuple
+from typing import Union
 
 import mdtraj as md
 import numpy as np
@@ -24,15 +22,15 @@ import numpy as np
 # noinspection PyUnresolvedReferences
 from .calccom import calc_com as calc_com
 from .cparse.cparse import parsePdb as parse
-from .nodes import (
-    Nodes,
-    Node,
-)
 from .cuwispio import IO
+from .nodes import Node
+from .nodes import Nodes
 from .numba_cuda.cuda_contact_map import cuda_contact_map
 from .numba_cuda.cuda_correlation_matrix import cuda_correlation_matrix
 from .numba_cuda.hollow_matrix import hollowMatrix
 from .numba_cuda.sum_coordinates import sumCoords
+
+NODES = defaultdict(list)
 
 def ctypes_matrix(
         n: int,
@@ -58,6 +56,7 @@ def ctypes_matrix(
         )
     )
 
+
 # noinspection PyProtectedMember
 def shared_ctypes_multiprocessing_array(
         ctypes_array: Any,
@@ -74,6 +73,7 @@ def shared_ctypes_multiprocessing_array(
         ctypes_array._type_,
         ctypes_array
     )
+
 
 class Molecule:
 
@@ -274,26 +274,56 @@ class Molecule:
             self.nodes_array[index][1] = coms[index][1]
             self.nodes_array[index][2] = coms[index][2]
 
+
+def create_symbolic_link(
+        src_file_path: str,
+        symbolic_link_path: str,
+) -> None:
+    process = subprocess.Popen(
+        [
+            f'ln', f'-s',
+            f'{src_file_path}',
+            f'{symbolic_link_path}',
+        ],
+        shell=False,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.STDOUT
+    )
+    out, err = process.communicate()
+    errcode = process.returncode
+    process.kill()
+    process.terminate()
+
+
+def remove_symbolic_link(
+        src_file_path: str,
+        symbolic_link_path: str,
+) -> None:
+    process = subprocess.Popen(
+        [
+            f'unlink',
+            f'{symbolic_link_path}',
+        ],
+        shell=False,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.STDOUT
+    )
+    out, err = process.communicate()
+    errcode = process.returncode
+    process.kill()
+    process.terminate()
+
+
 def catdcd(
         catdcd_exe_dir: str,
         input_dcd_filename: str,
         topology_filename: str,
         output_pdb_filename: str,
 ) -> None:
-    """
-    @param catdcd_exe_dir:
-    @type catdcd_exe_dir: str
-
-    @param input_dcd_filename:
-    @type input_dcd_filename: str
-
-    @param topology_filename:
-    @type topology_filename: str
-
-    @param output_pdb_filename:
-    @type output_pdb_filename: str
-
-    """
+    create_symbolic_link(
+        f'{catdcd_exe_dir}/libexpat.so.0',
+        f'libexpat.so.0',
+    )
     process = subprocess.Popen(
         [
             f'{catdcd_exe_dir}/catdcd',
@@ -306,8 +336,15 @@ def catdcd(
         stdout=subprocess.DEVNULL,
         stderr=subprocess.STDOUT
     )
+    out, err = process.communicate()
+    errcode = process.returncode
     process.kill()
     process.terminate()
+    remove_symbolic_link(
+        f'{catdcd_exe_dir}/libexpat.so.0',
+        f'libexpat.so.0',
+    )
+
 
 def parse_pdb(
         args: Tuple[Union[int, int, str]],
@@ -329,6 +366,7 @@ def parse_pdb(
         frame,
         pdb
     )
+
 
 def parse_dcd(
         input_dcd_filename: str,
@@ -377,6 +415,7 @@ def parse_dcd(
     )
     os.remove(output_pdb_filename)
 
+
 def prepare_trajectory_for_analysis(
         temp_file_directory: str,
         cuwisp_io: IO,
@@ -413,6 +452,7 @@ def prepare_trajectory_for_analysis(
     ]
     return pdb_single_frame_files
 
+
 def get_parameters_for_multiprocessing_pdb_parser(
         temp_file_directory: str,
         pdb_from_trajectory: Molecule,
@@ -448,6 +488,7 @@ def get_parameters_for_multiprocessing_pdb_parser(
         paths,
         num_frames,
     )
+
 
 def multiprocessing_pdb_parser(
         num_traj_frames: int,
@@ -534,6 +575,7 @@ def multiprocessing_pdb_parser(
     pdbs.append(average_pdb)
     return pdbs
 
+
 def serialize_nodes(
         average_pdb: Molecule,
         coms: np.ndarray,
@@ -589,13 +631,14 @@ def serialize_nodes(
     for frame in node_coordinate_frames:
         np.save(
             (
-                f'{cuwisp_io.node_coordinates_directory}/'
-                + f'{frame}.npy'
+                    f'{cuwisp_io.node_coordinates_directory}/'
+                    + f'{frame}.npy'
             )
             , coms[frame]
         )
     nodes.serialize(cuwisp_io.nodes_fname)
     return atom_indices_list
+
 
 def calculate_center_of_masses(
         pdbs: List[Molecule],
@@ -641,6 +684,7 @@ def calculate_center_of_masses(
     )
     return all_coms
 
+
 def save_matrix(
         fname: str,
         a: np.ndarray,
@@ -660,6 +704,7 @@ def save_matrix(
         fname,
         a,
     )
+
 
 def get_node_com_coordinates_array(
         num_nodes: int,
@@ -699,6 +744,7 @@ def get_node_com_coordinates_array(
                 pdbs[pdb_index].nodes_array[node_index][2]
             )
     return nodes
+
 
 def get_contact_map(
         correlation_matrix: np.ndarray,
@@ -741,6 +787,7 @@ def get_contact_map(
         return contact_map, correlation_matrix_after_contact_map
     return contact_map, correlation_matrix
 
+
 def _get_correlation_matrix(
         num_nodes: int,
         nodes: np.ndarray,
@@ -782,6 +829,7 @@ def _get_correlation_matrix(
         h_correlation_matrix
     )
     return h_correlation_matrix
+
 
 def get_correlation_matrix(
         cuwisp_io: IO,

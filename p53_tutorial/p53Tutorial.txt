@@ -1,0 +1,35 @@
+
+     **************************
+     *    p53 WISP TUTORIAL   *
+     *    By Andy Stokely     *
+     **************************
+---------------------------------------------------------------------------                                                    
+1.) Unzip p53.tar.gz, which contains all of the example
+    trajectory and topology files.
+        i.) tar -xvf p53.tar.gz
+
+2.) Open p53_suboptimal_paths.py and adjust the parameters
+    as needed.
+        i.) vim p53_suboptimal_paths.py
+
+3.) Generate the calculation filetree and 
+    perform the correlation matrix and suboptiomal paths
+    calculation.
+        i.) python3 p53_suboptimal_paths.py 
+
+4.) Generate path interpolation splines. These will be used
+    for visualizing the suboptimal paths in VMD. 
+        i.) python3 p53_generate_splines.py
+
+5.) Generate tcl script for visualizaing the results in VMD.
+        i.) python3 p53_visualize_suboptimal_paths.py
+
+6.) Visualize the results in VMD.
+        i.) vmd p53.pdb
+    In the VMD tk console...
+        ii.) source p53/p53Graphics/p53_frame<index of frame you 
+             want to visualize paths for>.tcl
+
+            *Make sure the visualization frame index and current 
+             trajectory frame index are the same.
+

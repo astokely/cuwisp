@@ -3,38 +3,34 @@ from __future__ import absolute_import
 __author__ = "Andy Stokely"
 __version__ = "1.0"
 
-import time
-from collections import (
-    deque,
-    defaultdict,
-)
-from numba import cuda
-import numpy as np
-import os
-import cupy as cp
 import inspect
-from typing import (
-    Any,
-    Tuple,
-    Optional,
-    List,
-    Union,
-    Set,
-    Deque,
-    Callable,
-    Dict,
-)
+import os
+import time
+from collections import defaultdict
+from collections import deque
 from math import floor
-from .cuwispio import (
-    IO,
-    naming_conventions
-)
+from typing import Any
+from typing import Callable
+from typing import Deque
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Set
+from typing import Tuple
+from typing import Union
+
+import cupy as cp
+import numpy as np
 from abserdes import Serializer as serializer
-from .nodes import (
-    Nodes,
-    Node,
-)
+from numba import cuda
+
+import cuwisp
+from .cuwispio import IO
+from .cuwispio import naming_conventions
+from .nodes import Node
+from .nodes import Nodes
 from .numba_cuda.hedetniemi import hedetniemi_distance
+
 
 class Rule(object):
 
@@ -96,6 +92,7 @@ class Rule(object):
 
         """
         return self._append(dq, val)
+
 
 class SuboptimalPaths(serializer):
 
@@ -274,6 +271,7 @@ class SuboptimalPaths(serializer):
             suboptimal_paths.paths
         )
         return suboptimal_paths
+
 
 class Path(serializer):
 
@@ -557,6 +555,7 @@ class Path(serializer):
         new_path.index = 0
         return new_path
 
+
 class Edge(serializer):
 
     def __init__(
@@ -623,6 +622,7 @@ class Edge(serializer):
     ):
         return 2
 
+
 def ordered_paths(
         paths: List,
         src: int,
@@ -653,6 +653,7 @@ def ordered_paths(
                 paths.remove(i)
     return ordered_paths_list
 
+
 def append_middle(
         dq: deque,
         val: Tuple,
@@ -671,6 +672,7 @@ def append_middle(
     middle_index = floor(len(dq) / 2)
     dq.insert(middle_index, val)
 
+
 def pop_middle(
         dq: deque,
 ) -> Tuple:
@@ -686,6 +688,7 @@ def pop_middle(
     middle_val = dq[middle_index]
     del dq[middle_index]
     return middle_val
+
 
 def append(
         dq: deque,
@@ -706,6 +709,7 @@ def append(
     dq.append(val)
     return
 
+
 def pop(
         dq: deque,
 ) -> Tuple:
@@ -718,6 +722,7 @@ def pop(
 
     """
     return dq.pop()
+
 
 def append_left(
         dq: deque,
@@ -737,6 +742,7 @@ def append_left(
     dq.appendleft(val)
     return
 
+
 def pop_left(
         dq: deque,
 ) -> Tuple:
@@ -749,6 +755,7 @@ def pop_left(
 
     """
     return dq.popleft()
+
 
 def built_in_rules() -> Dict[int, Rule]:
     """
@@ -763,6 +770,7 @@ def built_in_rules() -> Dict[int, Rule]:
         3: Rule(append_middle, pop_left),
         4: Rule(append_middle, pop),
     }
+
 
 def get_ssp(
         src: int,
@@ -826,6 +834,7 @@ def get_ssp(
             p = h_row[pos]
     return path, nodes
 
+
 def serialize_correlation_matrix(
         a: np.ndarray,
         serialization_fname: str,
@@ -854,16 +863,17 @@ def serialize_correlation_matrix(
 
     """
     numpy_fname = (
-        f'{correlation_matrix_serialization_directory}/'
-        + naming_convention(
-            'serialized',
-            serialization_fname,
-            'correlation',
-            'matrix',
-            str(round_index),
-        ) + f'.npy'
+            f'{correlation_matrix_serialization_directory}/'
+            + naming_convention(
+        'serialized',
+        serialization_fname,
+        'correlation',
+        'matrix',
+        str(round_index),
+    ) + f'.npy'
     )
     np.save(numpy_fname, a)
+
 
 def serialize_suboptimal_paths(
         src: int,
@@ -936,16 +946,17 @@ def serialize_suboptimal_paths(
     suboptimal_paths.sink = sink
     suboptimal_paths.num_paths = len(suboptimal_paths.paths)
     xml_fname = (
-        f'{suboptimal_paths_serialization_directory}/'
-        + naming_convention(
-            'serialized',
-            serialization_fname,
-            'suboptimal',
-            'paths',
-            str(round_index),
-        ) + f'.xml'
+            f'{suboptimal_paths_serialization_directory}/'
+            + naming_convention(
+        'serialized',
+        serialization_fname,
+        'suboptimal',
+        'paths',
+        str(round_index),
+    ) + f'.xml'
     )
     suboptimal_paths.serialize(xml_fname)
+
 
 def explore_paths(
         src: int,
@@ -1094,6 +1105,7 @@ def explore_paths(
             break
     return s
 
+
 def get_suboptimal_paths(
         cuwisp_io: IO,
         src: int,
@@ -1190,7 +1202,7 @@ def get_suboptimal_paths(
             )
 
         if not os.path.exists(
-            cuwisp_io.all_pairs_shortest_paths_matrix_fname
+                cuwisp_io.all_pairs_shortest_paths_matrix_fname
         ):
             np.save(
                 cuwisp_io.all_pairs_shortest_paths_matrix_fname,
@@ -1202,7 +1214,7 @@ def get_suboptimal_paths(
         if not cutoff:
             cutoff = ssp[-1] * np.float64(1.2)
         nodes = [(nodes[i], nodes[i + 1]) for i in
-            range(len(nodes) - 1)]
+                 range(len(nodes) - 1)]
         paths = list(
             explore_paths(
                 src,
@@ -1256,4 +1268,11 @@ def get_suboptimal_paths(
     suboptimal_paths.num_paths = len(suboptimal_paths.paths)
     suboptimal_paths.serialize(
         cuwisp_io.suboptimal_paths_fnames[-1]
+    )
+    cuwisp.merge_suboptimal_paths(
+        input_suboptimal_paths_fnames=(
+            cuwisp_io.suboptimal_paths_fnames
+        ),
+        nodes_fname=cuwisp_io.nodes_fname,
+        suboptimal_paths_fname=cuwisp_io.suboptimal_paths_fname
     )

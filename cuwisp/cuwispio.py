@@ -419,7 +419,7 @@ class IO(serializer):
         self.nodes_fname = self._fnc.nodes_fname
         self.suboptimal_paths_fname = self._fnc.suboptimal_paths_fname
         self.correlation_matrix_fname = (
-            self._fnc.contact_map_matrix_fname
+            self._fnc.correlation_matrix_fname
         )
         self.contact_map_correlation_matrix_fname = (
             self._fnc.contact_map_correlation_matrix_fname
