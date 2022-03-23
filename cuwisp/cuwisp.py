@@ -5,30 +5,25 @@ __version__ = "1.0"
 
 import os
 import sys
-from typing import (
-    Optional,
-    Tuple,
-    List,
-    Dict,
-    Any,
-)
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Tuple
+
 from abserdes import Serializer as serializer
 
 from .correlation_matrix import get_correlation_matrix
-from .paths import (
-    get_suboptimal_paths,
-    SuboptimalPaths,
-    Path,
-    Edge,
-    Nodes,
-    built_in_rules,
-    Rule,
-)
+from .cuwispio import IO
+from .cuwispio import naming_conventions
+from .paths import built_in_rules
+from .paths import Edge
+from .paths import get_suboptimal_paths
+from .paths import Nodes
+from .paths import Path
+from .paths import Rule
+from .paths import SuboptimalPaths
 
-from .cuwispio import (
-    IO,
-    naming_conventions,
-)
 
 def set_class_instance_attr(
         value: Any,
@@ -37,6 +32,7 @@ def set_class_instance_attr(
     if not value:
         return default_value
     return value
+
 
 class CorrelationMatrixCalculation(serializer):
 
@@ -134,6 +130,7 @@ class CorrelationMatrixCalculation(serializer):
             node_coordinate_frames=self.node_coordinate_frames,
         )
 
+
 def get_path_finding_rules(
         path_finding_rules: Dict,
 ) -> Dict:
@@ -145,6 +142,7 @@ def get_path_finding_rules(
             rules[index] = Rule(*rule)
     return path_finding_rules
 
+
 def get_output_suffix(
         simulation_rounds: List,
 ) -> str:
@@ -152,6 +150,7 @@ def get_output_suffix(
     for simulation_round in simulation_rounds:
         suffix += f'{simulation_round}_'
     return suffix[:-1]
+
 
 def initialize_cuwispio_list_attrs(
         cuwisp_io: IO,
@@ -164,6 +163,7 @@ def initialize_cuwispio_list_attrs(
         cuwisp_io.serialized_suboptimal_paths_directories = []
     return cuwisp_io
 
+
 def create_backup_output_sp_serialization_directories(
         directory: str,
 ) -> None:
@@ -171,6 +171,7 @@ def create_backup_output_sp_serialization_directories(
         os.makedirs(name=f'{directory}/backup')
     if not os.path.exists(path=f'{directory}/output'):
         os.makedirs(name=f'{directory}/output')
+
 
 def _create_sp_calc_serialization_directories(
         cuwisp_io: IO,
@@ -197,6 +198,7 @@ def _create_sp_calc_serialization_directories(
                 append(directory)
         return cuwisp_io.serialized_suboptimal_paths_directories. \
             index(directory)
+
 
 def create_sp_calc_correlation_matrices_serialization_directories(
         cuwisp_io: IO,
@@ -227,6 +229,7 @@ def create_sp_calc_correlation_matrices_serialization_directories(
     )
     return directory_index
 
+
 def create_sp_calc_suboptimal_paths_serialization_directories(
         cuwisp_io: IO,
         suffix: str,
@@ -256,6 +259,7 @@ def create_sp_calc_suboptimal_paths_serialization_directories(
     )
     return directory_index
 
+
 def create_sp_calc_serialization_directories(
         cuwisp_io: IO,
         suffix: str,
@@ -270,17 +274,21 @@ def create_sp_calc_serialization_directories(
     )
     return i, j
 
+
 def get_restart_correlation_matrix_directory(
         cuwisp_io: IO,
         suffix: str,
 ) -> str:
     spsd = cuwisp_io.suboptimal_paths_serialization_directory
     for d in os.listdir(spsd):
-        is_restart_directory = d.split(suffix) == [
-            'serialized_correlation_matrices_', ''
-        ]
+        is_restart_directory = (
+                'serializedcorrelationmatrices' in split_join_lower_str(
+            str_=d
+        )
+        )
         if is_restart_directory:
             return f'{spsd}/{d}'
+
 
 def _get_restart_correlation_matrix_fname(
         restart_correlation_matrix_directory: str,
@@ -291,6 +299,7 @@ def _get_restart_correlation_matrix_fname(
             return (
                 f'{restart_correlation_matrix_directory}/{f}'
             )
+
 
 def get_restart_correlation_matrix_fname(
         cuwisp_io: IO,
@@ -313,6 +322,7 @@ def get_restart_correlation_matrix_fname(
     )
     return restart_correlation_matrix_fname
 
+
 def get_num_existing_sp_calc_output_files(
         sposd: str,
 ) -> int:
@@ -321,17 +331,33 @@ def get_num_existing_sp_calc_output_files(
         num_existing_sp_output_files += 1
     return num_existing_sp_output_files
 
+
+def split_join_lower_str(
+        str_: str,
+        split_delimiter: Optional[str] = '_',
+) -> str:
+    str_split = str_.split(split_delimiter)
+    str_join = ''
+    str_join = str_join.join(str_split)
+    str_lower = str_join.lower()
+    return str_lower
+
+
 def get_calc_sp_output_serialization_directory(
         cuwisp_io: IO,
         suffix: str,
 ) -> str:
     spsd = cuwisp_io.suboptimal_paths_serialization_directory
+
     for d in os.listdir(spsd):
-        is_calc_sp_serialization_directory = d.split(suffix) == [
-            'serialized_suboptimal_paths_', ''
-        ]
+        is_calc_sp_serialization_directory = (
+                'serializedsuboptimalpaths' in split_join_lower_str(
+            str_=d
+        )
+        )
         if is_calc_sp_serialization_directory:
             return f'{spsd}/{d}/output'
+
 
 def set_suboptimal_paths_calc_fname(
         cuwisp_io: IO,
@@ -357,6 +383,7 @@ def set_suboptimal_paths_calc_fname(
     )
     cuwisp_io.suboptimal_paths_fnames.append(sp_calc_fname)
     return cuwisp_io
+
 
 class SuboptimalPathsCalculation(serializer):
 
@@ -506,8 +533,10 @@ class SuboptimalPathsCalculation(serializer):
                 simulation_rounds_ = self.restart
             else:
                 simulation_rounds_ = self.simulation_rounds[
-                self.simulation_rounds.index(self.restart):
-                ]
+                                     self.simulation_rounds.index(
+                                         self.restart
+                                     ):
+                                     ]
             correlation_matrix_fname = (
                 get_restart_correlation_matrix_fname(
                     cuwisp_io=self.cuwisp_io,
@@ -537,14 +566,14 @@ class SuboptimalPathsCalculation(serializer):
             correlation_matrix_serialization_directory=(
                 self.cuwisp_io.
                     serialized_correlation_matrices_directories[
-                     cmsd_index
-                    ]
+                    cmsd_index
+                ]
             ),
             suboptimal_paths_serialization_directory=(
                     self.cuwisp_io.
-                        serialized_suboptimal_paths_directories[
-                            spsd_index
-                        ] + f'/backup'
+                    serialized_suboptimal_paths_directories[
+                        spsd_index
+                    ] + f'/backup'
             ),
             simulation_rounds=simulation_rounds_,
             gpu_index=self.gpu,
@@ -552,6 +581,7 @@ class SuboptimalPathsCalculation(serializer):
             rules=rules,
             correlation_matrix_fname=correlation_matrix_fname,
         )
+
 
 def get_suboptimal_path_calcs_xmls(
         xmls: List[str],
@@ -563,6 +593,7 @@ def get_suboptimal_path_calcs_xmls(
             if path_finding_round in xml and 'nodes' not in xml:
                 suboptimal_path_calcs_xmls.append(xml)
     return list(set(suboptimal_path_calcs_xmls))
+
 
 def get_serialized_suboptimal_paths(
         directory: str,
@@ -593,6 +624,7 @@ def get_serialized_suboptimal_paths(
         path_finding_rounds=path_finding_rounds
     )
 
+
 def deserialize_suboptimal_paths(
         suboptimal_path_xmls: List[str],
 ) -> List[SuboptimalPaths]:
@@ -611,6 +643,7 @@ def deserialize_suboptimal_paths(
         suboptimal_path.deserialize(xml)
         suboptimal_paths.append(suboptimal_path)
     return suboptimal_paths
+
 
 def get_sorted_suboptimal_paths_dict(
         suboptimal_paths: SuboptimalPaths,
@@ -635,6 +668,7 @@ def get_sorted_suboptimal_paths_dict(
         )
     )
 
+
 def get_src_sink(
         suboptimal_paths: SuboptimalPaths,
 ) -> Tuple[int]:
@@ -651,15 +685,15 @@ def get_src_sink(
         suboptimal_paths.sink,
     )
 
+
 def merge_suboptimal_paths(
-        directory: str,
-        rounds: List[int],
+        input_suboptimal_paths_fnames: List[str],
         nodes_fname: str,
-        suboptimal_paths_fname: str,
+        suboptimal_paths_fname: str
 ) -> None:
     """
-    @param directory:
-    @type directory: str
+    @param input_suboptimal_paths_fnames:
+    @type input_suboptimal_paths_fnames: list
 
     @param rounds:
     @type rounds: list
@@ -674,15 +708,9 @@ def merge_suboptimal_paths(
     @rtype: None
 
     """
-    suboptimal_paths = (
-        get_serialized_suboptimal_paths(
-            directory,
-            rounds,
-        )
-    )
     suboptimal_paths_objs = (
         deserialize_suboptimal_paths(
-            suboptimal_paths
+            input_suboptimal_paths_fnames
         )
     )
     src, sink = get_src_sink(
